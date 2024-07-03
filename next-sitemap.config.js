@@ -5,7 +5,7 @@
 module.exports = {
   // !INITIAL_CONFIG Change the siteUrl
   /** Without additional '/' on the end, e.g. https://mithyalabs.com */
-  siteUrl: 'https://mithyalabs.com',
+  siteUrl: 'https://kasi.mithyalabs.com',
   generateRobotsTxt: true,
   robotsTxtOptions: {
     policies: [{ userAgent: '*', allow: '/' }],
