@@ -35,7 +35,7 @@ export default function ComponentPage() {
         <div
           className={cn(
             'layout min-h-screen py-20',
-            mode === 'dark' ? 'text-white' : 'text-black'
+            mode === 'dark' ? 'text-white' : 'text-black',
           )}
         >
           {mode}
@@ -57,6 +57,12 @@ export default function ComponentPage() {
             <Button onClick={notify} variant='outline'>
               Notify!
             </Button>
+          </div>
+
+          <div className='mt-8 flex flex-wrap gap-2'>
+            <ButtonLink className='mt-2' href='/components/dialog'>
+              Dialog Playground
+            </ButtonLink>
           </div>
 
           <button onClick={notify}></button>
