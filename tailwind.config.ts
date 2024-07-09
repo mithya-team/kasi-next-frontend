@@ -5,6 +5,9 @@ export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      outline: {
+        none: 'none',
+      },
       fontFamily: {
         // sans: ['var(--font-inter)'],
         primary: ['Inter', ...defaultTheme.fontFamily.sans],
@@ -25,6 +28,27 @@ export default {
           950: 'rgb(var(--tw-color-primary-950) / <alpha-value>)',
         },
         dark: '#222222',
+        gray: {
+          50: '#F9FAFB',
+          300: '#D1D5DB',
+          400: '#9CA3AF',
+          500: '#6B7280',
+          600: '#4B5563',
+          800: '#1F2937',
+          900: '#111827',
+        },
+        linear: {
+          1: '#8B5DF5',
+          2: '#5DE4BB',
+          3: 'rgba(139, 93, 245, 0.3)',
+          4: 'rgba(93, 228, 187, 0.3)',
+        },
+        error: {
+          1: '#F55D5D',
+        },
+        green: {
+          500: '#91E0C8',
+        },
       },
       keyframes: {
         flicker: {

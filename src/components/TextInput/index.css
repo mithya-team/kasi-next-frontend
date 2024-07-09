@@ -1,0 +1,4 @@
+.cmp-TextInput__input:focus {
+  box-shadow: none;
+  outline: none;
+}

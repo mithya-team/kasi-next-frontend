@@ -1,0 +1,5 @@
+.plan-status {
+  background-image: linear-gradient(to right, #8b5df5, #5de4bb);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
