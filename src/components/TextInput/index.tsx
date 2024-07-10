@@ -52,7 +52,7 @@ const TextInput: FC<TextInputProps> = (props) => {
       ) : null}
       <div
         className={cn(
-          'flex items-center font-sans border p-2 rounded',
+          'flex items-center font-sans border-0 p-2 rounded',
           classNames?.inputRoot,
           {
             'border-red-3': !!error,
@@ -75,7 +75,7 @@ const TextInput: FC<TextInputProps> = (props) => {
           type={type}
           className={cn(
             'cmp-TextInput__input',
-            'w-full leading-normal font-sans font-light auto text-2xl bg-transparent',
+            'w-full leading-normal border-0 font-sans font-light auto text-2xl bg-transparent',
             classNames?.input,
             {
               'bg-gray-1': disabled,

@@ -1,4 +1,4 @@
-import { type PropsWithChildren } from 'react';
+import { type PropsWithChildren, useEffect } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -27,7 +27,13 @@ const Dialog = (props: PropsWithChildren<DialogProps>) => {
     crossIconClass,
     crossColor,
   } = props;
-
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [open]);
   if (!open) return null;
 
   return (

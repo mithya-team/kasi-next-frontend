@@ -6,6 +6,7 @@ import CrossIcon from '@/components/SvgIcon/Cross';
 import DistanceIcon from '@/components/SvgIcon/Distance';
 import DobIcon from '@/components/SvgIcon/Dob';
 import DownArrowIcon from '@/components/SvgIcon/DownArrow';
+import GoogleIcon from '@/components/SvgIcon/Google';
 import HeartRateIcon from '@/components/SvgIcon/HeartRate';
 import NotificationIcon from '@/components/SvgIcon/Notification';
 import ProfileIcon from '@/components/SvgIcon/profile';
@@ -14,7 +15,7 @@ import SearchIcon from '@/components/SvgIcon/SearchIcon';
 import SortIcon from '@/components/SvgIcon/Sort';
 import SubscriptionIcon from '@/components/SvgIcon/Subscription';
 import ThreeDots from '@/components/SvgIcon/ThreeDots';
-import UserIcon from '@/components/SvgIcon/user';
+import UserIcon from '@/components/SvgIcon/User';
 import UsersIcon from '@/components/SvgIcon/Users';
 import VoiceIcon from '@/components/SvgIcon/Voice';
 
@@ -38,7 +39,8 @@ export type IconName =
   | 'heart-rate'
   | 'clock'
   | 'subscription'
-  | 'voice';
+  | 'voice'
+  | 'google';
 
 const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   run: RunIcon,
@@ -57,6 +59,7 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   clock: ClockIcon,
   subscription: SubscriptionIcon,
   voice: VoiceIcon,
+  google: GoogleIcon,
 };
 
 const SvgIcon: FC<ISvgIconProps> = ({ name, ...svgProps }) => {

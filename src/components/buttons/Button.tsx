@@ -3,7 +3,7 @@ import * as React from 'react';
 import { getButtonStyles } from '@/lib/styles/ButtonStyles.helper';
 import { cn } from '@/lib/utils';
 
-import Icon, { IconType } from '@/components/icons/Icon';
+import Icon from '@/components/icons/Icon';
 
 import { ButtonSize, ButtonVariant } from '@/@types/ButtonsStyles';
 
@@ -12,8 +12,8 @@ export type ButtonProps = {
   isDarkBg?: boolean;
   variant?: ButtonVariant;
   size?: ButtonSize;
-  leftIcon?: IconType;
-  rightIcon?: IconType;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
   classNames?: {
     leftIcon?: string;
     rightIcon?: string;
@@ -32,17 +32,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       isDarkBg = false,
       leftIcon: LeftIcon,
       rightIcon: RightIcon,
-      classNames,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const disabled = isLoading || buttonDisabled;
 
     const { baseClasses, sizeClasses, variantClasses } = getButtonStyles(
       variant,
       size,
-      isDarkBg
+      isDarkBg,
     );
 
     const ButtonClasses = cn(
@@ -52,7 +51,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       disabled && 'disabled:cursor-not-allowed',
       isLoading &&
         'relative text-transparent transition-none hover:text-transparent disabled:cursor-wait',
-      className
+      className,
     );
 
     return (
@@ -71,7 +70,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 'text-white': ['primary', 'dark'].includes(variant),
                 'text-black': ['light'].includes(variant),
                 'text-primary-500': ['outline', 'ghost'].includes(variant),
-              }
+              },
             )}
           >
             <Icon name='spinner' classNames={{ element: 'animate-spin' }} />
@@ -84,16 +83,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               size === 'sm' && 'mr-1.5',
             ])}
           >
-            <LeftIcon
-              size='1em'
-              className={cn(
-                [
-                  size === 'base' && 'md:text-md text-md',
-                  size === 'sm' && 'md:text-md text-sm',
-                ],
-                classNames?.leftIcon
-              )}
-            />
+            {LeftIcon}
           </div>
         )}
         {children}
@@ -104,21 +94,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               size === 'sm' && 'ml-1.5',
             ])}
           >
-            <RightIcon
-              size='1em'
-              className={cn(
-                [
-                  size === 'base' && 'text-md md:text-md',
-                  size === 'sm' && 'md:text-md text-sm',
-                ],
-                classNames?.rightIcon
-              )}
-            />
+            {RightIcon}
           </div>
         )}
       </button>
     );
-  }
+  },
 );
 
 export default Button;

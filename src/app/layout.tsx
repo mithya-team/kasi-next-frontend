@@ -15,7 +15,7 @@ import Header from '@/features/Header';
 const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <html>
-      <body>
+      <body suppressHydrationWarning={true}>
         <AppProviders>
           <div className='flex flex-row min-h-screen bg-gray-900'>
             <DashboardSidebar />

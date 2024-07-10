@@ -9,6 +9,7 @@ import TextLink from '@/components/links/TextLink';
 import Typo from '@/components/typography/Typo';
 
 import { DialogContext } from '@/contexts/DialogContext';
+import SignUp from '@/features/Auth/Signup';
 
 import Logo from '~/svg/Logo.svg';
 
@@ -20,23 +21,9 @@ export default function HomePage() {
   const { showDialog } = React.useContext(DialogContext);
 
   const onSignup = () => {
-    showDialog(
-      <>
-        Before you begin editing, follow all comments with `INITIAL_CONFIG`, to
-        customize the default configuration. Before you begin editing, follow
-        all comments with `INITIAL_CONFIG`, to customize the default
-        configuration. Before you begin editing, follow all comments with
-        `INITIAL_CONFIG`, to customize the default configuration. Before you
-        begin editing, follow all comments with `INITIAL_CONFIG`, to customize
-        the default configuration. Before you begin editing, follow all comments
-        with `INITIAL_CONFIG`, to customize the default configuration. Before
-        you begin editing, follow all comments with `INITIAL_CONFIG`, to
-        customize the default configuration.
-      </>,
-      {
-        containerClass: 'w-[28rem]',
-      },
-    );
+    showDialog(<SignUp />, {
+      containerClass: 'w-[28rem]',
+    });
   };
 
   return (

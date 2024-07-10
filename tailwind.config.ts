@@ -11,6 +11,7 @@ export default {
       fontFamily: {
         // sans: ['var(--font-inter)'],
         primary: ['Inter', ...defaultTheme.fontFamily.sans],
+        secondary: ['Barlow', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         primary: {
@@ -42,6 +43,9 @@ export default {
           2: '#5DE4BB',
           3: 'rgba(139, 93, 245, 0.3)',
           4: 'rgba(93, 228, 187, 0.3)',
+        },
+        black: {
+          1: '#0D131F',
         },
         error: {
           1: '#F55D5D',
