@@ -29,9 +29,9 @@ const CrossIcon: FC<CrossIconProps> = (props) => {
         <path
           d='M27 17.0001L17 27M27 26.9999L17 17'
           stroke='white'
-          stroke-width='1.5'
-          stroke-linecap='round'
-          stroke-linejoin='round'
+          strokeWidth='1.5'
+          strokeLinecap='round'
+          strokeLinejoin='round'
         />
       </g>
       <defs>
@@ -42,9 +42,9 @@ const CrossIcon: FC<CrossIconProps> = (props) => {
           width='84'
           height='84'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
-          <feFlood flood-opacity='0' result='BackgroundImageFix' />
+          <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feGaussianBlur in='BackgroundImageFix' stdDeviation='10' />
           <feComposite
             in2='SourceAlpha'

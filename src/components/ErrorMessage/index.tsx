@@ -3,8 +3,11 @@ import { FC } from 'react';
 
 import { cn } from '@/lib/utils';
 
+import SvgIcon from '@/components/SvgIcon';
+
 export interface ErrorMessageProps {
   error: string;
+  src?: string;
   classes?: {
     root?: string;
     icon?: string;
@@ -12,23 +15,25 @@ export interface ErrorMessageProps {
   };
 }
 
-const ErrorMessage: FC<ErrorMessageProps> = ({ error, classes = {} }) => {
+const ErrorMessage: FC<ErrorMessageProps> = ({ error, src, classes = {} }) => {
   const { root = '', icon = '', text = '' } = classes;
 
   return (
-    <div
-      className={cn(
-        `h-[46px] flex items-center gap-1 px-2 mt-2 rounded border-[1px] border-gray-5`,
-        root,
+    <div className={cn(`flex items-center gap-1`, root)}>
+      {src ? (
+        <Image
+          src='/images/x-circle.svg'
+          alt='x icon'
+          className={icon}
+          width={20}
+        />
+      ) : (
+        <SvgIcon name='error' />
       )}
-    >
-      <Image
-        src='/images/x-circle.svg'
-        alt='x icon'
-        className={icon}
-        width={20}
-      />
-      <p className={cn(` text-base`, text)}>{error}</p>
+
+      <p className={cn(` text-xs font-primary text-red-400 font-medium`, text)}>
+        {error}
+      </p>
     </div>
   );
 };

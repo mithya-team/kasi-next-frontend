@@ -23,6 +23,9 @@ const userModel = {
   async fetchUserById(id: string) {
     return request<User>(`/users/${id}`);
   },
+  async me() {
+    return request<User>('/users/me');
+  },
 };
 
 export default userModel;

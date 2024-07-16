@@ -8,9 +8,14 @@ export default {
       outline: {
         none: 'none',
       },
+      letterSpacing: {
+        1: '-0.75px',
+        2: '-0.5px',
+      },
       fontFamily: {
         // sans: ['var(--font-inter)'],
         primary: ['Inter', ...defaultTheme.fontFamily.sans],
+        secondary: ['Barlow', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         primary: {
@@ -29,6 +34,8 @@ export default {
         },
         dark: '#222222',
         gray: {
+          1: '#D9D9D9',
+          10: '#E5E7EB',
           50: '#F9FAFB',
           300: '#D1D5DB',
           400: '#9CA3AF',
@@ -43,11 +50,17 @@ export default {
           3: 'rgba(139, 93, 245, 0.3)',
           4: 'rgba(93, 228, 187, 0.3)',
         },
+        black: {
+          1: '#0D131F',
+        },
         error: {
           1: '#F55D5D',
         },
         green: {
           500: '#91E0C8',
+        },
+        red: {
+          300: '#EF4444',
         },
       },
       keyframes: {

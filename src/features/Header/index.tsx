@@ -1,6 +1,6 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -22,7 +22,13 @@ const Header: FC<HeaderProps> = ({
   rightHeaderClass,
 }) => {
   const pathname = usePathname();
-  const isUserDetailsPage = pathname.split('/')[1] === 'user';
+
+  const { isUserDetailsPage, isUserListingPage } = useMemo(() => {
+    const isUserDetailsPage = pathname.split('/')[1] === 'user';
+    const isUserListingPage = pathname.split('/')[1] === 'users-list';
+    return { isUserDetailsPage, isUserListingPage };
+  }, [pathname]);
+
   const userId = pathname.split('/')[2];
 
   const { setShowUserWorkoutContent, fetchUsers, fetchUser } = useStoreActions(
@@ -32,9 +38,8 @@ const Header: FC<HeaderProps> = ({
       fetchUser: store.UserStore.fetchUser,
     }),
   );
-
   useEffect(() => {
-    if (userId) fetchUser(userId);
+    if (userId && isUserDetailsPage) fetchUser(userId);
 
     return () => {
       setShowUserWorkoutContent(false);
@@ -47,6 +52,10 @@ const Header: FC<HeaderProps> = ({
     if (tabs.id === 'overview') setShowUserWorkoutContent(false);
   };
 
+  const onSearch = (term: string) => {
+    if (isUserListingPage || isUserDetailsPage) fetchUsers({ search: term });
+  };
+
   return (
     <div
       className={cn(
@@ -54,10 +63,7 @@ const Header: FC<HeaderProps> = ({
         className,
       )}
     >
-      <LeftHeader
-        leftHeaderClass={leftHeaderClass}
-        onSearch={(term) => fetchUsers({ search: term })}
-      />
+      <LeftHeader leftHeaderClass={leftHeaderClass} onSearch={onSearch} />
       {isUserDetailsPage ? <MiddleHeader onTabsClick={onTabsClick} /> : null}
       <RightHeader rightHeaderClass={rightHeaderClass} />
     </div>
