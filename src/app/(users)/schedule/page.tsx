@@ -1,4 +1,7 @@
+'use client';
 import React from 'react';
+
+import withAuth from '@/hoc/withAuth';
 
 const Schedule = () => {
   return (
@@ -16,4 +19,4 @@ const Schedule = () => {
   );
 };
 
-export default Schedule;
+export default withAuth(Schedule);

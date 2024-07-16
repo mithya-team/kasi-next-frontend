@@ -8,12 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from '@/lib/toast';
 import useAppInit from '@/hooks/useAppInIt';
 
-import DashboardSidebar from '@/components/DashboardSidebar';
 import Loader from '@/components/Loader';
 
 import { GLOBAL_TOAST_ID } from '@/constant/toast';
 import { AppProviders } from '@/contexts/AppProvider';
-import Header from '@/features/Header';
 
 const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
@@ -42,13 +40,5 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   if (!appInitialized) return <Loader />;
 
-  return (
-    <div className='flex flex-row min-h-screen bg-gray-900'>
-      <DashboardSidebar />
-      <div className='flex flex-col w-full ml-20'>
-        <Header />
-        <div className='flex-1 overflow-auto'>{children}</div>
-      </div>
-    </div>
-  );
+  return <>{children}</>;
 };

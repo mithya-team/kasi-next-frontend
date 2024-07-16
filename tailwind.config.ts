@@ -34,6 +34,7 @@ export default {
         },
         dark: '#222222',
         gray: {
+          1: '#D9D9D9',
           10: '#E5E7EB',
           50: '#F9FAFB',
           300: '#D1D5DB',

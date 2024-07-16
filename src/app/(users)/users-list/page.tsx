@@ -2,8 +2,6 @@
 import Link from 'next/link';
 import { FC, useEffect } from 'react';
 
-import './index.css';
-
 import { parseDate } from '@/lib/utils';
 
 import Loader from '@/components/Loader';
@@ -11,6 +9,7 @@ import SvgIcon from '@/components/SvgIcon';
 
 import { useStoreActions, useStoreState } from '@/store';
 
+import withAuth from '@/hoc/withAuth';
 import { AthleteSubscription, ProductPlanId } from '@/models/user/user.types';
 
 const UsersListingPage: FC = () => {
@@ -78,7 +77,7 @@ const UsersListingPage: FC = () => {
   );
 };
 
-export default UsersListingPage;
+export default withAuth(UsersListingPage);
 
 const getPlanStatusTag = (
   planId: ProductPlanId,

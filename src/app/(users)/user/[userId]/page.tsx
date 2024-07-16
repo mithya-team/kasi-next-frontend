@@ -11,6 +11,7 @@ import Typo from '@/components/typography/Typo';
 
 import { useStoreState } from '@/store';
 
+import withAuth from '@/hoc/withAuth';
 import { User } from '@/models/user/user.types';
 
 const UserDetails = () => {
@@ -72,7 +73,7 @@ const UserDetails = () => {
   );
 };
 
-export default UserDetails;
+export default withAuth(UserDetails);
 
 interface OverviewContentProps {
   user: User | null;

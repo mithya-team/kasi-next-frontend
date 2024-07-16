@@ -3,7 +3,6 @@ import * as React from 'react';
 
 import Button from '@/components/Buttons';
 import ButtonLink from '@/components/links/ButtonLink';
-import Typo from '@/components/typography/Typo';
 
 import { useStoreActions } from '@/store';
 
@@ -39,14 +38,6 @@ export default function HomePage() {
 
       <ButtonLink className='mt-6' href='/users-list' variant='light'>
         Listing users page
-      </ButtonLink>
-      <Typo classes='mt-2 text-sm text-gray-800'>
-        A starter for Next.js, Tailwind CSS, and TypeScript, pre-configured with
-        Husky{' '}
-      </Typo>
-
-      <ButtonLink className='mt-6' href='/components' variant='light'>
-        See all components
       </ButtonLink>
       <AuthDialog />
     </div>

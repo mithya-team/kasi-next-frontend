@@ -11,11 +11,14 @@ import GoogleIcon from '@/components/SvgIcon/Google';
 import HeartRateIcon from '@/components/SvgIcon/HeartRate';
 import HideIcon from '@/components/SvgIcon/Hide';
 import KasiIcon from '@/components/SvgIcon/Kasi';
-import MatchedIcon from '@/components/SvgIcon/matched';
+import LogoutIcon from '@/components/SvgIcon/Logout';
+import MatchedIcon from '@/components/SvgIcon/Matched';
 import NotificationIcon from '@/components/SvgIcon/Notification';
+import PaymentIcon from '@/components/SvgIcon/Payment';
 import ProfileIcon from '@/components/SvgIcon/profile';
 import RunIcon from '@/components/SvgIcon/Run';
 import SearchIcon from '@/components/SvgIcon/SearchIcon';
+import SettingIcon from '@/components/SvgIcon/Setting';
 import ShowIcon from '@/components/SvgIcon/Show';
 import SortIcon from '@/components/SvgIcon/Sort';
 import SubscriptionIcon from '@/components/SvgIcon/Subscription';
@@ -52,7 +55,10 @@ export type IconName =
   | 'show'
   | 'success'
   | 'error'
-  | 'matched';
+  | 'matched'
+  | 'payment'
+  | 'setting'
+  | 'logout';
 
 const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   run: RunIcon,
@@ -78,6 +84,9 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   success: SuccessIcon,
   error: ErrorIcon,
   matched: MatchedIcon,
+  payment: PaymentIcon,
+  setting: SettingIcon,
+  logout: LogoutIcon,
 };
 
 const SvgIcon: FC<ISvgIconProps> = ({ name, ...svgProps }) => {
