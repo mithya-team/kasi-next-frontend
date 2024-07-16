@@ -39,11 +39,13 @@ const TextInput: FC<TextInputProps> = (props) => {
   } = props;
 
   return (
-    <div className={cn(className, 'cmp-TextInput', 'flex flex-col')}>
+    <div
+      className={cn(className, 'cmp-TextInput', 'flex flex-col font-primary ')}
+    >
       {label ? (
         <label
           className={cn(
-            'cmp-TextInput__label font-sans mb-2',
+            'cmp-TextInput__label font-primary text-xs text-gray-500 mb-0',
             classNames?.label,
           )}
         >
@@ -52,11 +54,8 @@ const TextInput: FC<TextInputProps> = (props) => {
       ) : null}
       <div
         className={cn(
-          'flex items-center font-sans border-0 p-2 rounded',
+          'flex items-center border-0 p-0 border-b border-b-gray-500 rounded-none',
           classNames?.inputRoot,
-          {
-            'border-red-3': !!error,
-          },
         )}
       >
         {startAdornment ? (
@@ -75,7 +74,7 @@ const TextInput: FC<TextInputProps> = (props) => {
           type={type}
           className={cn(
             'cmp-TextInput__input',
-            'w-full leading-normal border-0 font-sans font-light auto text-2xl bg-transparent',
+            'w-full leading-normal border-0  bg-transparent font-primary font-medium text-base text-white p-0',
             classNames?.input,
             {
               'bg-gray-1': disabled,
@@ -95,14 +94,14 @@ const TextInput: FC<TextInputProps> = (props) => {
         ) : null}
       </div>
       {helperText ? (
-        <span
+        <div
           className={cn(
-            'cmp-TextInput__helper-text text-xs text-gray-4 mt-1',
+            'cmp-TextInput__helper-text font-primary text-xs font-medium text-gray-500 mt-1',
             classNames?.helperText,
           )}
         >
           {helperText}
-        </span>
+        </div>
       ) : null}
       {!!error && typeof error === 'string' ? (
         <ErrorMessage error={error} />

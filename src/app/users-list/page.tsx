@@ -28,7 +28,7 @@ const UsersListingPage: FC = () => {
   );
 
   useEffect(() => {
-    fetchUsers({});
+    if (!usersList) fetchUsers({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

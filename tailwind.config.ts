@@ -8,6 +8,10 @@ export default {
       outline: {
         none: 'none',
       },
+      letterSpacing: {
+        1: '-0.75px',
+        2: '-0.5px',
+      },
       fontFamily: {
         // sans: ['var(--font-inter)'],
         primary: ['Inter', ...defaultTheme.fontFamily.sans],
@@ -30,6 +34,7 @@ export default {
         },
         dark: '#222222',
         gray: {
+          10: '#E5E7EB',
           50: '#F9FAFB',
           300: '#D1D5DB',
           400: '#9CA3AF',
@@ -52,6 +57,9 @@ export default {
         },
         green: {
           500: '#91E0C8',
+        },
+        red: {
+          300: '#EF4444',
         },
       },
       keyframes: {

@@ -5,10 +5,14 @@ import { cn } from '@/lib/utils';
 import SvgIcon, { ISvgIconProps } from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
 
+import { useStoreState } from '@/store';
+
 export interface RightHeaderProps {
   rightHeaderClass?: string;
 }
 const RightHeader: FC<RightHeaderProps> = ({ rightHeaderClass }) => {
+  const { admin } = useStoreState(({ AdminStore: { admin } }) => ({ admin }));
+
   return (
     <div
       className={cn(
@@ -29,7 +33,7 @@ const RightHeader: FC<RightHeaderProps> = ({ rightHeaderClass }) => {
           level='h4'
           classes='text-gray-50 font-semibold leading-7 -tracking-[0.1px]'
         >
-          sanjay
+          {admin?.fullName ?? ''}
         </Typo>
         <SvgIcon name='down-arrow' />
       </div>

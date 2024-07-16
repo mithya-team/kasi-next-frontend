@@ -1,12 +1,15 @@
 'use client';
 import * as React from 'react';
+import { useEffect } from 'react';
 
 import '@/styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { ToastContainer } from '@/lib/toast';
+import useAppInit from '@/hooks/useAppInIt';
 
 import DashboardSidebar from '@/components/DashboardSidebar';
+import Loader from '@/components/Loader';
 
 import { GLOBAL_TOAST_ID } from '@/constant/toast';
 import { AppProviders } from '@/contexts/AppProvider';
@@ -15,15 +18,12 @@ import Header from '@/features/Header';
 const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <html>
-      <body suppressHydrationWarning={true}>
+      <body
+        suppressHydrationWarning={true}
+        className='w-[100vw] h-[100vh] bg-gray-900'
+      >
         <AppProviders>
-          <div className='flex flex-row min-h-screen bg-gray-900'>
-            <DashboardSidebar />
-            <div className='flex flex-col w-full ml-20'>
-              <Header />
-              <div className='flex-1 overflow-auto'>{children}</div>
-            </div>
-          </div>
+          <Layout>{children}</Layout>
           <ToastContainer containerId={GLOBAL_TOAST_ID} />
         </AppProviders>
       </body>
@@ -32,3 +32,23 @@ const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
 };
 
 export default RootLayout;
+
+const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { init, appInitialized } = useAppInit();
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  if (!appInitialized) return <Loader />;
+
+  return (
+    <div className='flex flex-row min-h-screen bg-gray-900'>
+      <DashboardSidebar />
+      <div className='flex flex-col w-full ml-20'>
+        <Header />
+        <div className='flex-1 overflow-auto'>{children}</div>
+      </div>
+    </div>
+  );
+};
