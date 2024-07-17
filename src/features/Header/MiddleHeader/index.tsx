@@ -2,15 +2,13 @@ import { FC } from 'react';
 
 import { useStoreState } from '@/store';
 
-import { HeaderProps } from '@/features/Header';
-
 export interface ITabs {
   name: string;
   id: string;
 }
 
 interface MiddleHeaderProps {
-  onTabsClick?: HeaderProps['onTabsClick'];
+  onTabsClick?: (tabs: ITabs) => void;
 }
 
 const MiddleHeader: FC<MiddleHeaderProps> = ({ onTabsClick }) => {
