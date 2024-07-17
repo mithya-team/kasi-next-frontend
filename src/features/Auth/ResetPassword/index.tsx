@@ -3,7 +3,7 @@ import { Form, Formik, FormikProps } from 'formik';
 import { FC } from 'react';
 import * as yup from 'yup';
 
-import PrimaryButton from '@/components/Buttons/PrimaryButton';
+import PrimaryButton from '@/components/Buttons1/PrimaryButton';
 import PasswordInput from '@/components/PasswordInput';
 import SvgIcon from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';

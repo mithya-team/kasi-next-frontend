@@ -1,6 +1,6 @@
 import React from 'react';
 
-import IconButton, { IconButtonProps } from '@/components/Buttons/IconButton';
+import IconButton, { IconButtonProps } from '@/components/Buttons1/IconButton';
 import IconLink, { IconLinkProps } from '@/components/links/IconLink';
 
 export type HybridIconButtonProps = IconButtonProps | IconLinkProps;

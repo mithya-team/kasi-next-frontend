@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import SecondaryButton from '@/components/Buttons/SecondaryButton';
+import SecondaryButton from '@/components/Buttons1/SecondaryButton';
 import Typo from '@/components/typography/Typo';
 
 interface AuthFormFooterProps {

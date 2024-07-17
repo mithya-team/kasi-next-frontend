@@ -18,7 +18,7 @@ const TextButton = React.forwardRef<HTMLButtonElement, TextButtonProps>(
       disabled: buttonDisabled,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const { baseClasses, variantClasses } = getTextButtonStyles(variant);
     const ButtonClasses = cn(baseClasses, variantClasses, className);
@@ -33,7 +33,7 @@ const TextButton = React.forwardRef<HTMLButtonElement, TextButtonProps>(
         {children}
       </button>
     );
-  }
+  },
 );
 
 export default TextButton;

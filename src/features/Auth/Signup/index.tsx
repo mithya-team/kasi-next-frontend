@@ -2,7 +2,7 @@
 import { FC } from 'react';
 
 import AuthFormFooter from '@/components/AuthFormFooter';
-import PrimaryButton from '@/components/Buttons/PrimaryButton';
+import PrimaryButton from '@/components/Buttons1/PrimaryButton';
 
 import SignupForm from '@/features/Auth/Signup/SignupForm';
 import SocialAuth from '@/features/Auth/SocialAuth';

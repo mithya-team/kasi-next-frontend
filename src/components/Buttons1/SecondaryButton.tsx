@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import Button, { ButtonProps } from '@/components/Buttons';
+import Button, { ButtonProps } from '@/components/Buttons1';
 import Typo from '@/components/typography/Typo';
 
 export interface SecondaryButtonProps extends ButtonProps {

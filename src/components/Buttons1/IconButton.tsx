@@ -29,14 +29,14 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       classNames,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const disabled = isLoading || buttonDisabled;
 
     const { baseClasses, variantClasses } = getButtonStyles(
       variant,
       'base',
-      isDarkBg
+      isDarkBg,
     );
 
     const IconButtonClasses = cn(
@@ -46,7 +46,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       disabled && 'disabled:cursor-not-allowed',
       isLoading &&
         'relative text-transparent transition-none hover:text-transparent disabled:cursor-wait',
-      className
+      className,
     );
 
     return (
@@ -65,7 +65,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
                 'text-white': ['primary', 'dark'].includes(variant),
                 'text-black': ['light'].includes(variant),
                 'text-primary-500': ['outline', 'ghost'].includes(variant),
-              }
+              },
             )}
           >
             <Icon
@@ -80,7 +80,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         )}
       </button>
     );
-  }
+  },
 );
 
 export default IconButton;
