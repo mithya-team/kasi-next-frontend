@@ -16,6 +16,7 @@ import MatchedIcon from '@/components/SvgIcon/Matched';
 import NotificationIcon from '@/components/SvgIcon/Notification';
 import PaymentIcon from '@/components/SvgIcon/Payment';
 import ProfileIcon from '@/components/SvgIcon/profile';
+import RightArrowIcon from '@/components/SvgIcon/RightArrow';
 import RunIcon from '@/components/SvgIcon/Run';
 import SearchIcon from '@/components/SvgIcon/SearchIcon';
 import SettingIcon from '@/components/SvgIcon/Setting';
@@ -58,7 +59,8 @@ export type IconName =
   | 'matched'
   | 'payment'
   | 'setting'
-  | 'logout';
+  | 'logout'
+  | 'right-arrow';
 
 const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   run: RunIcon,
@@ -87,6 +89,7 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   payment: PaymentIcon,
   setting: SettingIcon,
   logout: LogoutIcon,
+  'right-arrow': RightArrowIcon,
 };
 
 const SvgIcon: FC<ISvgIconProps> = ({ name, ...svgProps }) => {

@@ -34,7 +34,7 @@ const Header: FC<HeaderProps> = ({
   const { setShowUserWorkoutContent, fetchUsers, fetchUser } = useStoreActions(
     (store) => ({
       setShowUserWorkoutContent: store.UserStore.setShowUserWorkoutContent,
-      fetchUsers: store.UsersListStore.fetchUsers,
+      fetchUsers: store.UserStore.fetchUsersList,
       fetchUser: store.UserStore.fetchUser,
     }),
   );
