@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import Button, { ButtonProps } from '@/components/Buttons1';
+import Button, { ButtonProps } from '@/components/Buttons';
 import Typo from '@/components/typography/Typo';
 
 const PrimaryButton: FC<ButtonProps> = ({

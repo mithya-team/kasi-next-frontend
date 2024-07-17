@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FC } from 'react';
 
-import SecondaryButton from '@/components/Buttons1/SecondaryButton';
+import SecondaryButton from '@/components/Buttons/SecondaryButton';
 import SvgIcon from '@/components/SvgIcon';
 
 import { APP_CONFIG } from '@/constant/config';

@@ -4,7 +4,7 @@ import { FC, useState } from 'react';
 import { cn } from '@/lib/utils';
 import useAuthActions from '@/hooks/useAuthActions';
 
-import Button from '@/components/Buttons1';
+import Button from '@/components/Buttons';
 import Popover from '@/components/Popover';
 import SvgIcon, { IconName, ISvgIconProps } from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';

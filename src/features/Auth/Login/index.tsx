@@ -2,8 +2,8 @@ import { Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import React, { FC } from 'react';
 
 import AuthFormFooter from '@/components/AuthFormFooter';
-import PrimaryButton from '@/components/Buttons1/PrimaryButton';
-import SecondaryButton from '@/components/Buttons1/SecondaryButton';
+import PrimaryButton from '@/components/Buttons/PrimaryButton';
+import SecondaryButton from '@/components/Buttons/SecondaryButton';
 import PasswordInput from '@/components/PasswordInput';
 import TextInput from '@/components/TextInput';
 

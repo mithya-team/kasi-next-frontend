@@ -2,7 +2,7 @@ import { Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import React, { FC, useEffect, useState } from 'react';
 
 import AuthFormFooter from '@/components/AuthFormFooter';
-import PrimaryButton from '@/components/Buttons1/PrimaryButton';
+import PrimaryButton from '@/components/Buttons/PrimaryButton';
 import TextInput from '@/components/TextInput';
 import Typo from '@/components/typography/Typo';
 

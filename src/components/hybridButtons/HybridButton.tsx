@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Button, { ButtonProps } from '@/components/Buttons1';
+import Button, { ButtonProps } from '@/components/Buttons';
 import ButtonLink, { ButtonLinkProps } from '@/components/links/ButtonLink';
 
 export type HybridButtonProps = ButtonProps | ButtonLinkProps;

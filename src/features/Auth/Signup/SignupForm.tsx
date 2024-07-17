@@ -2,7 +2,7 @@
 import { Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import { FC } from 'react';
 
-import PrimaryButton from '@/components/Buttons1/PrimaryButton';
+import PrimaryButton from '@/components/Buttons/PrimaryButton';
 import CheckboxInput from '@/components/CheckboxInput';
 
 import { SignUpProps } from '@/features/Auth/Signup';

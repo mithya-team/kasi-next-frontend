@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 
-import Button from '@/components/Buttons1';
+import Button from '@/components/Buttons';
 import ButtonLink from '@/components/links/ButtonLink';
 
 import { useStoreActions } from '@/store';
