@@ -38,7 +38,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const disabled = isLoading || buttonDisabled;
 
-    const { baseClasses, sizeClasses, variantClasses } = getButtonStyles(
+    const { baseClasses, variantClasses } = getButtonStyles(
       variant,
       size,
       isDarkBg,
@@ -46,7 +46,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const ButtonClasses = cn(
       baseClasses,
-      sizeClasses,
       variantClasses,
       disabled && 'disabled:cursor-not-allowed',
       isLoading &&
