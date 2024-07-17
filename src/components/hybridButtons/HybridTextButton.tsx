@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TextButton, { TextButtonProps } from '@/components/Buttons1/TextButton';
+import TextButton, { TextButtonProps } from '@/components/Buttons/TextButton';
 import TextLink, { TextLinkProps } from '@/components/links/TextLink';
 
 export type HybridTextButtonProps = TextButtonProps | TextLinkProps;

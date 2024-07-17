@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import TextButton from '@/components/Buttons1/TextButton';
+import TextButton from '@/components/Buttons/TextButton';
 import Icon from '@/components/icons/Icon';
 import Typo from '@/components/typography/Typo';
 
