@@ -3,50 +3,45 @@ import * as React from 'react';
 import { getButtonStyles } from '@/lib/styles/ButtonStyles.helper';
 import { cn } from '@/lib/utils';
 
-import Icon from '@/components/icons/Icon';
+import Icon, { IconType } from '@/components/icons/Icon';
 
-import { ButtonSize, ButtonVariant } from '@/@types/ButtonsStyles';
+import { ButtonVariant } from '@/@types/ButtonsStyles';
 
-export type ButtonProps = {
+export type IconButtonProps = {
   isLoading?: boolean;
   isDarkBg?: boolean;
   variant?: ButtonVariant;
-  size?: ButtonSize;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+  icon?: IconType;
   classNames?: {
-    leftIcon?: string;
-    rightIcon?: string;
+    icon?: string;
   };
 } & React.ComponentPropsWithRef<'button'>;
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   (
     {
-      children,
       className,
       disabled: buttonDisabled,
       isLoading,
       variant = 'primary',
-      size = 'base',
       isDarkBg = false,
-      leftIcon: LeftIcon,
-      rightIcon: RightIcon,
+      icon: IconPassed,
+      classNames,
       ...rest
     },
     ref,
   ) => {
     const disabled = isLoading || buttonDisabled;
 
-    const { baseClasses, sizeClasses, variantClasses } = getButtonStyles(
+    const { baseClasses, variantClasses } = getButtonStyles(
       variant,
-      size,
+      'base',
       isDarkBg,
     );
 
-    const ButtonClasses = cn(
+    const IconButtonClasses = cn(
       baseClasses,
-      sizeClasses,
+      'min-h-[28px] min-w-[28px] p-1 md:min-h-[34px] md:min-w-[34px] md:p-2',
       variantClasses,
       disabled && 'disabled:cursor-not-allowed',
       isLoading &&
@@ -59,7 +54,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type='button'
         disabled={disabled}
-        className={ButtonClasses}
+        className={IconButtonClasses}
         {...rest}
       >
         {isLoading && (
@@ -73,33 +68,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               },
             )}
           >
-            <Icon name='spinner' classNames={{ element: 'animate-spin' }} />
+            <Icon
+              name='spinner'
+              size={60}
+              classNames={{ element: 'animate-spin' }}
+            />
           </div>
         )}
-        {LeftIcon && (
-          <div
-            className={cn([
-              size === 'base' && 'mr-1',
-              size === 'sm' && 'mr-1.5',
-            ])}
-          >
-            {LeftIcon}
-          </div>
-        )}
-        {children}
-        {RightIcon && (
-          <div
-            className={cn([
-              size === 'base' && 'ml-1',
-              size === 'sm' && 'ml-1.5',
-            ])}
-          >
-            {RightIcon}
-          </div>
+        {IconPassed && (
+          <IconPassed size='1em' className={cn(classNames?.icon)} />
         )}
       </button>
     );
   },
 );
 
-export default Button;
+export default IconButton;

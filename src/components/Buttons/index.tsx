@@ -3,50 +3,54 @@ import * as React from 'react';
 import { getButtonStyles } from '@/lib/styles/ButtonStyles.helper';
 import { cn } from '@/lib/utils';
 
-import Icon, { IconType } from '@/components/icons/Icon';
+import Icon from '@/components/icons/Icon';
 
-import { ButtonVariant } from '@/@types/ButtonsStyles';
+import { ButtonSize, ButtonVariant } from '@/@types/ButtonsStyles';
 
-export type IconButtonProps = {
+export type ButtonProps = {
   isLoading?: boolean;
   isDarkBg?: boolean;
   variant?: ButtonVariant;
-  icon?: IconType;
+  size?: ButtonSize;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
   classNames?: {
-    icon?: string;
+    leftIcon?: string;
+    rightIcon?: string;
   };
 } & React.ComponentPropsWithRef<'button'>;
 
-const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
+      children,
       className,
       disabled: buttonDisabled,
       isLoading,
       variant = 'primary',
+      size = 'base',
       isDarkBg = false,
-      icon: IconPassed,
-      classNames,
+      leftIcon: LeftIcon,
+      rightIcon: RightIcon,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const disabled = isLoading || buttonDisabled;
 
     const { baseClasses, variantClasses } = getButtonStyles(
       variant,
-      'base',
-      isDarkBg
+      size,
+      isDarkBg,
     );
 
-    const IconButtonClasses = cn(
+    const ButtonClasses = cn(
       baseClasses,
-      'min-h-[28px] min-w-[28px] p-1 md:min-h-[34px] md:min-w-[34px] md:p-2',
       variantClasses,
       disabled && 'disabled:cursor-not-allowed',
       isLoading &&
         'relative text-transparent transition-none hover:text-transparent disabled:cursor-wait',
-      className
+      className,
     );
 
     return (
@@ -54,7 +58,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         ref={ref}
         type='button'
         disabled={disabled}
-        className={IconButtonClasses}
+        className={ButtonClasses}
         {...rest}
       >
         {isLoading && (
@@ -65,22 +69,36 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
                 'text-white': ['primary', 'dark'].includes(variant),
                 'text-black': ['light'].includes(variant),
                 'text-primary-500': ['outline', 'ghost'].includes(variant),
-              }
+              },
             )}
           >
-            <Icon
-              name='spinner'
-              size={60}
-              classNames={{ element: 'animate-spin' }}
-            />
+            <Icon name='spinner' classNames={{ element: 'animate-spin' }} />
           </div>
         )}
-        {IconPassed && (
-          <IconPassed size='1em' className={cn(classNames?.icon)} />
+        {LeftIcon && (
+          <div
+            className={cn([
+              size === 'base' && 'mr-1',
+              size === 'sm' && 'mr-1.5',
+            ])}
+          >
+            {LeftIcon}
+          </div>
+        )}
+        {children}
+        {RightIcon && (
+          <div
+            className={cn([
+              size === 'base' && 'ml-1',
+              size === 'sm' && 'ml-1.5',
+            ])}
+          >
+            {RightIcon}
+          </div>
         )}
       </button>
     );
-  }
+  },
 );
 
-export default IconButton;
+export default Button;

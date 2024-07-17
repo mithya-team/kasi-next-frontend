@@ -35,20 +35,15 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       classNames,
       ...rest
     },
-    ref
+    ref,
   ) => {
-    const { baseClasses, sizeClasses, variantClasses } = getButtonStyles(
+    const { baseClasses, variantClasses } = getButtonStyles(
       variant,
       size,
-      isDarkBg
+      isDarkBg,
     );
 
-    const ButtonClasses = cn(
-      baseClasses,
-      sizeClasses,
-      variantClasses,
-      className
-    );
+    const ButtonClasses = cn(baseClasses, variantClasses, className);
     return (
       <UnstyledLink ref={ref} {...rest} className={ButtonClasses}>
         {LeftIcon && (
@@ -65,7 +60,7 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
                   size === 'base' && 'md:text-md text-md',
                   size === 'sm' && 'md:text-md text-sm',
                 ],
-                classNames?.leftIcon
+                classNames?.leftIcon,
               )}
             />
           </div>
@@ -85,14 +80,14 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
                   size === 'base' && 'text-md md:text-md',
                   size === 'sm' && 'md:text-md text-sm',
                 ],
-                classNames?.rightIcon
+                classNames?.rightIcon,
               )}
             />
           </div>
         )}
       </UnstyledLink>
     );
-  }
+  },
 );
 
 export default ButtonLink;
