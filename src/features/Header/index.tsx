@@ -31,11 +31,20 @@ const Header: FC<HeaderProps> = ({
 
   const userId = pathname.split('/')[2];
 
-  const { setShowUserWorkoutContent, fetchUsers, fetchUser } = useStoreActions(
-    (store) => ({
-      setShowUserWorkoutContent: store.UserStore.setShowUserWorkoutContent,
-      fetchUsers: store.UserStore.fetchUsersList,
-      fetchUser: store.UserStore.fetchUser,
+  const {
+    setShowUserWorkoutContent,
+    fetchUsersList,
+    fetchUser,
+    fetchUserWorkoutData,
+  } = useStoreActions(
+    ({
+      UserStore: { setShowUserWorkoutContent, fetchUsersList, fetchUser },
+      WorkoutStore: { fetchUserWorkoutData },
+    }) => ({
+      setShowUserWorkoutContent,
+      fetchUsersList,
+      fetchUser,
+      fetchUserWorkoutData,
     }),
   );
   useEffect(() => {
@@ -48,12 +57,16 @@ const Header: FC<HeaderProps> = ({
   }, [userId]);
 
   const onTabsClick = (tabs: ITabs) => {
-    if (tabs.id === 'workout') setShowUserWorkoutContent(true);
+    if (tabs.id === 'workout') {
+      setShowUserWorkoutContent(true);
+      fetchUserWorkoutData({ userId });
+    }
     if (tabs.id === 'overview') setShowUserWorkoutContent(false);
   };
 
   const onSearch = (term: string) => {
-    if (isUserListingPage || isUserDetailsPage) fetchUsers({ search: term });
+    if (isUserListingPage || isUserDetailsPage)
+      fetchUsersList({ search: term });
   };
 
   return (

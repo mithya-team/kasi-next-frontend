@@ -9,30 +9,17 @@ import TextInput from '@/components/TextInput';
 
 export interface LeftHeaderProps {
   leftHeaderClass?: string;
-  variant?: 'searchview' | 'runview';
   onSearch?: (searchTerm: string) => void;
 }
-const LeftHeader: FC<LeftHeaderProps> = ({
-  leftHeaderClass,
-  variant = 'searchview',
-  onSearch,
-}) => {
+const LeftHeader: FC<LeftHeaderProps> = ({ leftHeaderClass, onSearch }) => {
   return (
     <div
       className={cn(
-        'left-header flex flex-row justify-center items-center gap-5',
-        {
-          ['py-2']: variant === 'searchview',
-          ['']: variant === 'runview',
-        },
+        'left-header flex flex-row justify-center py-2 items-center gap-5',
         leftHeaderClass,
       )}
     >
-      {variant === 'searchview' ? (
-        <SearchView onSearch={onSearch} />
-      ) : (
-        <RunView />
-      )}
+      <SearchView onSearch={onSearch} />
     </div>
   );
 };
@@ -74,8 +61,4 @@ const SearchView: FC<LeftHeaderProps> = ({ onSearch }) => {
       </div>
     </>
   );
-};
-
-const RunView: FC<LeftHeaderProps> = () => {
-  return <>live view</>;
 };

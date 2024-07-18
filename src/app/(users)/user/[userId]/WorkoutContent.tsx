@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { FC } from 'react';
 
-import { cn, parseDate } from '@/lib/utils';
+import { cn, getHref, parseDate } from '@/lib/utils';
 
 import SvgIcon from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
 import WorkoutStatus from '@/components/WorkoutStatus';
+
+import { useStoreActions } from '@/store';
 
 import {
   UserWorkoutData,
@@ -17,6 +19,11 @@ interface WorkoutContentProps {
 }
 
 const WorkoutContent: FC<WorkoutContentProps> = ({ userWorkoutData }) => {
+  const { fetchUserWorkoutData } = useStoreActions(
+    ({ WorkoutStore: { fetchUserWorkoutData } }) => ({
+      fetchUserWorkoutData,
+    }),
+  );
   if (!userWorkoutData) return null;
 
   return (
@@ -25,8 +32,11 @@ const WorkoutContent: FC<WorkoutContentProps> = ({ userWorkoutData }) => {
         const { startTime, status, workoutConfig } = data;
         return (
           <Link
-            href={`/workout/${workoutConfig?._id}`}
+            href={getHref(data?._id, status) ?? '/'}
             key={index}
+            onClick={() => {
+              if (data?.userId) fetchUserWorkoutData({ userId: data?.userId });
+            }}
             className={cn(
               'flex w-full flex-row justify-between items-center rounded-xl py-[15px] px-5',
               {

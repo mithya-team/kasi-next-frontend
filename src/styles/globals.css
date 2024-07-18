@@ -104,6 +104,19 @@
   .min-h-main {
     @apply min-h-[calc(100vh-56px)];
   }
+
+  .user-overview {
+    border-radius: 12px;
+    -webkit-backdrop-filter: 25px;
+    background: linear-gradient(
+      135deg,
+      rgba(139, 93, 245, 0.3) -24.95%,
+      rgba(93, 228, 187, 0.3) 117.89%
+    );
+  }
+  .user-overview::before {
+    backdrop-filter: 25px;
+  }
 }
 
 @layer utilities {

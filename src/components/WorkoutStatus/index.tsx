@@ -25,7 +25,7 @@ const WorkoutStatus: FC<WorkoutStatusProps> = ({ status }) => {
   return (
     <div
       className={cn(
-        'flex justify-center items-center  flex-row gap-1.5 py-0.5 px-2.5 rounded-md text-white text-sm font-primary bg-gray-700 font-semibold',
+        'flex justify-center items-center w-fit  flex-row gap-1.5 py-0.5 px-2.5 rounded-md text-white text-sm font-primary bg-gray-700 font-semibold',
         {
           ['bg-violet-700']: status === WorkoutSessionStatus.RUNNING,
         },

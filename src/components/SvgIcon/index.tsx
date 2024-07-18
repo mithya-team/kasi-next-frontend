@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 
 import { SvgIconProps } from '@/components/SvgIcon/@types';
+import CallIcon from '@/components/SvgIcon/Call';
 import ClockIcon from '@/components/SvgIcon/Clock';
 import CrossIcon from '@/components/SvgIcon/Cross';
 import DistanceIcon from '@/components/SvgIcon/Distance';
@@ -14,6 +15,7 @@ import KasiIcon from '@/components/SvgIcon/Kasi';
 import LogoutIcon from '@/components/SvgIcon/Logout';
 import MatchedIcon from '@/components/SvgIcon/Matched';
 import NotificationIcon from '@/components/SvgIcon/Notification';
+import OverviewImageIcon from '@/components/SvgIcon/OverviewImage';
 import PaymentIcon from '@/components/SvgIcon/Payment';
 import ProfileIcon from '@/components/SvgIcon/profile';
 import RightArrowIcon from '@/components/SvgIcon/RightArrow';
@@ -24,6 +26,7 @@ import ShowIcon from '@/components/SvgIcon/Show';
 import SortIcon from '@/components/SvgIcon/Sort';
 import SubscriptionIcon from '@/components/SvgIcon/Subscription';
 import SuccessIcon from '@/components/SvgIcon/Success';
+import TabsBorderIcon from '@/components/SvgIcon/TabsBorder';
 import ThreeDots from '@/components/SvgIcon/ThreeDots';
 import UserIcon from '@/components/SvgIcon/User';
 import UsersIcon from '@/components/SvgIcon/Users';
@@ -60,7 +63,10 @@ export type IconName =
   | 'payment'
   | 'setting'
   | 'logout'
-  | 'right-arrow';
+  | 'right-arrow'
+  | 'call'
+  | 'overview-image'
+  | 'tabs-border';
 
 const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   run: RunIcon,
@@ -90,6 +96,9 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   setting: SettingIcon,
   logout: LogoutIcon,
   'right-arrow': RightArrowIcon,
+  call: CallIcon,
+  'overview-image': OverviewImageIcon,
+  'tabs-border': TabsBorderIcon,
 };
 
 const SvgIcon: FC<ISvgIconProps> = ({ name, ...svgProps }) => {

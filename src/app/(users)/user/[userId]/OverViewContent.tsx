@@ -15,25 +15,32 @@ const OverViewContent: FC<OverviewContentProps> = ({ user }) => {
   const overViewConfig = useMemo(() => getUserOverview(user), [user]);
   return (
     <>
-      <div className='min-w-[45%] rounded-xl p-5 bg-gradient-to-r from-linear-3  to-linear-4'>
-        {user?.userPreferences?.bestTimeResults.map((u, idx) => {
-          return (
-            <div
-              className={cn(
-                'flex flex-row justify-between p-5 border-b border-gray-800 last:border-0 ',
-              )}
-              key={idx}
-            >
-              <span>{u.paceType}</span>
-              <span>{`${u.minPace} - ${u?.maxPace}`}</span>
-            </div>
-          );
-        })}
-      </div>
+      {user?.userPreferences ? (
+        <div className='min-w-[45%] user-overview relative'>
+          {user?.userPreferences?.bestTimeResults.map((u, idx) => {
+            return (
+              <div
+                className={cn(
+                  'flex flex-row justify-between p-5 border-b border-gray-800 last:border-0 ',
+                )}
+                key={idx}
+              >
+                <span>{u.paceType}</span>
+                <span>{`${u.minPace} - ${u?.maxPace}`}</span>
+              </div>
+            );
+          })}
+          <SvgIcon
+            name='overview-image'
+            className='absolute right-0 bottom-0'
+          />
+        </div>
+      ) : null}
+
       {overViewConfig?.map((config, idx) => {
         return (
           <div
-            className='py-3 px-5 flex flex-row rounded-xl bg-gray-800 justify-between'
+            className='py-3 px-5 flex flex-row rounded-xl bg-gray-800 justify-between items-center'
             key={idx}
           >
             <div className='flex flex-row justify-center items-center gap-2.5'>
@@ -92,7 +99,7 @@ const getUserOverview = (user: User | null): IConfig[] => {
       iconName: 'clock',
       label: 'Best Time',
       value: user?.userPreferences?.dateOfBirth
-        ? parseDate(user.userPreferences.dateOfBirth, 'MMMM D, YYYY')
+        ? user.userPreferences?.bestTime?.completionPace
         : '-',
     },
 

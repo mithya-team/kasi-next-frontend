@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { twMerge } from 'tailwind-merge';
 
 import { AthleteSubscription } from '@/models/user/user.types';
+import { WorkoutSessionStatus } from '@/models/workout/workout.types';
 
 /** Merge classes with tailwind-merge with clsx full feature */
 export function cn(...inputs: ClassValue[]) {
@@ -12,6 +13,11 @@ export function cn(...inputs: ClassValue[]) {
 export const parseDate = (date: string, format: string) => {
   const dateObj = dayjs(date);
   return dateObj.isValid() ? dateObj.format(format) : '-';
+};
+
+export const parseTime = (date: string): string => {
+  const dateObj = dayjs(date);
+  return dateObj.isValid() ? dateObj.format('hh:mm A') : '-';
 };
 
 export const getPlanStatusTag = (
@@ -29,5 +35,18 @@ export const getPlanStatusTag = (
         : { status: 'Trial Expired', className: 'text-error-1' };
     default:
       return { status: 'Free Trial', className: 'text-green-500' };
+  }
+};
+
+export const getHref = (id: string, status: WorkoutSessionStatus) => {
+  switch (status) {
+    case WorkoutSessionStatus.PAST:
+      return `/workout/${id}/past`;
+    case WorkoutSessionStatus.RUNNING:
+      return `/workout/${id}/live`;
+    case WorkoutSessionStatus.YET_TO_START:
+      return `/workout/${id}/upcoming`;
+    default:
+      break;
   }
 };

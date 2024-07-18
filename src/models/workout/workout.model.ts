@@ -18,6 +18,10 @@ const workoutModel = {
       params,
     });
   },
+
+  async fetchWorkoutSessionsDetails(id: string) {
+    return request(`/workout-sessions/${id}`);
+  },
 };
 
 export default workoutModel;

@@ -2,31 +2,42 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 
-import { getPlanStatusTag, parseDate } from '@/lib/utils';
+import { getHref, parseDate, parseTime } from '@/lib/utils';
 
+import StartCallButton from '@/components/Buttons/StartCallButton';
+import Loader from '@/components/Loader';
 import SvgIcon from '@/components/SvgIcon';
+import WorkoutStatus from '@/components/WorkoutStatus';
 
 import { useStoreActions, useStoreState } from '@/store';
 
 import withAuth from '@/hoc/withAuth';
 
 const Schedule = () => {
-  const { workoutScheduleData } = useStoreState(
+  const { workoutScheduleData, isWorkoutScheduleLoading } = useStoreState(
     ({ WorkoutStore: { workoutScheduleData, isWorkoutScheduleLoading } }) => ({
       workoutScheduleData,
       isWorkoutScheduleLoading,
     }),
   );
 
-  const { fetchWorkoutScheduleData } = useStoreActions(
-    ({ WorkoutStore: { fetchWorkoutScheduleData } }) => ({
-      fetchWorkoutScheduleData,
-    }),
-  );
+  const { fetchWorkoutScheduleData, fetchUser, fetchUserWorkoutData } =
+    useStoreActions(
+      ({
+        WorkoutStore: { fetchWorkoutScheduleData, fetchUserWorkoutData },
+        UserStore: { fetchUser },
+      }) => ({
+        fetchWorkoutScheduleData,
+        fetchUser,
+        fetchUserWorkoutData,
+      }),
+    );
 
   useEffect(() => {
     fetchWorkoutScheduleData({});
   }, []);
+
+  if (isWorkoutScheduleLoading) return <Loader />;
 
   return (
     <div className='w-full px-5 font-medium font-primary overflow-auto'>
@@ -40,29 +51,40 @@ const Schedule = () => {
         <div className='w-[5%] py-3 pl-5'></div>
       </div>
       {workoutScheduleData?.map((data, index) => {
-        const { status, className } = getPlanStatusTag(
-          data?.user?.athleteSubscription?.[0],
-        );
         const { user } = data;
         return (
           <div
             key={index}
             className='flex border-b border-gray-800 text-sm leading-[14px] text-white'
           >
-            <div className='w-[21.62%] p-5 text-ellipsis overflow-hidden'>
-              <Link href={`/user/${encodeURIComponent(user?._id ?? '')}`}>
+            <div className='w-[19%] p-5 text-ellipsis overflow-hidden'>
+              <Link
+                href={getHref(data?._id, data?.status) ?? '/'}
+                onClick={() => {
+                  if (user) {
+                    fetchUser(user?._id);
+                    fetchUserWorkoutData({ userId: user?._id });
+                  }
+                }}
+              >
                 {user?.fullName}
               </Link>
             </div>
-            <div className='w-[10.29%] p-5'>
+            <div className='w-[15%] px-5 py-[15px]'>
+              <WorkoutStatus status={data?.status} />
+            </div>
+            <div className='w-[19%] p-5 text-ellipsis overflow-hidden'>
+              {data?.workoutConfig?.name ?? '-'}
+            </div>
+            <div className='w-[10%] p-5'>
               {parseDate(user?.createdAt ?? '', 'MMMM D, YYYY')}
             </div>
-            <div className={`w-[16.91%] p-5 ${className}`}>{status}</div>
-            <div className='w-[21.62%] p-5 text-ellipsis overflow-hidden'>
-              {user?.email}
+            <div className='w-[10%] p-5'>
+              {' '}
+              {parseTime(user?.createdAt ?? '')}
             </div>
-            <div className='w-[21.62%] p-5 text-gray-500'>
-              Member already exists
+            <div className='w-[19%] px-5 py-2.5'>
+              <StartCallButton>Start call</StartCallButton>
             </div>
             <button className='w-[5.00%] p-5'>
               <SvgIcon name='three-dots' />
