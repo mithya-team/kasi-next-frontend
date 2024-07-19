@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { FC, useEffect } from 'react';
 
-import { parseDate } from '@/lib/utils';
+import { getPlanStatusTag, parseDate } from '@/lib/utils';
 
 import Loader from '@/components/Loader';
 import SvgIcon from '@/components/SvgIcon';
@@ -10,24 +10,23 @@ import SvgIcon from '@/components/SvgIcon';
 import { useStoreActions, useStoreState } from '@/store';
 
 import withAuth from '@/hoc/withAuth';
-import { AthleteSubscription, ProductPlanId } from '@/models/user/user.types';
 
 const UsersListingPage: FC = () => {
   const { usersList, isLoading } = useStoreState(
-    ({ UsersListStore: { usersList, isLoading } }) => ({
+    ({ UserStore: { usersList, isLoading } }) => ({
       usersList,
       isLoading,
     }),
   );
 
-  const { fetchUsers } = useStoreActions(
-    ({ UsersListStore: { fetchUsers } }) => ({
-      fetchUsers,
+  const { fetchUsersList } = useStoreActions(
+    ({ UserStore: { fetchUsersList } }) => ({
+      fetchUsersList,
     }),
   );
 
   useEffect(() => {
-    if (!usersList) fetchUsers({});
+    if (!usersList) fetchUsersList({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -44,8 +43,7 @@ const UsersListingPage: FC = () => {
       </div>
       {usersList?.map((user, index) => {
         const { status, className } = getPlanStatusTag(
-          user?.athleteSubscription?.[0]?.planId,
-          user?.athleteSubscription?.[0]?.subscription,
+          user?.athleteSubscription?.[0],
         );
         return (
           <div
@@ -78,21 +76,3 @@ const UsersListingPage: FC = () => {
 };
 
 export default withAuth(UsersListingPage);
-
-const getPlanStatusTag = (
-  planId: ProductPlanId,
-  subscription: AthleteSubscription['subscription'],
-) => {
-  switch (planId) {
-    case 'PAID_TIER_1_MONTH':
-      return { status: 'Monthly Subscription', className: 'plan-status' };
-    case 'PAID_TIER_12_MONTHS':
-      return { status: 'Annual Subscription', className: 'plan-status' };
-    case 'NONE':
-      return subscription
-        ? { status: 'Plan Expired', className: 'text-error-1' }
-        : { status: 'Trial Expired', className: 'text-error-1' };
-    default:
-      return { status: 'Free Trial', className: 'text-green-500' };
-  }
-};

@@ -4,11 +4,11 @@ import { isEqual } from 'lodash';
 import AdminStore from '@/store/admin';
 import DialogStore from '@/store/dialog';
 import UserStore from '@/store/user';
-import UsersListStore from '@/store/usersList';
+import WorkoutStore from '@/store/workout';
 
 const RootStore = {
   UserStore,
-  UsersListStore,
+  WorkoutStore,
   AdminStore,
   DialogStore,
 };

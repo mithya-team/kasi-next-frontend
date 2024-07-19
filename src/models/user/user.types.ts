@@ -3,19 +3,8 @@ export interface UserPreferences {
   maxHeartRate: number;
   voiceType: string;
   distanceUnit: string;
-  bestTime: {
-    paceType: string;
-    completionPace: string;
-    paceUnit: string;
-    _id: string;
-  };
-  bestTimeResults: {
-    paceType: string;
-    minPace: string;
-    maxPace: string;
-    paceUnit: string;
-    _id: string;
-  }[];
+  bestTime: BestTime;
+  bestTimeResults: BestTimeResult[];
   _id: string;
 }
 
@@ -75,3 +64,18 @@ export type ProductPlanId =
   | 'NONE'
   | 'PAID_TIER_1_MONTH'
   | 'PAID_TIER_12_MONTHS';
+
+interface BestTime {
+  paceType: string;
+  completionPace: string;
+  paceUnit: string;
+  _id: string;
+}
+
+interface BestTimeResult {
+  paceType: string;
+  minPace: string;
+  maxPace: string;
+  paceUnit: string;
+  _id: string;
+}

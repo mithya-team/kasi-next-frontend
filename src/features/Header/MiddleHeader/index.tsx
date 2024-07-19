@@ -1,5 +1,9 @@
 import { FC } from 'react';
 
+import { cn } from '@/lib/utils';
+
+import Button from '@/components/Buttons';
+
 import { useStoreState } from '@/store';
 
 export interface ITabs {
@@ -17,7 +21,7 @@ const MiddleHeader: FC<MiddleHeaderProps> = ({ onTabsClick }) => {
   );
 
   return (
-    <div className='flex flex-row gap-5'>
+    <div className='flex flex-start gap-5 py-2.5'>
       {tabs.map((tab, index) => {
         const isActive = showUserWorkoutContent
           ? tab.id === 'workout'
@@ -25,14 +29,22 @@ const MiddleHeader: FC<MiddleHeaderProps> = ({ onTabsClick }) => {
         return (
           <div
             key={index}
-            className={`h-[54px] flex justify-center px-2  items-center rounded-lg border-b ${isActive ? 'border-white' : 'border-transparent'}`}
+            className={cn(
+              'flex flex-col justify-center px-1 border-b-2 py-3 border-transparent  items-center',
+              {
+                ['border-white']: isActive,
+              },
+            )}
           >
-            <button
-              className={`text-sm font-medium font-primary w-full h-full ${isActive ? 'text-white' : 'text-gray-500'}`}
+            <Button
+              className={cn(
+                'text-sm font-medium w-full h-full capitalize font-primary text-gray-500',
+                { ['text-white']: isActive },
+              )}
               onClick={() => onTabsClick?.(tab)}
             >
               {tab.name}
-            </button>
+            </Button>
           </div>
         );
       })}

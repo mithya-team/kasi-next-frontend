@@ -53,7 +53,6 @@ function useAppInit() {
       await handleAccessToken(access_token, setAuthHeader, redirectToHome);
       await me();
     }
-
     setAppInitialized(true);
   };
 
