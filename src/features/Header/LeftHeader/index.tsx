@@ -36,8 +36,6 @@ const LeftHeader: FC<LeftHeaderProps> = ({ leftHeaderClass, onSearch }) => {
     return userWorkoutData?.find((workout) => workout?._id === sessionId);
   }, [userWorkoutData, user, pathname]);
 
-  console.log({ isWorkoutDetailPage });
-
   return (
     <div
       className={cn(

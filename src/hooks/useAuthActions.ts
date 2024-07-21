@@ -70,11 +70,7 @@ function useAuthActions() {
       const data = await userModel.me();
       setAdmin(data);
     } catch (error: any) {
-      if (error?.response?.data?.name === 'TokenExpiredError') {
-        console.log('token expired');
-      } else {
-        logout(false);
-      }
+      logout(false);
     }
   };
 
