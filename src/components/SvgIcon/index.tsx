@@ -7,6 +7,7 @@ import CrossIcon from '@/components/SvgIcon/Cross';
 import DistanceIcon from '@/components/SvgIcon/Distance';
 import DobIcon from '@/components/SvgIcon/Dob';
 import DownArrowIcon from '@/components/SvgIcon/DownArrow';
+import EmptyUserWorkoutIcon from '@/components/SvgIcon/EmptyUserWorkout';
 import ErrorIcon from '@/components/SvgIcon/Error';
 import GoogleIcon from '@/components/SvgIcon/Google';
 import HeartRateIcon from '@/components/SvgIcon/HeartRate';
@@ -66,7 +67,8 @@ export type IconName =
   | 'right-arrow'
   | 'call'
   | 'overview-image'
-  | 'tabs-border';
+  | 'tabs-border'
+  | 'empty-workout';
 
 const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   run: RunIcon,
@@ -99,6 +101,7 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   call: CallIcon,
   'overview-image': OverviewImageIcon,
   'tabs-border': TabsBorderIcon,
+  'empty-workout': EmptyUserWorkoutIcon,
 };
 
 const SvgIcon: FC<ISvgIconProps> = ({ name, ...svgProps }) => {

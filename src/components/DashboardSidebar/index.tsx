@@ -13,7 +13,7 @@ interface DashboardSidebarProps {
 const links = [
   {
     name: 'users' as ISvgIconProps['name'],
-    href: '/users-list',
+    href: '/users',
   },
   {
     name: 'run' as ISvgIconProps['name'],
@@ -29,7 +29,7 @@ const DashboardSidebar: FC<DashboardSidebarProps> = ({ className }) => {
         className,
       )}
     >
-      <Link className='py-[15px] pl-[8px]' href='/'>
+      <Link className='py-[15px] pl-[8px]' href='/users'>
         <Image
           width={64}
           height={54}

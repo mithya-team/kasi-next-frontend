@@ -1,17 +1,43 @@
 'use client';
 import { debounce } from 'lodash';
-import { FC, useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
 import SvgIcon from '@/components/SvgIcon';
 import TextInput from '@/components/TextInput';
 
+import { useStoreState } from '@/store';
+
+import WorkoutLeftHeader from '@/features/Header/WorkoutLeftHeader';
+import { WorkoutSessionStatus } from '@/models/workout/workout.types';
+
 export interface LeftHeaderProps {
   leftHeaderClass?: string;
   onSearch?: (searchTerm: string) => void;
 }
 const LeftHeader: FC<LeftHeaderProps> = ({ leftHeaderClass, onSearch }) => {
+  const pathname = usePathname();
+  const sessionId = pathname.split('/')[2];
+
+  const { user, userWorkoutData, isWorkoutDetailPage } = useStoreState(
+    ({
+      UserStore: { user },
+      WorkoutStore: { userWorkoutData, isWorkoutDetailPage },
+    }) => ({
+      user,
+      userWorkoutData,
+      isWorkoutDetailPage,
+    }),
+  );
+
+  const workoutData = useMemo(() => {
+    return userWorkoutData?.find((workout) => workout?._id === sessionId);
+  }, [userWorkoutData, user, pathname]);
+
+  console.log({ isWorkoutDetailPage });
+
   return (
     <div
       className={cn(
@@ -19,7 +45,16 @@ const LeftHeader: FC<LeftHeaderProps> = ({ leftHeaderClass, onSearch }) => {
         leftHeaderClass,
       )}
     >
-      <SearchView onSearch={onSearch} />
+      {isWorkoutDetailPage ? (
+        <WorkoutLeftHeader
+          userName={user?.fullName ?? ''}
+          startTime={workoutData?.startTime ?? ''}
+          status={workoutData?.status ?? WorkoutSessionStatus?.YET_TO_START}
+          workoutName={workoutData?.workoutConfig?.name ?? ''}
+        />
+      ) : (
+        <SearchView onSearch={onSearch} />
+      )}
     </div>
   );
 };

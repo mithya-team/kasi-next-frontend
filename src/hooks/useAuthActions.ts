@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useRouter } from 'next/navigation';
+
 import { axiosUtils } from '@/lib/axios/axios';
 import storage, { EStorageKey } from '@/lib/storage';
 import { toast } from '@/lib/toast';
@@ -13,6 +15,7 @@ function useAuthActions() {
   const { setAdmin } = useStoreActions(({ AdminStore: { setAdmin } }) => ({
     setAdmin,
   }));
+  const router = useRouter();
 
   const signUp = async (data: SignupFormData) => {
     try {
@@ -55,6 +58,7 @@ function useAuthActions() {
     try {
       setAdmin(null);
       clearTokens();
+      router.push('/login');
       if (showToast) toast.success('Log out successful');
     } catch (error) {
       console.error(error);

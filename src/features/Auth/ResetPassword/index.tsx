@@ -1,5 +1,6 @@
 'use client';
 import { Form, Formik, FormikProps } from 'formik';
+import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 import * as yup from 'yup';
 
@@ -8,9 +9,7 @@ import PasswordInput from '@/components/PasswordInput';
 import SvgIcon from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
 
-import { useStoreActions } from '@/store';
-
-import { AuthDialogType, ResetFormData } from '@/models/auth/auth.types';
+import { ResetFormData } from '@/models/auth/auth.types';
 
 const initialValues = {
   password: '',
@@ -44,9 +43,7 @@ const ResetPassword: FC<ResetPasswordProps> = ({
 export default ResetPassword;
 
 const SuccessContent = () => {
-  const { openDialog } = useStoreActions(({ DialogStore: { openDialog } }) => ({
-    openDialog,
-  }));
+  const router = useRouter();
   return (
     <div className='flex flex-col justify-center items-center gap-7 mt-5 font-secondary font-semibold text-xl text-center text-white'>
       <SvgIcon name='success' />
@@ -60,7 +57,7 @@ const SuccessContent = () => {
       </div>
       <PrimaryButton
         onClick={() => {
-          openDialog(AuthDialogType.LOGIN);
+          router.push('login');
         }}
       >
         Continue to login
@@ -112,17 +109,14 @@ const ResetForm: FC<ResetFormProps> = ({ onResetPassword }) => {
                 touched?.confirmPassword ? errors?.confirmPassword : undefined
               }
             />
-            {touched.confirmPassword &&
-              values.password &&
-              values.confirmPassword &&
-              values.password === values.confirmPassword && (
-                <div className=' flex flex-row gap-1 -mt-2'>
-                  <SvgIcon name='matched' />
-                  <Typo classes='text-xs font-primary font-medium text-green-500'>
-                    Both password match
-                  </Typo>
-                </div>
-              )}
+            {values.password && values.password === values.confirmPassword && (
+              <div className=' flex flex-row gap-1 -mt-2'>
+                <SvgIcon name='matched' />
+                <Typo classes='text-xs font-primary font-medium text-green-500'>
+                  Both password match
+                </Typo>
+              </div>
+            )}
           </div>
           <PrimaryButton type='submit' isLoading={isSubmitting}>
             Reset Password

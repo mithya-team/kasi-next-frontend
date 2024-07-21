@@ -3,6 +3,7 @@ import { FC } from 'react';
 
 import { cn, getHref, parseDate } from '@/lib/utils';
 
+import EmptyUserWorkout from '@/components/EmptyUserWorkout';
 import SvgIcon from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
 import WorkoutStatus from '@/components/WorkoutStatus';
@@ -24,11 +25,11 @@ const WorkoutContent: FC<WorkoutContentProps> = ({ userWorkoutData }) => {
       fetchUserWorkoutData,
     }),
   );
-  if (!userWorkoutData) return null;
+  if (!userWorkoutData?.length) return <EmptyUserWorkout />;
 
   return (
     <>
-      {userWorkoutData.map((data, index) => {
+      {userWorkoutData?.map((data, index) => {
         const { startTime, status, workoutConfig } = data;
         return (
           <Link

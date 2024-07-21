@@ -1,4 +1,3 @@
-import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -82,8 +81,6 @@ interface PopoverContentProps {
 }
 
 const PopoverContent: FC<PopoverContentProps> = ({ closePopover }) => {
-  const router = useRouter();
-
   const { logout } = useAuthActions();
   const contentConfig = [
     {
@@ -104,10 +101,8 @@ const PopoverContent: FC<PopoverContentProps> = ({ closePopover }) => {
       title: 'Sign Out',
       icon: 'logout' as IconName,
       onClick: async () => {
-        console.log('logout');
         await logout();
         closePopover();
-        router.push('/');
       },
     },
   ];

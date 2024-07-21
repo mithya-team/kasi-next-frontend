@@ -3,7 +3,7 @@ import * as React from 'react';
 import { getButtonStyles } from '@/lib/styles/ButtonStyles.helper';
 import { cn } from '@/lib/utils';
 
-import Icon from '@/components/icons/Icon';
+import Loader from '@/components/Loader';
 
 import { ButtonSize, ButtonVariant } from '@/@types/ButtonsStyles';
 
@@ -72,7 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               },
             )}
           >
-            <Icon name='spinner' classNames={{ element: 'animate-spin' }} />
+            <Loader />
           </div>
         )}
         {LeftIcon && (

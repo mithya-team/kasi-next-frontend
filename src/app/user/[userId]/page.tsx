@@ -9,8 +9,8 @@ import Loader from '@/components/Loader';
 
 import { useStoreState } from '@/store';
 
-import OverViewContent from '@/app/(users)/user/[userId]/OverViewContent';
-import WorkoutContent from '@/app/(users)/user/[userId]/WorkoutContent';
+import OverViewContent from '@/app/user/[userId]/OverViewContent';
+import WorkoutContent from '@/app/user/[userId]/WorkoutContent';
 import withAuth from '@/hoc/withAuth';
 
 const UserDetails = () => {
