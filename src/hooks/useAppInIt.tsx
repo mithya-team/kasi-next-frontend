@@ -17,14 +17,14 @@ function useAppInit() {
   const { me, setAuthHeader, logout } = useAuthActions();
   const router = useRouter();
 
-  const redirectToHome = () => router.push('/');
+  const loginScreen = () => router.push('/login');
 
   const init = async () => {
     axiosInstance.interceptors.response.use(
       (res) => res,
       async (err) => {
         if (isAxiosError(err)) {
-          if (err.config?.url?.includes('/refresh')) logout();
+          if (err.config?.url?.includes('/refresh')) logout(false);
           else if (err.response?.status === 401) {
             try {
               const refreshToken = storage.get(EStorageKey.REFRESH_TOKEN);
@@ -38,7 +38,6 @@ function useAppInit() {
                   storage.set(EStorageKey.REFRESH_TOKEN, res.refreshToken);
               }
             } catch (error) {
-              console.error(error);
               logout();
             }
           }
@@ -50,7 +49,7 @@ function useAppInit() {
     const access_token = storage.get(EStorageKey.ACCESS_TOKEN);
 
     if (access_token) {
-      await handleAccessToken(access_token, setAuthHeader, redirectToHome);
+      await handleAccessToken(access_token, setAuthHeader, loginScreen);
       await me();
     }
     setAppInitialized(true);
@@ -67,7 +66,7 @@ export default useAppInit;
 const handleAccessToken = async (
   access_token: string,
   setAuthHeader: (accessToken: string) => void,
-  redirectToHome: () => void,
+  loginScreen: () => void,
 ) => {
   const accessTokenData: JwtDecodeResponse = jwtDecode(access_token);
   const currentTimestamp = Date.now() / 1000; // Convert to seconds
@@ -82,7 +81,7 @@ const handleAccessToken = async (
 
       if (refreshTokenData?.exp <= currentTimestamp) {
         // Both access and refresh tokens are expired, send to home screen
-        redirectToHome();
+        loginScreen();
       } else {
         // Refresh the access token using an API call
         const {

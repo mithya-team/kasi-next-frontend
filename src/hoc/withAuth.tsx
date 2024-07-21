@@ -1,9 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { useStoreActions, useStoreState } from '@/store';
-
-import { AuthDialogType } from '@/models/auth/auth.types';
+import { useStoreState } from '@/store';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,16 +10,10 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
     const { admin } = useStoreState(({ AdminStore: { admin } }) => ({
       admin,
     }));
-    const { openDialog } = useStoreActions(
-      ({ DialogStore: { openDialog } }) => ({
-        openDialog,
-      }),
-    );
 
     useEffect(() => {
       if (!admin) {
-        router.push('/');
-        openDialog(AuthDialogType.LOGIN);
+        router.push('/login');
       }
     }, [router, admin]);
 

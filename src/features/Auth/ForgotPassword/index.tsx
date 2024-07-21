@@ -11,7 +11,7 @@ import { ForgotPasswordFormData } from '@/models/auth/auth.types';
 
 export interface ForgotPasswordProps {
   onGoBack: () => void;
-  onResetPassword: (values: ForgotPasswordFormData) => void;
+  onForgotPassword: (values: ForgotPasswordFormData) => void;
 }
 
 const initialValues = {
@@ -20,7 +20,7 @@ const initialValues = {
 
 const ForgotPassword: FC<ForgotPasswordProps> = ({
   onGoBack,
-  onResetPassword,
+  onForgotPassword: onResetPassword,
 }) => {
   const [timer, setTimer] = useState(60);
   const [isResendEnabled, setIsResendEnabled] = useState(false);

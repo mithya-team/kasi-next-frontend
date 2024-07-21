@@ -3,7 +3,9 @@ import { request } from '@/lib/axios/request';
 import {
   UserWorkoutDataResponse,
   UserWorkoutSessionParams,
+  WorkoutConfigDetails,
   WorkoutScheduleResponse,
+  WorkoutSessionDetails,
 } from '@/models/workout/workout.types';
 
 const workoutModel = {
@@ -20,7 +22,11 @@ const workoutModel = {
   },
 
   async fetchWorkoutSessionsDetails(id: string) {
-    return request(`/workout-sessions/${id}`);
+    return request<WorkoutSessionDetails>(`/workout-sessions/${id}`);
+  },
+
+  async fetchWorkoutConfig(slug: string) {
+    return request<WorkoutConfigDetails>(`/workout-configs/${slug}`);
   },
 };
 

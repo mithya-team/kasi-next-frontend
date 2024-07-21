@@ -68,3 +68,111 @@ interface WorkoutConfig {
   name: string;
   slug: string;
 }
+
+interface Session {
+  timestamp: string;
+  currentPace: number;
+  heartRate: number;
+  currentDistance: number;
+  durationElapsed: number;
+}
+
+interface LapDetails {
+  startTime: string;
+  averagePace: number;
+  sessions: Session[];
+  endTime: string;
+  elapsedDuration: number;
+  averageHeartRate: number;
+  elapsedDistance: number;
+}
+
+interface RepDetails {
+  averagePace: number;
+  elapsedDuration: number;
+  elapsedDistance: number;
+  laps: LapDetails[];
+}
+
+interface WorkoutData {
+  elapsedDuration: number;
+  elapsedDistance: number;
+  reps: RepDetails[];
+  averagePace: number;
+}
+
+interface SegmentDuration {
+  pace: number;
+  elapsedDuration: number;
+  totalDurationAtStart: number;
+  segment: number;
+}
+
+export interface WorkoutSessionDetails {
+  _id: string;
+  startTime: string;
+  lengthUnit: string;
+  workoutData: WorkoutData[];
+  sets: WorkoutSet[];
+  currentSetIndex: number;
+  currentRepIndex: number;
+  currentLapIndex: number;
+  nature: string;
+  status: string;
+  recoveryStartTimes: string[];
+  recoveryEndTimes: string[];
+  totalDistance: number;
+  timeElapsed: number;
+  segmentLength: number;
+  segmentDurations: SegmentDuration[];
+  totalLapDistance: number;
+  userId: string;
+  workoutSlug: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  endTime: string;
+  workoutConfig: WorkoutConfig;
+}
+
+export interface WorkoutConfigDetails {
+  _id: string;
+  name: string;
+  superCategory: string;
+  lengthUnit: string;
+  selection: {
+    nature: SelectionOption;
+    lapDistance: SelectionOption;
+    timeInterval: SelectionOption;
+    recoveryTime: SelectionOption;
+    repDistance: SelectionOption;
+    repInterval: SelectionOption;
+  };
+  limits: {
+    maxLapsInRep: number;
+    maxRepsInSet: number;
+    maxSet: number;
+  };
+  impMetrics: string[];
+  layouts: Array<{
+    lap: string[];
+    interval: string[];
+  }>;
+  segmentLength: string;
+  slug: string;
+  voiceDescription: string;
+  __v: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SelectionOption {
+  mode: string;
+  fixedValue: string;
+  options: Array<{
+    label: string;
+    value: string;
+  }>;
+  array?: string[];
+  locked: boolean;
+}

@@ -25,7 +25,7 @@ const Header: FC<HeaderProps> = ({
 
   const { isUserDetailsPage, isUserListingPage } = useMemo(() => {
     const isUserDetailsPage = pathname.split('/')[1] === 'user';
-    const isUserListingPage = pathname.split('/')[1] === 'users-list';
+    const isUserListingPage = pathname.split('/')[1] === 'users';
     return { isUserDetailsPage, isUserListingPage };
   }, [pathname]);
 

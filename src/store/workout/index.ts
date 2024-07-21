@@ -4,7 +4,9 @@ import workoutModel from '@/models/workout/workout.model';
 import {
   UserWorkoutData,
   UserWorkoutSessionParams,
+  WorkoutConfigDetails,
   WorkoutScheduleData,
+  WorkoutSessionDetails,
 } from '@/models/workout/workout.types';
 
 export interface TWorkoutStore {
@@ -21,6 +23,22 @@ export interface TWorkoutStore {
     TWorkoutStore,
     Omit<UserWorkoutSessionParams, 'userId'>
   >;
+  workoutSessionDetails: WorkoutSessionDetails | null;
+  setWorkoutSessionDetails: Action<TWorkoutStore, WorkoutSessionDetails | null>;
+  isWorkoutSessionDetailsLoading: boolean;
+  setIsWorkoutSessionDetailsLoading: Action<TWorkoutStore, boolean>;
+  fetchWorkoutSessionDetails: Thunk<TWorkoutStore, string>;
+
+  workoutDataByConfigSlug: WorkoutConfigDetails | null;
+  setWorkoutDataByConfigSlug: Action<
+    TWorkoutStore,
+    WorkoutConfigDetails | null
+  >;
+  isWorkoutDataByConfigSlugLoading: boolean;
+  setIsWorkoutDataByConfigSlugLoading: Action<TWorkoutStore, boolean>;
+  fetchWorkoutDataByConfigSlug: Thunk<TWorkoutStore, string>;
+  isWorkoutDetailPage: boolean;
+  setIsWorkoutDetailPage: Action<TWorkoutStore, boolean>;
 }
 
 const WorkoutStore: TWorkoutStore = {
@@ -47,6 +65,10 @@ const WorkoutStore: TWorkoutStore = {
       actions.setIsWorkoutDataLoading(false);
     }
   }),
+  isWorkoutDetailPage: false,
+  setIsWorkoutDetailPage: action((state, payload) => {
+    state.isWorkoutDetailPage = payload;
+  }),
   workoutScheduleData: [],
   isWorkoutScheduleLoading: false,
   setWorkoutScheduleData: action((state, payload) => {
@@ -67,6 +89,54 @@ const WorkoutStore: TWorkoutStore = {
       console.warn('Failed to fetch workout schedule data:', error);
     } finally {
       actions.setIsWorkoutScheduleLoading(false);
+    }
+  }),
+
+  // New states and actions implementation
+  workoutSessionDetails: null,
+  isWorkoutSessionDetailsLoading: false,
+  setWorkoutSessionDetails: action((state, payload) => {
+    state.workoutSessionDetails = payload;
+  }),
+  setIsWorkoutSessionDetailsLoading: action((state, payload) => {
+    state.isWorkoutSessionDetailsLoading = payload;
+  }),
+  fetchWorkoutSessionDetails: thunk(async (actions, workoutId) => {
+    actions.setIsWorkoutSessionDetailsLoading(true);
+    try {
+      const response =
+        await workoutModel.fetchWorkoutSessionsDetails(workoutId);
+      if (response) {
+        actions.setWorkoutSessionDetails(response);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn('Failed to fetch specific workout data:', error);
+    } finally {
+      actions.setIsWorkoutSessionDetailsLoading(false);
+    }
+  }),
+
+  workoutDataByConfigSlug: null,
+  isWorkoutDataByConfigSlugLoading: false,
+  setWorkoutDataByConfigSlug: action((state, payload) => {
+    state.workoutDataByConfigSlug = payload;
+  }),
+  setIsWorkoutDataByConfigSlugLoading: action((state, payload) => {
+    state.isWorkoutDataByConfigSlugLoading = payload;
+  }),
+  fetchWorkoutDataByConfigSlug: thunk(async (actions, configSlug) => {
+    actions.setIsWorkoutDataByConfigSlugLoading(true);
+    try {
+      const response = await workoutModel.fetchWorkoutConfig(configSlug);
+      if (response) {
+        actions.setWorkoutDataByConfigSlug(response);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn('Failed to fetch workout data by config slug:', error);
+    } finally {
+      actions.setIsWorkoutDataByConfigSlugLoading(false);
     }
   }),
 };

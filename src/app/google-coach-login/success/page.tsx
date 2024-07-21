@@ -17,7 +17,7 @@ const GoogleCoachLoginSuccess = () => {
   useEffect(() => {
     if (accessToken && refreshToken) {
       authenticate({ accessToken, refreshToken });
-      router.push('/');
+      router.push('/users');
     }
   }, [accessToken, refreshToken]);
 

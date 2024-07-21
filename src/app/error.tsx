@@ -3,7 +3,6 @@
 import * as React from 'react';
 
 import TextButton from '@/components/Buttons/TextButton';
-import Icon from '@/components/icons/Icon';
 import Typo from '@/components/typography/Typo';
 
 export default function Error({
@@ -22,14 +21,6 @@ export default function Error({
     <main>
       <section className='bg-white'>
         <div className='layout flex min-h-screen flex-col items-center justify-center text-center text-black'>
-          <Icon
-            name='alarm-warning'
-            size={60}
-            classNames={{
-              element: 'drop-shadow-glow animate-flicker text-red-500',
-            }}
-          />
-
           <Typo level='h1' classes='mt-8 text-4xl md:text-6xl'>
             Oops, something went wrong!
           </Typo>
