@@ -32,6 +32,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       isDarkBg = false,
       leftIcon: LeftIcon,
       rightIcon: RightIcon,
+      classNames,
       ...rest
     },
     ref,
@@ -80,6 +81,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             className={cn([
               size === 'base' && 'mr-1',
               size === 'sm' && 'mr-1.5',
+              classNames?.leftIcon,
             ])}
           >
             {LeftIcon}
@@ -91,6 +93,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             className={cn([
               size === 'base' && 'ml-1',
               size === 'sm' && 'ml-1.5',
+              classNames?.rightIcon,
             ])}
           >
             {RightIcon}

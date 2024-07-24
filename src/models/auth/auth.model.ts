@@ -25,7 +25,7 @@ const authModel = {
 
   async getUpdatedToken(oldRefreshToken: string) {
     return request('/auth/refresh', {
-      method: 'POST',
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${oldRefreshToken}`,
       },

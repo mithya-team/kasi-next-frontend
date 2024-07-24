@@ -1,3 +1,5 @@
+import { toast } from '@/lib/toast';
+
 export function getFromLocalStorage(key: string): string | null {
   if (typeof window !== 'undefined') {
     return window.localStorage.getItem(key);
@@ -10,4 +12,18 @@ export function getFromSessionStorage(key: string): string | null {
     return sessionStorage.getItem(key);
   }
   return null;
+}
+
+export function copyToClipboard(text: string) {
+  if (!navigator.clipboard) {
+    return; // Clipboard API not supported
+  }
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      toast.success('Text copied to clipboard successfully!');
+    })
+    .catch((err) => {
+      toast.error('Failed to copy text to clipboard:', err);
+    });
 }

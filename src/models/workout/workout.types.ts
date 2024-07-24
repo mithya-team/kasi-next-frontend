@@ -14,11 +14,15 @@ export interface UserWorkoutSessionParams {
   page?: number;
   limit?: number;
 }
+export enum LengthUnit {
+  KM = 'km',
+  MILES = 'miles',
+}
 
 export interface UserWorkoutData {
   _id: string;
   startTime: string;
-  lengthUnit: string;
+  lengthUnit: LengthUnit;
   sets: WorkoutSet[];
   currentSetIndex: number;
   currentRepIndex: number;
@@ -77,7 +81,7 @@ interface Session {
   durationElapsed: number;
 }
 
-interface LapDetails {
+export interface LapDetails {
   startTime: string;
   averagePace: number;
   sessions: Session[];
@@ -85,9 +89,10 @@ interface LapDetails {
   elapsedDuration: number;
   averageHeartRate: number;
   elapsedDistance: number;
+  recoveryTime: number;
 }
 
-interface RepDetails {
+export interface RepDetails {
   averagePace: number;
   elapsedDuration: number;
   elapsedDistance: number;
@@ -101,7 +106,7 @@ interface WorkoutData {
   averagePace: number;
 }
 
-interface SegmentDuration {
+export interface SegmentDuration {
   pace: number;
   elapsedDuration: number;
   totalDurationAtStart: number;
@@ -111,7 +116,7 @@ interface SegmentDuration {
 export interface WorkoutSessionDetails {
   _id: string;
   startTime: string;
-  lengthUnit: string;
+  lengthUnit: LengthUnit;
   workoutData: WorkoutData[];
   sets: WorkoutSet[];
   currentSetIndex: number;
@@ -135,11 +140,22 @@ export interface WorkoutSessionDetails {
   workoutConfig: WorkoutConfig;
 }
 
+export type ImpMetrices =
+  | 'TotalDistance'
+  | 'TimeElapsed'
+  | 'TimeForEachMileDistance'
+  | 'TimeForEachKMDistance'
+  | 'SegmentPace'
+  | 'SegmentTime'
+  | 'TimeEachLap'
+  | 'Pace'
+  | 'HeartRate';
+
 export interface WorkoutConfigDetails {
   _id: string;
   name: string;
   superCategory: string;
-  lengthUnit: string;
+  lengthUnit: LengthUnit;
   selection: {
     nature: SelectionOption;
     lapDistance: SelectionOption;
@@ -153,7 +169,7 @@ export interface WorkoutConfigDetails {
     maxRepsInSet: number;
     maxSet: number;
   };
-  impMetrics: string[];
+  impMetrics: ImpMetrices[];
   layouts: Array<{
     lap: string[];
     interval: string[];
