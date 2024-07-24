@@ -1,36 +1,113 @@
 'use client';
-import Link from 'next/link';
-import { FC, useEffect } from 'react';
+import { isAxiosError } from 'axios';
+import { FC, useEffect, useState } from 'react';
 
-import { getPlanStatusTag, parseDate } from '@/lib/utils';
+import { toast } from '@/lib/toast';
 
 import Loader from '@/components/Loader';
 import SvgIcon from '@/components/SvgIcon';
+import Typo from '@/components/typography/Typo';
 
 import { useStoreActions, useStoreState } from '@/store';
 
+import Empty from '@/app/users/Empty';
+import UsersListTable, {
+  isUnConfirmedUserWithDetails,
+} from '@/app/users/UsersListTable';
+import ConfirmationDialog from '@/features/ConfirmationDialog';
 import withAuth from '@/hoc/withAuth';
+import adminModel from '@/models/admin/admin.model';
+import { UnConfirmedUserWithDetails } from '@/models/admin/admin.types';
+import { User } from '@/models/user/user.types';
+
+export type ActionType = 'decline' | 'accept';
 
 const UsersListingPage: FC = () => {
-  const { usersList, isLoading } = useStoreState(
-    ({ UserStore: { usersList, isLoading } }) => ({
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [actionType, setActionType] = useState<ActionType>();
+  const [selectedUser, setSelectedUser] = useState<
+    User | UnConfirmedUserWithDetails | null
+  >(null);
+  const { usersList, isLoading, admin, unConfirmedUsers } = useStoreState(
+    ({
+      UserStore: { usersList, isLoading },
+      AdminStore: { admin, unConfirmedUsers },
+    }) => ({
       usersList,
       isLoading,
+      admin,
+      unConfirmedUsers,
     }),
   );
 
-  const { fetchUsersList } = useStoreActions(
-    ({ UserStore: { fetchUsersList } }) => ({
-      fetchUsersList,
-    }),
-  );
+  const { fetchUsersList, fetchUserConnections, updateConfirmedUsers } =
+    useStoreActions(
+      ({
+        UserStore: { fetchUsersList },
+        AdminStore: {
+          fetchUnConfirmedUsers: fetchUserConnections,
+          updateConfirmedUsers,
+        },
+      }) => ({
+        fetchUsersList,
+        fetchUserConnections,
+        updateConfirmedUsers,
+      }),
+    );
+
+  const openConfirmationDialog = (
+    user: User | UnConfirmedUserWithDetails,
+    action: ActionType,
+  ) => {
+    setSelectedUser(user);
+    setActionType(action);
+    setDialogOpen(true);
+  };
+  const closeConfirmationDialog = () => {
+    setActionType(undefined);
+    setDialogOpen(false);
+  };
+
+  const onAgree = async () => {
+    if (!admin?._id) return;
+    try {
+      if (selectedUser && isUnConfirmedUserWithDetails(selectedUser)) {
+        if (actionType === 'accept') {
+          await adminModel.acceptRequest(selectedUser?._id, admin?._id);
+          updateConfirmedUsers({ action: 'UPDATE', user: selectedUser });
+          toast.success('Connected Successfully!');
+        } else if (actionType === 'decline') {
+          await adminModel.deleteRequest(selectedUser?._id, admin?._id);
+          updateConfirmedUsers({ action: 'REMOVE', user: selectedUser });
+          toast.success('Connection Decline!');
+        }
+      }
+    } catch (error) {
+      if (isAxiosError(error))
+        toast.error(error?.response?.data?.message || 'Try Again');
+    } finally {
+      setDialogOpen(false);
+    }
+  };
 
   useEffect(() => {
     fetchUsersList({});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    return () => {
+      setDialogOpen(false);
+      setActionType(undefined);
+    };
   }, []);
 
+  useEffect(() => {
+    if (usersList?.length && admin) {
+      const userIds = usersList?.map((user) => user._id);
+      fetchUserConnections({ coachId: admin._id, userIds });
+    }
+  }, [usersList, admin]);
+
   if (isLoading) return <Loader className='h-[100vh]' />;
+
   return (
     <div className='w-full px-5 font-medium font-primary overflow-auto'>
       <div className='flex bg-gray-800 text-base  text-gray-400 mb-5'>
@@ -41,36 +118,48 @@ const UsersListingPage: FC = () => {
         <div className='w-[21.62%] py-3 pl-5'>Status</div>
         <div className='w-[5.00%] py-3 pl-5' />
       </div>
-      {usersList?.map((user, index) => {
-        const { status, className } = getPlanStatusTag(
-          user?.athleteSubscription?.[0],
-        );
-        return (
-          <div
-            key={index}
-            className='flex border-b border-gray-800 text-sm leading-[14px] text-white'
+      {!unConfirmedUsers?.length && !usersList?.length ? (
+        <Empty />
+      ) : (
+        <>
+          {unConfirmedUsers?.map((user) => (
+            <UsersListTable
+              onAction={openConfirmationDialog}
+              user={user}
+              key={user?._id}
+            />
+          ))}
+          {usersList?.map((user) => (
+            <UsersListTable
+              onAction={openConfirmationDialog}
+              user={user}
+              key={user?._id}
+            />
+          ))}
+        </>
+      )}
+      <ConfirmationDialog
+        open={isDialogOpen}
+        onClose={closeConfirmationDialog}
+        onAgree={onAgree}
+      >
+        <SvgIcon
+          name={actionType === 'accept' ? 'user-dialog' : 'delete-user'}
+        />
+        <div className='flex flex-col gap-5'>
+          <Typo
+            level='h2'
+            classes='font-secondary tracking-[-0.225px] text-center font-semibold text-gray-50'
           >
-            <div className='w-[21.62%] p-5 text-ellipsis overflow-hidden'>
-              <Link href={`/user/${encodeURIComponent(user._id)}`}>
-                {user?.fullName}
-              </Link>
-            </div>
-            <div className='w-[10.29%] p-5'>
-              {parseDate(user?.createdAt, 'MMMM D, YYYY')}
-            </div>
-            <div className={`w-[16.91%] p-5 ${className}`}>{status}</div>
-            <div className='w-[21.62%] p-5 text-ellipsis overflow-hidden'>
-              {user?.email}
-            </div>
-            <div className='w-[21.62%] p-5 text-gray-500'>
-              Member already exists
-            </div>
-            <button className='w-[5.00%] p-5'>
-              <SvgIcon name='three-dots' />
-            </button>
-          </div>
-        );
-      })}
+            {`Are you sure you want  to ${actionType === 'accept' ? 'connect with ' : 'decline the joining request from'} ${selectedUser?.fullName}?`}
+          </Typo>
+          <Typo classes='font-primary text-gray-500 text-base text-center'>
+            {actionType === 'accept'
+              ? `${selectedUser?.fullName} has requested to join you.`
+              : `       Please confirm if you wish to decline ${selectedUser?.fullName} request to join. This action cannot be undone.`}
+          </Typo>
+        </div>
+      </ConfirmationDialog>
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss';
-import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
@@ -13,9 +12,8 @@ export default {
         2: '-0.5px',
       },
       fontFamily: {
-        // sans: ['var(--font-inter)'],
-        primary: ['Inter', ...defaultTheme.fontFamily.sans],
-        secondary: ['Barlow', ...defaultTheme.fontFamily.sans],
+        primary: ['var(--font-inter)'],
+        secondary: ['var(--font-barlow)'],
       },
       colors: {
         primary: {
@@ -61,6 +59,7 @@ export default {
           500: '#91E0C8',
         },
         red: {
+          1: '#DC2626',
           300: '#EF4444',
         },
       },

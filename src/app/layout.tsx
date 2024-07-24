@@ -5,7 +5,9 @@ import { useEffect } from 'react';
 import '@/styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { barlow, inter } from '@/lib/fonts';
 import { ToastContainer } from '@/lib/toast';
+import { cn } from '@/lib/utils';
 import useAppInit from '@/hooks/useAppInIt';
 
 import DashboardSidebar from '@/components/DashboardSidebar';
@@ -20,7 +22,7 @@ const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     <html>
       <body
         suppressHydrationWarning={true}
-        className='w-[100vw] h-[100vh] bg-gray-900'
+        className={cn('w-[100vw] h-[100vh] bg-gray-900', inter, barlow)}
       >
         <AppProviders>
           <Layout>{children}</Layout>

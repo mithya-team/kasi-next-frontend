@@ -1,5 +1,7 @@
 import clsx, { ClassValue } from 'clsx';
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 import { twMerge } from 'tailwind-merge';
 
 import { AthleteSubscription } from '@/models/user/user.types';
@@ -18,6 +20,11 @@ export const parseDate = (date: string, format: string) => {
 export const parseTime = (date: string): string => {
   const dateObj = dayjs(date);
   return dateObj.isValid() ? dateObj.format('hh:mm A') : '-';
+};
+
+export const formatDuration = (seconds: number): string => {
+  const formattedDuration = dayjs.duration(seconds, 'seconds');
+  return formattedDuration.format('mm:ss');
 };
 
 export const getPlanStatusTag = (

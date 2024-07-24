@@ -1,40 +1,21 @@
 'use client';
-import { usePathname } from 'next/navigation';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 
-import { useStoreActions, useStoreState } from '@/store';
+import MetricsCard from '@/features/MetricsCard';
+import WorkoutConfigHeader from '@/features/WorkoutConfigHeader';
+import withAuth from '@/hoc/withAuth';
 
 const PastScreen: FC = () => {
-  const pathname = usePathname();
-  const sessionId = pathname.split('/')[2];
-
-  const { workoutSessionDetails } = useStoreState(
-    ({ WorkoutStore: { workoutSessionDetails, workoutDataByConfigSlug } }) => ({
-      workoutSessionDetails,
-      workoutDataByConfigSlug,
-    }),
+  return (
+    <div className='text-white mt-[60px] flex flex-col gap-5'>
+      <div className='flex flex-row gap-5 justify-center items-center px-[96px]'>
+        <WorkoutConfigHeader />
+      </div>
+      <div className='flex flex-col justify-center items-start mt-5'>
+        <MetricsCard />
+      </div>
+    </div>
   );
-
-  const { fetchWorkoutSessionDetails, fetchWorkoutDataByConfigSlug } =
-    useStoreActions(
-      ({
-        WorkoutStore: {
-          fetchWorkoutSessionDetails,
-          fetchWorkoutDataByConfigSlug,
-        },
-      }) => ({
-        fetchWorkoutSessionDetails,
-        fetchWorkoutDataByConfigSlug,
-      }),
-    );
-
-  useEffect(() => {
-    if (sessionId) fetchWorkoutSessionDetails(sessionId);
-    if (workoutSessionDetails)
-      fetchWorkoutDataByConfigSlug(workoutSessionDetails?.workoutSlug);
-  }, [sessionId, workoutSessionDetails?.workoutSlug]);
-
-  return <div className='text-white'>past screen</div>;
 };
 
-export default PastScreen;
+export default withAuth(PastScreen);

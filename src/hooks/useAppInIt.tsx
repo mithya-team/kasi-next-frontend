@@ -25,7 +25,10 @@ function useAppInit() {
       async (err) => {
         if (isAxiosError(err)) {
           if (err.config?.url?.includes('/refresh')) logout(false);
-          else if (err.response?.status === 401) {
+          else if (
+            err.response?.status === 401 &&
+            !err.config?.url?.includes('/coach-login')
+          ) {
             try {
               const refreshToken = storage.get(EStorageKey.REFRESH_TOKEN);
               if (refreshToken) {
@@ -33,6 +36,15 @@ function useAppInit() {
                 if (res.accessToken) {
                   setAuthHeader(res.accessToken);
                   storage.set(EStorageKey.ACCESS_TOKEN, res.accessToken);
+                  // Retry the original request with the new access token
+                  const originalRequest = {
+                    ...err.config,
+                    headers: {
+                      ...err?.config?.headers,
+                      Authorization: `Bearer ${res.accessToken}`,
+                    },
+                  };
+                  return axiosInstance(originalRequest);
                 }
                 if (res.refreshToken)
                   storage.set(EStorageKey.REFRESH_TOKEN, res.refreshToken);

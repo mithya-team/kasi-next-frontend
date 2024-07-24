@@ -5,7 +5,10 @@ import { cn } from '@/lib/utils';
 import SvgIcon from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
 
-const EmptyUserWorkout: FC<{ className?: string }> = ({ className }) => {
+const EmptyUserWorkout: FC<{ className?: string; helperText?: string }> = ({
+  className,
+  helperText,
+}) => {
   return (
     <div
       className={cn(
@@ -15,7 +18,7 @@ const EmptyUserWorkout: FC<{ className?: string }> = ({ className }) => {
     >
       <SvgIcon name='empty-workout' />
       <Typo classes='font-primary text-base text-gray-500 text-center'>
-        You have no upcoming runs
+        {helperText}
       </Typo>
     </div>
   );

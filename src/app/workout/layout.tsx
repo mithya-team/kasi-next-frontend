@@ -1,14 +1,47 @@
 'use client';
+import { usePathname } from 'next/navigation';
 import { FC, PropsWithChildren, useEffect } from 'react';
 
-import { useStoreActions } from '@/store';
+import { useStoreActions, useStoreState } from '@/store';
 
 const WorkoutLayout: FC<PropsWithChildren> = ({ children }) => {
-  const { setIsWorkoutDetailPage } = useStoreActions(
-    ({ WorkoutStore: { setIsWorkoutDetailPage } }) => ({
-      setIsWorkoutDetailPage,
+  const pathname = usePathname();
+  const sessionId = pathname.split('/')[2];
+
+  const { workoutSessionDetails } = useStoreState(
+    ({ WorkoutStore: { workoutSessionDetails } }) => ({
+      workoutSessionDetails,
     }),
   );
+
+  const {
+    fetchWorkoutSessionDetails,
+    fetchWorkoutDataByConfigSlug,
+    setIsWorkoutDetailPage,
+    fetchUserWorkoutData,
+  } = useStoreActions(
+    ({
+      WorkoutStore: {
+        fetchWorkoutSessionDetails,
+        fetchWorkoutDataByConfigSlug,
+        setIsWorkoutDetailPage,
+        fetchUserWorkoutData,
+      },
+    }) => ({
+      fetchWorkoutSessionDetails,
+      fetchWorkoutDataByConfigSlug,
+      setIsWorkoutDetailPage,
+      fetchUserWorkoutData,
+    }),
+  );
+
+  useEffect(() => {
+    if (sessionId) fetchWorkoutSessionDetails(sessionId);
+    if (workoutSessionDetails)
+      fetchWorkoutDataByConfigSlug(workoutSessionDetails?.workoutSlug);
+    if (workoutSessionDetails?.userId)
+      fetchUserWorkoutData({ userId: workoutSessionDetails?.userId });
+  }, [sessionId, workoutSessionDetails?.workoutSlug]);
 
   useEffect(() => {
     // Set isWorkoutDetailPage to true when the component mounts
@@ -19,6 +52,7 @@ const WorkoutLayout: FC<PropsWithChildren> = ({ children }) => {
       setIsWorkoutDetailPage(false);
     };
   }, []);
+
   return <> {children}</>;
 };
 export default WorkoutLayout;
