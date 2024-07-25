@@ -6,6 +6,8 @@ import useAuthActions from '@/hooks/useAuthActions';
 
 import Loader from '@/components/Loader';
 
+import { ROUTE } from '@/constant/route';
+
 const GoogleCoachLoginSuccess = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -17,7 +19,7 @@ const GoogleCoachLoginSuccess = () => {
   useEffect(() => {
     if (accessToken && refreshToken) {
       authenticate({ accessToken, refreshToken });
-      router.push('/users');
+      router.push(ROUTE.USER_LIST_ROUTE.path);
     }
   }, [accessToken, refreshToken]);
 

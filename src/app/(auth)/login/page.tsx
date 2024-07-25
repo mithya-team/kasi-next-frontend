@@ -7,6 +7,7 @@ import useAuthActions from '@/hooks/useAuthActions';
 
 import Typo from '@/components/typography/Typo';
 
+import { ROUTE } from '@/constant/route';
 import Login from '@/features/Auth/Login';
 import { LoginFormData } from '@/models/auth/auth.types';
 
@@ -15,7 +16,7 @@ const LoginScreen: FC = () => {
   const router = useRouter();
   const onLogin = async (values: LoginFormData) => {
     await login(values);
-    router.push('/users');
+    router.push(ROUTE.USER_LIST_ROUTE.path);
   };
 
   return (

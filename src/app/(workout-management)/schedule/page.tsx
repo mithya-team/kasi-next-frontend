@@ -6,7 +6,7 @@ import Loader from '@/components/Loader';
 
 import { useStoreActions, useStoreState } from '@/store';
 
-import ScheduleTable from '@/app/schedule/ScheduleTable';
+import ScheduleTable from '@/app/(workout-management)/schedule/ScheduleTable';
 import withAuth from '@/hoc/withAuth';
 
 const Schedule = () => {

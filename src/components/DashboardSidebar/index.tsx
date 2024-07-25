@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -7,17 +8,27 @@ import { cn } from '@/lib/utils';
 
 import SvgIcon, { ISvgIconProps } from '@/components/SvgIcon';
 
+import { ROUTE } from '@/constant/route';
+
 interface DashboardSidebarProps {
   className?: string;
 }
 const links = [
   {
     name: 'users' as ISvgIconProps['name'],
-    href: '/users',
+    href: ROUTE.USER_LIST_ROUTE.path,
   },
   {
     name: 'run' as ISvgIconProps['name'],
-    href: '/schedule',
+    href: ROUTE.SCHEDULE_ROUTE.path,
+  },
+  // {
+  //   name: 'subscription' as ISvgIconProps['name'],
+  //   href: ROUTE.SUBSCRIPTION_ROUTE.path,
+  // },
+  {
+    name: 'setting' as ISvgIconProps['name'],
+    href: ROUTE.SETTING_ROUTE.path,
   },
 ];
 const DashboardSidebar: FC<DashboardSidebarProps> = ({ className }) => {
@@ -29,7 +40,7 @@ const DashboardSidebar: FC<DashboardSidebarProps> = ({ className }) => {
         className,
       )}
     >
-      <Link className='py-[15px] pl-[8px]' href='/users'>
+      <Link className='py-[15px] pl-[8px]' href={ROUTE.USER_LIST_ROUTE.path}>
         <Image
           width={64}
           height={54}

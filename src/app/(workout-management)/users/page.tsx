@@ -10,10 +10,10 @@ import Typo from '@/components/typography/Typo';
 
 import { useStoreActions, useStoreState } from '@/store';
 
-import Empty from '@/app/users/Empty';
+import Empty from '@/app/(workout-management)/users/Empty';
 import UsersListTable, {
   isUnConfirmedUserWithDetails,
-} from '@/app/users/UsersListTable';
+} from '@/app/(workout-management)/users/UsersListTable';
 import ConfirmationDialog from '@/features/ConfirmationDialog';
 import withAuth from '@/hoc/withAuth';
 import adminModel from '@/models/admin/admin.model';

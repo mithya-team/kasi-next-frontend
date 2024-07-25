@@ -27,7 +27,7 @@ const LogoutIcon: FC<LogoutIconProps> = (props) => {
       <path
         d='M9.76001 12.0596H19.93'
         stroke='white'
-        stroke-width='1.6'
+        strokeWidth='1.6'
         strokeMiterlimit='10'
         strokeLinecap='round'
         strokeLinejoin='round'

@@ -7,6 +7,7 @@ import useAuthActions from '@/hooks/useAuthActions';
 
 import Typo from '@/components/typography/Typo';
 
+import { ROUTE } from '@/constant/route';
 import SignUp from '@/features/Auth/Signup';
 import { SignupFormData } from '@/models/auth/auth.types';
 
@@ -18,7 +19,7 @@ const SignupScreen: FC = () => {
   const onSignup = async (values: SignupFormData) => {
     await signUp(values);
     setShowSignupForm(false);
-    router.push('/users');
+    router.push(ROUTE.USER_LIST_ROUTE.path);
   };
 
   return (

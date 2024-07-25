@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -9,6 +10,8 @@ import SvgIcon, { IconName, ISvgIconProps } from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
 
 import { useStoreState } from '@/store';
+
+import { ROUTE } from '@/constant/route';
 
 export interface RightHeaderProps {
   rightHeaderClass?: string;
@@ -42,7 +45,11 @@ const RightHeader: FC<RightHeaderProps> = ({ rightHeaderClass }) => {
         >
           {admin?.fullName ?? ''}
         </Typo>
-        <Popover content={<PopoverContent closePopover={closePopover} />}>
+        <Popover
+          open={openPopover}
+          onOpenChange={setOpenPopover}
+          content={<PopoverContent closePopover={closePopover} />}
+        >
           <div
             onClick={() => setOpenPopover(!openPopover)}
             className='w-6 flex justify-center items-center'
@@ -82,19 +89,23 @@ interface PopoverContentProps {
 
 const PopoverContent: FC<PopoverContentProps> = ({ closePopover }) => {
   const { logout } = useAuthActions();
+  const router = useRouter();
+
   const contentConfig = [
     {
       title: 'Settings',
       icon: 'setting' as IconName,
       onClick: () => {
-        // Handle settings click
+        router.push(ROUTE.SETTING_ROUTE.path);
+        closePopover();
       },
     },
     {
       title: 'Payments',
       icon: 'payment' as IconName,
       onClick: () => {
-        // Handle payments click
+        router.push(ROUTE.SUBSCRIPTION_ROUTE.path);
+        closePopover();
       },
     },
     {
