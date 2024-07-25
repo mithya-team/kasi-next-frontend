@@ -17,7 +17,7 @@ interface RepCardProps {
   isLive?: boolean;
 }
 
-const MetricsCard: React.FC<RepCardProps> = ({ isLive = false }) => {
+const SegmentCard: React.FC<RepCardProps> = ({ isLive = false }) => {
   const { workoutSessionDetails, workoutDataByConfigSlug } = useStoreState(
     ({ WorkoutStore: { workoutSessionDetails, workoutDataByConfigSlug } }) => ({
       workoutSessionDetails,
@@ -90,21 +90,20 @@ const MetricsCard: React.FC<RepCardProps> = ({ isLive = false }) => {
   );
 };
 
-export default MetricsCard;
+export default SegmentCard;
 
 const getRowsValue = (
   impMetrics: ImpMetrices[],
   segmentDurations: SegmentDuration,
 ) => {
   for (const metric of impMetrics) {
-    const trimmedMetric = metric.trim();
-    if (trimmedMetric === 'TimeForEachKMDistance') {
-      return (segmentDurations?.pace / 1000)?.toFixed(3);
-    } else if (trimmedMetric === 'TimeForEachMileDistance') {
-      return (segmentDurations?.pace / 1609.34)?.toFixed(3);
-    } else if (trimmedMetric === 'SegmentPace') {
+    if (metric === 'TimeForEachKMDistance') {
+      return formatDuration(segmentDurations?.pace);
+    } else if (metric === 'TimeForEachMileDistance') {
+      return formatDuration(segmentDurations?.pace);
+    } else if (metric === 'SegmentPace') {
       return segmentDurations.pace?.toFixed(3);
-    } else if (trimmedMetric === 'SegmentTime') {
+    } else if (metric === 'SegmentTime') {
       return formatDuration(segmentDurations.elapsedDuration);
     }
   }

@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils';
 
 interface PopoverProps {
   content: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
   containerClassName?: string;
 }
@@ -12,10 +14,12 @@ interface PopoverProps {
 const Popover: FC<PopoverProps> = ({
   content,
   children,
-  containerClassName,
+  containerClassName = '',
+  open,
+  onOpenChange,
 }) => {
   return (
-    <RadixPopover.Root>
+    <RadixPopover.Root open={open} onOpenChange={onOpenChange}>
       <RadixPopover.Trigger>{children}</RadixPopover.Trigger>
       <RadixPopover.Portal>
         <RadixPopover.Content

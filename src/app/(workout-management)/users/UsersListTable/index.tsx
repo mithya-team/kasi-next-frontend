@@ -6,7 +6,7 @@ import { getPlanStatusTag, parseDate } from '@/lib/utils';
 import Button from '@/components/Buttons';
 import SvgIcon from '@/components/SvgIcon';
 
-import { ActionType } from '@/app/users/page';
+import { ActionType } from '@/app/(workout-management)/users/page';
 import { UnConfirmedUserWithDetails } from '@/models/admin/admin.types';
 import { User } from '@/models/user/user.types';
 

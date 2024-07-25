@@ -1,7 +1,7 @@
 'use client';
 import { FC } from 'react';
 
-import MetricsCard from '@/features/MetricsCard';
+import SegmentCard from '@/features/SegmentCard';
 import WorkoutConfigHeader from '@/features/WorkoutConfigHeader';
 import withAuth from '@/hoc/withAuth';
 
@@ -12,7 +12,7 @@ const PastScreen: FC = () => {
         <WorkoutConfigHeader />
       </div>
       <div className='flex flex-col justify-center items-start mt-5'>
-        <MetricsCard />
+        <SegmentCard />
       </div>
     </div>
   );
