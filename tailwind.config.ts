@@ -62,6 +62,9 @@ export default {
           1: '#DC2626',
           300: '#EF4444',
         },
+        violet: {
+          1: '#8B5CF6',
+        },
       },
       keyframes: {
         flicker: {

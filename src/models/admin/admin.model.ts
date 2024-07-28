@@ -1,6 +1,7 @@
 import { request } from '@/lib/axios/request';
 
 import { UnConfirmedUser } from '@/models/admin/admin.types';
+import { User } from '@/models/user/user.types';
 
 const adminModel = {
   async fetchConnectionRequest(coachId: string, userIds: string[]) {
@@ -12,7 +13,7 @@ const adminModel = {
       },
     );
   },
-  async getCodeInviteCodeById(id: string) {
+  async getInviteCodeById(id: string) {
     return request<{ code: string }>(`/coach-invite-code/${id}`);
   },
 
@@ -28,6 +29,27 @@ const adminModel = {
   async deleteRequest(userId: string, coachId: string) {
     return request(`/coach-user-connection/request/${userId}/${coachId}`, {
       method: 'DELETE',
+    });
+  },
+
+  async updateAdmin(userId: string, data: Partial<User>) {
+    return request<User>(`/users/${userId}`, {
+      method: 'PUT',
+      data,
+    });
+  },
+  async generateInviteCode(id: string) {
+    return request<{ code: string }>(`/coach-invite-code/${id}`, {
+      method: 'POST',
+    });
+  },
+  async updatePassword(
+    id: string,
+    data: { oldPassword: string; newPassword: string },
+  ) {
+    return request<User>(`/users/${id}/update-password`, {
+      method: 'PUT',
+      data,
     });
   },
 };
