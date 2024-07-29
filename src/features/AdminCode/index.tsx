@@ -1,5 +1,7 @@
 import { FC, useEffect } from 'react';
 
+import './index.css';
+
 import { copyToClipboard } from '@/lib/helper';
 import { cn } from '@/lib/utils';
 
@@ -31,7 +33,7 @@ const AdminCode: FC<{ className?: string }> = ({ className }) => {
   return (
     <div
       className={cn(
-        '-mt-4 border flex flex-row gap-5 bg-gray-800 px-[50px] py-3.5 border-dashed border-gray-600',
+        '-mt-4 rounded-xl flex flex-row gap-5 bg-gray-800 px-[50px] py-3.5 dashed-border',
         className,
       )}
     >
