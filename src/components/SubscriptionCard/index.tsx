@@ -1,25 +1,28 @@
 import { FC } from 'react';
 
 import { cn } from '@/lib/utils';
+import useAsyncTask from '@/hooks/useAsyncTask';
 
-import Button, { ButtonProps } from '@/components/Buttons';
+import Button from '@/components/Buttons';
 import PrimaryButton from '@/components/Buttons/PrimaryButton';
 import Typo from '@/components/typography/Typo';
+
+import { SubscriptionProductsDetails } from '@/models/admin/admin.types';
+import { ProductPlanId } from '@/models/user/user.types';
 
 interface SubscriptionCardProps {
   className?: string;
   isActive?: boolean;
-  label: string;
-  plan: string;
-  onClick: ButtonProps['onClick'];
+  product: SubscriptionProductsDetails;
+  onClick: (product: SubscriptionProductsDetails) => void;
 }
 const SubscriptionCard: FC<SubscriptionCardProps> = ({
   className,
   isActive,
-  plan,
-  label,
+  product,
   onClick,
 }) => {
+  const onClickTask = useAsyncTask(onClick);
   return (
     <div
       className={cn(
@@ -30,7 +33,7 @@ const SubscriptionCard: FC<SubscriptionCardProps> = ({
       <div className='flex flex-col'>
         <div className='flex flex-row justify-between items-center'>
           <Typo classes='text-white font-secondary font-semibold text-lg leading-[22px] tracking-[-0.09px]'>
-            {label}
+            {product?.name}
           </Typo>
           {isActive ? (
             <Button className='px-5 py-1.5 bg-green-900 text-white font-primary text-sm rounded-[10px]'>
@@ -44,22 +47,43 @@ const SubscriptionCard: FC<SubscriptionCardProps> = ({
         <Typo
           level='h4'
           classes='font-secondary text-white text-xl font-semibold tracking-[-0.1px]'
-        >{`$${plan}/`}</Typo>
+        >{`$${product?.amount}`}</Typo>
         <Typo classes='text-gray-500 font-medium font-primary text-xs leading-5'>
-          per month
+          {getSubscriptionPeriod(product?.planId)}
         </Typo>
       </div>
       {isActive ? (
         <Button
-          onClick={onClick}
+          disabled={product?.planId === 'FREE_TIER'}
+          onClick={() => onClick(product)}
           className='px-5 py-2.5 border border-green-500 rounded-[10px] bg-black-1 font-secondary text-white font-semibold text-xl tracking-[-0.1px]'
         >
           Cancel plan
         </Button>
       ) : (
-        <PrimaryButton onClick={onClick}>Subscribe now</PrimaryButton>
+        <PrimaryButton
+          isLoading={onClickTask.isLoading}
+          onClick={() => onClickTask.run(product)}
+        >
+          Subscribe now
+        </PrimaryButton>
       )}
     </div>
   );
 };
 export default SubscriptionCard;
+
+const getSubscriptionPeriod = (name: ProductPlanId) => {
+  switch (name) {
+    case 'FREE_TIER':
+      return '';
+    case 'PAID_TIER_1_MONTH':
+      return '/per month';
+    case 'PAID_TIER_6_MONTHS':
+      return '/per half year';
+    case 'PAID_TIER_12_MONTHS':
+      return '/per year';
+    default:
+      return '';
+  }
+};

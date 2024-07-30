@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { SvgIconProps } from '@/components/SvgIcon/@types';
 import CallIcon from '@/components/SvgIcon/Call';
 import ClockIcon from '@/components/SvgIcon/Clock';
+import CoachRun from '@/components/SvgIcon/CoachRun';
 import CopyIcon from '@/components/SvgIcon/Copy';
 import CrossIcon from '@/components/SvgIcon/Cross';
 import DeleteUserIcon from '@/components/SvgIcon/DeleteUser';
@@ -27,7 +28,9 @@ import NotificationIcon from '@/components/SvgIcon/Notification';
 import OverviewImageIcon from '@/components/SvgIcon/OverviewImage';
 import PaceIcon from '@/components/SvgIcon/Pace';
 import PaymentIcon from '@/components/SvgIcon/Payment';
+import PaymentSuccessIcon from '@/components/SvgIcon/PaymentSuccess';
 import ProfileIcon from '@/components/SvgIcon/profile';
+import RemoveUserIcon from '@/components/SvgIcon/RemoveUser';
 import RightArrowIcon from '@/components/SvgIcon/RightArrow';
 import RunIcon from '@/components/SvgIcon/Run';
 import SearchIcon from '@/components/SvgIcon/SearchIcon';
@@ -90,7 +93,10 @@ export type IconName =
   | 'copy'
   | 'delete-user'
   | 'elapsed-time'
-  | 'elapsed-distance';
+  | 'elapsed-distance'
+  | 'coach-run'
+  | 'remove-user'
+  | 'payment-success';
 
 const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   run: RunIcon,
@@ -135,6 +141,9 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   'delete-user': DeleteUserIcon,
   'elapsed-distance': ElapsedDistanceIcon,
   'elapsed-time': ElapsedTimeIcon,
+  'coach-run': CoachRun,
+  'remove-user': RemoveUserIcon,
+  'payment-success': PaymentSuccessIcon,
 };
 
 const SvgIcon: FC<ISvgIconProps> = ({ name, ...svgProps }) => {

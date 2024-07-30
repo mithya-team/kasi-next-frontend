@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@radix-ui/react-popover": "^1.1.1",
+    "@stripe/react-stripe-js": "^2.7.3",
+    "@stripe/stripe-js": "^4.1.0",
     "axios": "^1.6.2",
     "clsx": "^2.1.0",
     "dayjs": "^1.11.11",
