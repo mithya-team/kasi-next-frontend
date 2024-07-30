@@ -32,7 +32,7 @@ const authModel = {
     });
   },
 
-  async forgotPasword(data: ForgotPasswordFormData) {
+  async forgotPassword(data: ForgotPasswordFormData) {
     return request('/auth/coach-forgot-password', {
       method: 'POST',
       data,

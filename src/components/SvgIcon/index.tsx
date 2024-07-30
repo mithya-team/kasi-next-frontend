@@ -4,6 +4,7 @@ import { SvgIconProps } from '@/components/SvgIcon/@types';
 import CallIcon from '@/components/SvgIcon/Call';
 import ClockIcon from '@/components/SvgIcon/Clock';
 import CoachRun from '@/components/SvgIcon/CoachRun';
+import CodeIcon from '@/components/SvgIcon/Code';
 import CopyIcon from '@/components/SvgIcon/Copy';
 import CrossIcon from '@/components/SvgIcon/Cross';
 import DeleteUserIcon from '@/components/SvgIcon/DeleteUser';
@@ -13,10 +14,12 @@ import DownArrowIcon from '@/components/SvgIcon/DownArrow';
 import DurationIcon from '@/components/SvgIcon/Duration';
 import ElapsedDistanceIcon from '@/components/SvgIcon/ElapsedDistance';
 import ElapsedTimeIcon from '@/components/SvgIcon/ElapsedTime';
+import EmailIcon from '@/components/SvgIcon/Email';
 import EmptyUserListIcon from '@/components/SvgIcon/EmptyUserListIcon';
 import EmptyUserWorkoutIcon from '@/components/SvgIcon/EmptyUserWorkout';
 import ErrorIcon from '@/components/SvgIcon/Error';
 import ExpandedIcon from '@/components/SvgIcon/Expanded';
+import ExpiredIcon from '@/components/SvgIcon/Expired';
 import GoogleIcon from '@/components/SvgIcon/Google';
 import HeartRateIcon from '@/components/SvgIcon/HeartRate';
 import HideIcon from '@/components/SvgIcon/Hide';
@@ -42,6 +45,7 @@ import SuccessIcon from '@/components/SvgIcon/Success';
 import TabsBorderIcon from '@/components/SvgIcon/TabsBorder';
 import ThreeDots from '@/components/SvgIcon/ThreeDots';
 import UpcomingRunIcon from '@/components/SvgIcon/UpcomingRun';
+import UpdatePasswordIcon from '@/components/SvgIcon/UpdatePassword';
 import UserIcon from '@/components/SvgIcon/User';
 import UserDialogIcon from '@/components/SvgIcon/UserDialog';
 import UsersIcon from '@/components/SvgIcon/Users';
@@ -96,7 +100,11 @@ export type IconName =
   | 'elapsed-distance'
   | 'coach-run'
   | 'remove-user'
-  | 'payment-success';
+  | 'payment-success'
+  | 'code'
+  | 'update-password'
+  | 'email'
+  | 'expired';
 
 const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   run: RunIcon,
@@ -144,6 +152,10 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   'coach-run': CoachRun,
   'remove-user': RemoveUserIcon,
   'payment-success': PaymentSuccessIcon,
+  'update-password': UpdatePasswordIcon,
+  code: CodeIcon,
+  email: EmailIcon,
+  expired: ExpiredIcon,
 };
 
 const SvgIcon: FC<ISvgIconProps> = ({ name, ...svgProps }) => {
