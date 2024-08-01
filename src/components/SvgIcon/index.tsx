@@ -14,6 +14,7 @@ import ElapsedDistanceIcon from '@/components/SvgIcon/ElapsedDistance';
 import ElapsedTimeIcon from '@/components/SvgIcon/ElapsedTime';
 import EmptyUserListIcon from '@/components/SvgIcon/EmptyUserListIcon';
 import EmptyUserWorkoutIcon from '@/components/SvgIcon/EmptyUserWorkout';
+import EndCallIcon from '@/components/SvgIcon/EndCall';
 import ErrorIcon from '@/components/SvgIcon/Error';
 import ExpandedIcon from '@/components/SvgIcon/Expanded';
 import GoogleIcon from '@/components/SvgIcon/Google';
@@ -22,6 +23,7 @@ import HideIcon from '@/components/SvgIcon/Hide';
 import KasiIcon from '@/components/SvgIcon/Kasi';
 import LogoutIcon from '@/components/SvgIcon/Logout';
 import MatchedIcon from '@/components/SvgIcon/Matched';
+import MuteIcon from '@/components/SvgIcon/Mute';
 import NonExpandedIcon from '@/components/SvgIcon/NonExpanded';
 import NotificationIcon from '@/components/SvgIcon/Notification';
 import OverviewImageIcon from '@/components/SvgIcon/OverviewImage';
@@ -38,6 +40,7 @@ import SubscriptionIcon from '@/components/SvgIcon/Subscription';
 import SuccessIcon from '@/components/SvgIcon/Success';
 import TabsBorderIcon from '@/components/SvgIcon/TabsBorder';
 import ThreeDots from '@/components/SvgIcon/ThreeDots';
+import UnmuteIcon from '@/components/SvgIcon/Unmute';
 import UpcomingRunIcon from '@/components/SvgIcon/UpcomingRun';
 import UserIcon from '@/components/SvgIcon/User';
 import UserDialogIcon from '@/components/SvgIcon/UserDialog';
@@ -90,7 +93,10 @@ export type IconName =
   | 'copy'
   | 'delete-user'
   | 'elapsed-time'
-  | 'elapsed-distance';
+  | 'elapsed-distance'
+  | 'end-call'
+  | 'mute'
+  | 'unmute';
 
 const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   run: RunIcon,
@@ -135,6 +141,9 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   'delete-user': DeleteUserIcon,
   'elapsed-distance': ElapsedDistanceIcon,
   'elapsed-time': ElapsedTimeIcon,
+  'end-call': EndCallIcon,
+  mute: MuteIcon,
+  unmute: UnmuteIcon,
 };
 
 const SvgIcon: FC<ISvgIconProps> = ({ name, ...svgProps }) => {

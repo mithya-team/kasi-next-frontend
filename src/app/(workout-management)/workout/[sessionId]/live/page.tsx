@@ -4,6 +4,7 @@ import { FC, useEffect } from 'react';
 
 import { useStoreActions, useStoreState } from '@/store';
 
+import Call from '@/features/BrowserCall';
 import { MetricLayoutView } from '@/features/MetricLayouts/MetricLayoutView';
 import withAuth from '@/hoc/withAuth';
 import {
@@ -60,11 +61,16 @@ const LiveScreen: FC = () => {
   );
 
   return (
-    <div className='text-white mt-[60px] flex flex-col gap-5'>
-      <div className='flex flex-col justify-center items-center mt-5'>
-        {metricLayout.length && (
-          <MetricLayoutView metricLayout={metricLayout[0]} />
-        )}
+    <div className='relative flex flex-row w-full h-full'>
+      <div className='text-white mt-[60px] w-[60vw] flex flex-col gap-5'>
+        <div className='flex flex-col justify-center items-center mt-5'>
+          {metricLayout.length && (
+            <MetricLayoutView metricLayout={metricLayout[0]} />
+          )}
+        </div>
+      </div>
+      <div className='fixed flex bottom-5 justify-center items-center right-7 bg-gray-800 rounded-xl w-fit'>
+        <Call phoneNumber='+918777250782' />
       </div>
     </div>
   );
