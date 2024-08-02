@@ -13,7 +13,7 @@ import {
   updateMetricPrettified,
 } from '@/models/workout/workout-metric/workout-metric.adapter';
 
-const POLLING_INTERVAL = 30000; // 30 seconds
+const POLLING_INTERVAL = 5000; // 5 seconds
 
 const LiveScreen: FC = () => {
   const pathname = usePathname();
