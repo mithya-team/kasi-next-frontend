@@ -21,6 +21,9 @@ export interface TAdminState {
     TAdminState,
     { action: 'ADD' | 'REMOVE' | 'UPDATE'; user: UnConfirmedUserWithDetails }
   >;
+  adminCode: string | null;
+  setAdminCode: Action<TAdminState, string | null>;
+  fetchAdminCode: Thunk<TAdminState, string>;
 }
 
 const AdminStore: TAdminState = {
@@ -78,6 +81,19 @@ const AdminStore: TAdminState = {
         break;
       default:
         console.warn('Invalid update action provided for confirmed users');
+    }
+  }),
+  adminCode: null,
+  setAdminCode: action((state, payload) => {
+    state.adminCode = payload;
+  }),
+  fetchAdminCode: thunk(async (actions, adminId) => {
+    if (!adminId) return;
+    try {
+      const res = await adminModel.getInviteCodeById(adminId);
+      if (res) actions.setAdminCode(res.code);
+    } catch (error) {
+      console.log(error, 'fetching admin code');
     }
   }),
 };

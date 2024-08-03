@@ -106,6 +106,12 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+  .coach-heading {
+    background: linear-gradient(129deg, #8b5df5 -55.36%, #5de4bb 133.62%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 @layer utilities {

@@ -1460,6 +1460,18 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.5.1.tgz#5f1b518ec5fa54437c0b7c4a821546c64fed6922"
   integrity sha512-6i/8UoL0P5y4leBIGzvkZdS85RDMG9y1ihZzmTZQ5LdHUYmZ7pKFoj8X0236s3lusPs1Fa5HTQUpwI+UfTcmeA==
 
+"@stripe/react-stripe-js@^2.7.3":
+  version "2.7.3"
+  resolved "https://registry.yarnpkg.com/@stripe/react-stripe-js/-/react-stripe-js-2.7.3.tgz#9cbbc2adc24076850885b059dda86fdb45b9f64a"
+  integrity sha512-05t6oY7cmAJt7asknmeoI4z4GnutgKRZ7dcdTWCkeYclONzIRMuMTiyjBMQ/q3I2sdNizSl25YZ8G6Lg4nN1aw==
+  dependencies:
+    prop-types "^15.7.2"
+
+"@stripe/stripe-js@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-4.1.0.tgz#11a54478df28b7a2d146251f645fb26e9efc9bfd"
+  integrity sha512-HhstGRUz/4JdbZpb26OcOf8Qb/cFR02arvHvgz4sPFLSnI6ZNHC53Jc6JP/FGNwxtrF719YyUnK0gGy4oyhucQ==
+
 "@svgr/babel-plugin-add-jsx-attribute@8.0.0":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@svgr/babel-plugin-add-jsx-attribute/-/babel-plugin-add-jsx-attribute-8.0.0.tgz#4001f5d5dd87fa13303e36ee106e3ff3a7eb8b22"
@@ -4227,7 +4239,7 @@ prettier@^3.2.5:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.3.2.tgz#03ff86dc7c835f2d2559ee76876a3914cec4a90a"
   integrity sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==
 
-prop-types@^15.8.1:
+prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==

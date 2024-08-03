@@ -17,7 +17,7 @@ const ForgotPasswordScreen: FC = () => {
 
   const onForgotPassword = async (values: ForgotPasswordFormData) => {
     try {
-      await authModel.forgotPasword(values);
+      await authModel.forgotPassword(values);
     } catch (error) {
       if (isAxiosError(error))
         toast.error(error?.response?.data?.message || 'Try Again');
