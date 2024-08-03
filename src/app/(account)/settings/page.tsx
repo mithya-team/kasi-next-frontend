@@ -16,6 +16,7 @@ import {
 } from '@/app/(account)/settings/@types';
 import AdminInfo from '@/app/(account)/settings/Section/AdminInfo';
 import SettingItem from '@/app/(account)/settings/Section/SettingItem';
+import withAuth from '@/hoc/withAuth';
 import adminModel from '@/models/admin/admin.model';
 
 const Settings = () => {
@@ -83,6 +84,7 @@ const Settings = () => {
           onRegenerateCoachCode={onRegenerateCoachCode}
           itemId={editItemId}
           onAction={onAction}
+          admin={admin}
         />
       ) : (
         <AdminInfo onItemClick={onSettingItemClick} />
@@ -91,4 +93,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default withAuth(Settings);

@@ -43,6 +43,7 @@ export interface User {
   roles: string[];
   athleteSubscription: AthleteSubscription[];
   stripeCustomerId?: string;
+  emailVerified?: boolean;
 }
 
 export interface UserListResponse {

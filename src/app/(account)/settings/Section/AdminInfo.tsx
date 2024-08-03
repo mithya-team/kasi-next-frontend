@@ -51,7 +51,7 @@ const AdminInfo: FC<AdminInfoProps> = ({ onItemClick }) => {
               </div>
               <div className='flex flex-row justify-center items-center gap-2.5 hover:plan-status'>
                 <Typo classes='group-hover:plan-status'>{config?.value}</Typo>
-                <Button onClick={() => onItemClick(config)}>
+                <Button className='w-6 h-6' onClick={() => onItemClick(config)}>
                   <SvgIcon name='right-arrow' />
                 </Button>
               </div>

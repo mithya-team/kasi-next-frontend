@@ -16,6 +16,7 @@ import Success from '@/app/(account)/subscription/Success';
 import { APP_CONFIG } from '@/constant/config';
 import CheckoutForm from '@/features/Auth/CheckoutForm';
 import ConfirmationDialog from '@/features/ConfirmationDialog';
+import withAuth from '@/hoc/withAuth';
 import adminModel from '@/models/admin/admin.model';
 import {
   ActiveProduct,
@@ -179,4 +180,4 @@ const SubscriptionScreen = () => {
   );
 };
 
-export default SubscriptionScreen;
+export default withAuth(SubscriptionScreen);

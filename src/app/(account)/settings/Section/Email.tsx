@@ -24,6 +24,7 @@ const EmailSetting: FC<FormikProps<SettingItemFormValues>> = ({
       onChange={handleChange}
       value={emailValue?.email}
       error={emailErrors?.email}
+      className='w-full'
     />
   );
 };

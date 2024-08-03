@@ -3,13 +3,13 @@ import {
   SettingItemType,
 } from '@/app/(account)/settings/@types';
 import { User } from '@/models/user/user.types';
-
 export const getSettingItem = (
   admin: User | null,
   code: string | null,
 ): SettingItemConfig[] => {
   if (!admin) return [];
-  return [
+
+  const settings: SettingItemConfig[] = [
     {
       id: SettingItemType.CODE,
       label: 'Code',
@@ -19,20 +19,26 @@ export const getSettingItem = (
     {
       id: SettingItemType.NAME,
       label: 'Name',
-      value: admin?.fullName,
+      value: admin.fullName,
       icon: 'user',
     },
-    {
+  ];
+
+  if (!admin.emailVerified) {
+    settings.push({
       label: 'Email Address',
-      value: admin?.email,
+      value: admin.email,
       id: SettingItemType.EMAIL,
       icon: 'email',
-    },
-    {
-      label: 'Password',
-      value: '********',
-      id: SettingItemType.PASSWORD,
-      icon: 'update-password',
-    },
-  ];
+    });
+  }
+
+  settings.push({
+    label: 'Password',
+    value: '********',
+    id: SettingItemType.PASSWORD,
+    icon: 'update-password',
+  });
+
+  return settings;
 };

@@ -16,21 +16,24 @@ import Code from '@/app/(account)/settings/Section/Code';
 import Email from '@/app/(account)/settings/Section/Email';
 import Name from '@/app/(account)/settings/Section/Name';
 import Password from '@/app/(account)/settings/Section/Password';
+import { User } from '@/models/user/user.types';
 
 interface SettingItemProps {
   itemId: SettingItemType;
   onAction: (values: SettingItemFormValues) => void;
   onRegenerateCoachCode: () => Promise<void>;
+  admin: User | null;
 }
 const SettingItem: FC<SettingItemProps> = ({
   itemId,
   onAction,
   onRegenerateCoachCode,
+  admin,
 }) => {
   const regenerateCodeTask = useAsyncTask(onRegenerateCoachCode);
   return (
     <Formik<SettingItemFormValues>
-      initialValues={getInitialValues(itemId)}
+      initialValues={getInitialValues(itemId, admin)}
       validationSchema={getValidationSchema(itemId)}
       enableReinitialize
       onSubmit={onAction}
@@ -67,12 +70,15 @@ const SettingItem: FC<SettingItemProps> = ({
 };
 export default SettingItem;
 
-const getInitialValues = (itemId: SettingItemType): SettingItemFormValues => {
+const getInitialValues = (
+  itemId: SettingItemType,
+  admin: User | null,
+): SettingItemFormValues => {
   switch (itemId) {
     case SettingItemType.EMAIL:
-      return { email: '' };
+      return { email: admin?.email ?? '' };
     case SettingItemType.NAME:
-      return { name: '' };
+      return { name: admin?.fullName ?? '' };
     case SettingItemType.PASSWORD:
       return { oldPassword: '', newPassword: '', confirmNewPassword: '' };
     default:
