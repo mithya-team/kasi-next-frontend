@@ -63,6 +63,7 @@ export type ProductPlanId =
   | 'FREE_TIER'
   | 'NONE'
   | 'PAID_TIER_1_MONTH'
+  | 'PAID_TIER_6_MONTHS'
   | 'PAID_TIER_12_MONTHS';
 
 interface BestTime {

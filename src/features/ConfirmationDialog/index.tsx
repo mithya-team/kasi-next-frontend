@@ -45,13 +45,13 @@ const ConfirmationDialog = (
   return (
     <div
       className={cn(
-        'fixed inset-0  z-[300] opacity-90 bg-gray-900  backdrop-blur-[6px]',
+        'fixed inset-0  z-[300] opacity-90 bg-gray-900 backdrop-blur-[6px]',
         className,
       )}
     >
       <div
         className={cn(
-          'bg-transparent flex flex-col  py-10 px-[120px] mx-auto gap-10 w-[37.5rem]',
+          'bg-transparent flex flex-col justify-center items-center h-full  py-10 px-[120px] mx-auto gap-10 w-[37.5rem]',
           containerClass,
         )}
       >
