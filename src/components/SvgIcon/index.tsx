@@ -17,6 +17,7 @@ import ElapsedTimeIcon from '@/components/SvgIcon/ElapsedTime';
 import EmailIcon from '@/components/SvgIcon/Email';
 import EmptyUserListIcon from '@/components/SvgIcon/EmptyUserListIcon';
 import EmptyUserWorkoutIcon from '@/components/SvgIcon/EmptyUserWorkout';
+import EndCallIcon from '@/components/SvgIcon/EndCall';
 import ErrorIcon from '@/components/SvgIcon/Error';
 import ExpandedIcon from '@/components/SvgIcon/Expanded';
 import ExpiredIcon from '@/components/SvgIcon/Expired';
@@ -26,6 +27,7 @@ import HideIcon from '@/components/SvgIcon/Hide';
 import KasiIcon from '@/components/SvgIcon/Kasi';
 import LogoutIcon from '@/components/SvgIcon/Logout';
 import MatchedIcon from '@/components/SvgIcon/Matched';
+import MuteIcon from '@/components/SvgIcon/Mute';
 import NonExpandedIcon from '@/components/SvgIcon/NonExpanded';
 import NotificationIcon from '@/components/SvgIcon/Notification';
 import OverviewImageIcon from '@/components/SvgIcon/OverviewImage';
@@ -44,6 +46,7 @@ import SubscriptionIcon from '@/components/SvgIcon/Subscription';
 import SuccessIcon from '@/components/SvgIcon/Success';
 import TabsBorderIcon from '@/components/SvgIcon/TabsBorder';
 import ThreeDots from '@/components/SvgIcon/ThreeDots';
+import UnmuteIcon from '@/components/SvgIcon/Unmute';
 import UpcomingRunIcon from '@/components/SvgIcon/UpcomingRun';
 import UpdatePasswordIcon from '@/components/SvgIcon/UpdatePassword';
 import UserIcon from '@/components/SvgIcon/User';
@@ -98,6 +101,9 @@ export type IconName =
   | 'delete-user'
   | 'elapsed-time'
   | 'elapsed-distance'
+  | 'end-call'
+  | 'mute'
+  | 'unmute'
   | 'coach-run'
   | 'remove-user'
   | 'payment-success'
@@ -149,6 +155,9 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   'delete-user': DeleteUserIcon,
   'elapsed-distance': ElapsedDistanceIcon,
   'elapsed-time': ElapsedTimeIcon,
+  'end-call': EndCallIcon,
+  mute: MuteIcon,
+  unmute: UnmuteIcon,
   'coach-run': CoachRun,
   'remove-user': RemoveUserIcon,
   'payment-success': PaymentSuccessIcon,

@@ -24,6 +24,7 @@ const SegmentCard: React.FC<RepCardProps> = ({ isLive = false }) => {
       workoutDataByConfigSlug,
     }),
   );
+
   return (
     <>
       {workoutSessionDetails?.workoutData[0]?.reps.map((rep, idx) => {

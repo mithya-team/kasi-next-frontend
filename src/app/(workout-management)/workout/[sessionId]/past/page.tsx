@@ -1,18 +1,53 @@
 'use client';
 import { FC } from 'react';
 
-import SegmentCard from '@/features/SegmentCard';
-import WorkoutConfigHeader from '@/features/WorkoutConfigHeader';
+import logger from '@/lib/logger';
+
+import { useStoreState } from '@/store';
+
+import { MetricTestData } from '@/constant/DummyData/workout-metric';
+import { MetricLayoutView } from '@/features/MetricLayouts/MetricLayoutView';
 import withAuth from '@/hoc/withAuth';
+import {
+  getMetricLayouts,
+  initializeMetrics,
+  updateMetricPrettified,
+} from '@/models/workout/workout-metric/workout-metric.adapter';
 
 const PastScreen: FC = () => {
+  const { workoutSessionDetails, workoutDataByConfigSlug } = useStoreState(
+    ({ WorkoutStore: { workoutSessionDetails, workoutDataByConfigSlug } }) => ({
+      workoutSessionDetails,
+      workoutDataByConfigSlug,
+    }),
+  );
+
+  // Call first time
+  const metricPrettified = initializeMetrics(
+    workoutDataByConfigSlug?.impMetrics,
+    workoutSessionDetails?.lengthUnit,
+  );
+
+  // Invoke these two when data is updated
+  const updatedMetricPrettified = updateMetricPrettified(
+    workoutSessionDetails,
+    metricPrettified,
+  );
+
+  // Get metric layouts
+  const metricLayout = getMetricLayouts(
+    workoutDataByConfigSlug,
+    workoutSessionDetails,
+    updatedMetricPrettified,
+  );
+  logger({ metricLayout }, 'page.tsx line 42');
   return (
     <div className='text-white mt-[60px] flex flex-col gap-5'>
-      <div className='flex flex-row gap-5 justify-center items-center px-[96px]'>
-        <WorkoutConfigHeader />
-      </div>
-      <div className='flex flex-col justify-center items-start mt-5'>
-        <SegmentCard />
+      <div className='flex flex-col justify-center items-center mt-5'>
+        {metricLayout.length && (
+          <MetricLayoutView metricLayout={metricLayout[0]} />
+        )}
+        <MetricLayoutView metricLayout={MetricTestData[0]} />
       </div>
     </div>
   );

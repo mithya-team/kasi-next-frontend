@@ -113,6 +113,8 @@ export interface SegmentDuration {
   segment: number;
 }
 
+export type TWorkoutNature = 'lap' | 'interval';
+
 export interface WorkoutSessionDetails {
   _id: string;
   startTime: string;
@@ -122,7 +124,7 @@ export interface WorkoutSessionDetails {
   currentSetIndex: number;
   currentRepIndex: number;
   currentLapIndex: number;
-  nature: string;
+  nature: TWorkoutNature;
   status: string;
   recoveryStartTimes: string[];
   recoveryEndTimes: string[];
