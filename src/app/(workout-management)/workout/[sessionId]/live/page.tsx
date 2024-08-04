@@ -65,7 +65,11 @@ const LiveScreen: FC = () => {
       <div className='text-white mt-[60px] w-[60vw] flex flex-col gap-5'>
         <div className='flex flex-col justify-center items-center mt-5'>
           {metricLayout.length && (
-            <MetricLayoutView metricLayout={metricLayout[0]} />
+            <MetricLayoutView
+              metricLayout={metricLayout[0]}
+              className='w-[50%]'
+              singleMatricesClass='justify-center'
+            />
           )}
         </div>
       </div>

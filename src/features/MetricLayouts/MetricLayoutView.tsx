@@ -16,21 +16,26 @@ interface MetricLayoutViewProps {
   metricLayout: MetricLayout;
   buttonLabel?: string;
   buttonAction?: () => void;
+  className?: string;
+  singleMatricesClass?: string;
 }
 
 const MetricLayoutView: React.FC<MetricLayoutViewProps> = ({
   metricLayout,
   buttonLabel,
   buttonAction = () => console.log('Lap'),
+  className,
+  singleMatricesClass,
 }) => {
   return (
-    <div>
+    <div className={className}>
       <div className='p-4'>
         <div className='space-y-3'>
           <SingleMetricViewFlex
             metrics={metricLayout.metrics.filter(
               (metric: MetricPresentView) => metric.type === 'singleValue',
             )}
+            className={singleMatricesClass}
           />
 
           {metricLayout.metrics
