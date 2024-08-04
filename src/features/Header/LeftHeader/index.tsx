@@ -19,7 +19,7 @@ export interface LeftHeaderProps {
 }
 const LeftHeader: FC<LeftHeaderProps> = ({ leftHeaderClass, onSearch }) => {
   const pathname = usePathname();
-  const sessionId = pathname.split('/')[2];
+  const sessionId = pathname.split('/')[4];
 
   const { user, userWorkoutData, isWorkoutDetailPage } = useStoreState(
     ({

@@ -45,14 +45,18 @@ export const getPlanStatusTag = (
   }
 };
 
-export const getHref = (id: string, status: WorkoutSessionStatus) => {
+export const getHref = (
+  id: string,
+  status: WorkoutSessionStatus,
+  userId: string,
+) => {
   switch (status) {
     case WorkoutSessionStatus.PAST:
-      return `/workout/${id}/past`;
+      return `user/${userId}/workout/${id}/past`;
     case WorkoutSessionStatus.RUNNING:
-      return `/workout/${id}/live`;
+      return `user/${userId}/workout/${id}/live`;
     case WorkoutSessionStatus.YET_TO_START:
-      return `/workout/${id}/upcoming`;
+      return `user/${userId}/workout/${id}/upcoming`;
     default:
       break;
   }

@@ -6,7 +6,8 @@ import { useStoreActions, useStoreState } from '@/store';
 
 const WorkoutLayout: FC<PropsWithChildren> = ({ children }) => {
   const pathname = usePathname();
-  const sessionId = pathname.split('/')[2];
+  const clientId = pathname.split('/')[2];
+  const sessionId = pathname.split('/')[4];
 
   const { workoutSessionDetails } = useStoreState(
     ({ WorkoutStore: { workoutSessionDetails } }) => ({
@@ -19,6 +20,7 @@ const WorkoutLayout: FC<PropsWithChildren> = ({ children }) => {
     fetchWorkoutDataByConfigSlug,
     setIsWorkoutDetailPage,
     fetchUserWorkoutData,
+    fetchUser,
   } = useStoreActions(
     ({
       WorkoutStore: {
@@ -27,15 +29,18 @@ const WorkoutLayout: FC<PropsWithChildren> = ({ children }) => {
         setIsWorkoutDetailPage,
         fetchUserWorkoutData,
       },
+      UserStore: { fetchUser },
     }) => ({
       fetchWorkoutSessionDetails,
       fetchWorkoutDataByConfigSlug,
       setIsWorkoutDetailPage,
       fetchUserWorkoutData,
+      fetchUser,
     }),
   );
 
   useEffect(() => {
+    if (clientId) fetchUser(clientId);
     if (sessionId) fetchWorkoutSessionDetails(sessionId);
     if (workoutSessionDetails)
       fetchWorkoutDataByConfigSlug(workoutSessionDetails?.workoutSlug);

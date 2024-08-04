@@ -7,7 +7,10 @@ import StartCallButton from '@/components/Buttons/StartCallButton';
 import SvgIcon from '@/components/SvgIcon';
 import WorkoutStatus from '@/components/WorkoutStatus';
 
-import { WorkoutScheduleData } from '@/models/workout/workout.types';
+import {
+  WorkoutScheduleData,
+  WorkoutSessionStatus,
+} from '@/models/workout/workout.types';
 
 interface ScheduleTableProps {
   data: WorkoutScheduleData;
@@ -18,7 +21,10 @@ const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
   return (
     <div className='flex border-b border-gray-800 text-sm leading-[14px] text-white'>
       <div className='w-[19%] p-5 text-ellipsis overflow-hidden'>
-        <Link href={getHref(data?._id, data?.status) ?? '/'} onClick={onClick}>
+        <Link
+          href={getHref(data?._id, data?.status, data?.userId) ?? '/'}
+          onClick={onClick}
+        >
           {user?.fullName}
         </Link>
       </div>
@@ -32,9 +38,19 @@ const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
         {parseDate(user?.createdAt ?? '', 'MMMM D, YYYY')}
       </div>
       <div className='w-[10%] p-5'> {parseTime(user?.createdAt ?? '')}</div>
-      <div className='w-[19%] px-5 py-2.5'>
-        <StartCallButton>Start call</StartCallButton>
-      </div>
+      <Link
+        href={`user/${data?.userId}/workout/${data?._id}/live`}
+        className='w-[19%] px-5 py-2.5'
+      >
+        <StartCallButton
+          disabled={
+            data?.status === WorkoutSessionStatus?.PAST ||
+            data?.status === WorkoutSessionStatus?.YET_TO_START
+          }
+        >
+          Start call
+        </StartCallButton>
+      </Link>
       <button className='w-[5.00%] p-5'>
         <SvgIcon name='three-dots' />
       </button>

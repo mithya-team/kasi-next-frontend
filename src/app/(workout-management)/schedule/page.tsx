@@ -17,13 +17,9 @@ const Schedule = () => {
     }),
   );
 
-  const { fetchWorkoutScheduleData, setUser } = useStoreActions(
-    ({
-      WorkoutStore: { fetchWorkoutScheduleData },
-      UserStore: { setUser },
-    }) => ({
+  const { fetchWorkoutScheduleData } = useStoreActions(
+    ({ WorkoutStore: { fetchWorkoutScheduleData } }) => ({
       fetchWorkoutScheduleData,
-      setUser,
     }),
   );
 
@@ -51,16 +47,7 @@ const Schedule = () => {
         />
       ) : (
         workoutScheduleData?.map((data) => {
-          const { user } = data;
-          return (
-            <ScheduleTable
-              data={data}
-              key={data?._id}
-              onClick={() => {
-                if (user) setUser(user);
-              }}
-            />
-          );
+          return <ScheduleTable data={data} key={data?._id} />;
         })
       )}
     </div>

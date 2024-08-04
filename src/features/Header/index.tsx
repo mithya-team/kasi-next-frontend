@@ -23,11 +23,17 @@ const Header: FC<HeaderProps> = ({
 }) => {
   const pathname = usePathname();
 
-  const { isUserDetailsPage, isUserListingPage } = useMemo(() => {
-    const isUserDetailsPage = pathname.split('/')[1] === 'user';
-    const isUserListingPage = pathname.split('/')[1] === 'users';
-    return { isUserDetailsPage, isUserListingPage };
-  }, [pathname]);
+  const { isUserDetailsPage, isUserListingPage, isUsersWorkoutDetailsPage } =
+    useMemo(() => {
+      const isUserDetailsPage = pathname.split('/')[1] === 'user';
+      const isUserListingPage = pathname.split('/')[1] === 'users';
+      const isUsersWorkoutDetailsPage = pathname.split('/')[3] === 'workout';
+      return {
+        isUserDetailsPage,
+        isUserListingPage,
+        isUsersWorkoutDetailsPage,
+      };
+    }, [pathname]);
 
   const userId = pathname.split('/')[2];
 
@@ -77,7 +83,9 @@ const Header: FC<HeaderProps> = ({
       )}
     >
       <LeftHeader leftHeaderClass={leftHeaderClass} onSearch={onSearch} />
-      {isUserDetailsPage ? <MiddleHeader onTabsClick={onTabsClick} /> : null}
+      {isUserDetailsPage && !isUsersWorkoutDetailsPage ? (
+        <MiddleHeader onTabsClick={onTabsClick} />
+      ) : null}
       <RightHeader rightHeaderClass={rightHeaderClass} />
     </div>
   );

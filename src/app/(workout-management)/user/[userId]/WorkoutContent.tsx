@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FC } from 'react';
 
-import { cn, getHref, parseDate } from '@/lib/utils';
+import { cn, parseDate } from '@/lib/utils';
 
 import EmptyUserWorkout from '@/components/EmptyUserWorkout';
 import SvgIcon from '@/components/SvgIcon';
@@ -27,7 +27,7 @@ const WorkoutContent: FC<WorkoutContentProps> = ({ userWorkoutData }) => {
         const { startTime, status, workoutConfig } = data;
         return (
           <Link
-            href={getHref(data?._id, status) ?? '/'}
+            href={`/user/${data?.userId}/workout/${data?._id}/${getStatusHref(status)}`}
             key={index}
             className={cn(
               'flex w-full flex-row justify-between items-center rounded-xl py-[15px] px-5',
@@ -54,3 +54,16 @@ const WorkoutContent: FC<WorkoutContentProps> = ({ userWorkoutData }) => {
 };
 
 export default WorkoutContent;
+
+const getStatusHref = (status: WorkoutSessionStatus) => {
+  switch (status) {
+    case WorkoutSessionStatus.PAST:
+      return 'past';
+    case WorkoutSessionStatus.RUNNING:
+      return 'live';
+    case WorkoutSessionStatus.YET_TO_START:
+      return 'upcoming';
+    default:
+      return;
+  }
+};

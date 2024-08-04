@@ -17,7 +17,7 @@ const POLLING_INTERVAL = 5000; // 5 seconds
 
 const LiveScreen: FC = () => {
   const pathname = usePathname();
-  const sessionId = pathname.split('/')[2];
+  const sessionId = pathname.split('/')[4];
   const { workoutSessionDetails, workoutDataByConfigSlug } = useStoreState(
     ({ WorkoutStore: { workoutSessionDetails, workoutDataByConfigSlug } }) => ({
       workoutSessionDetails,
