@@ -7,14 +7,17 @@ import Button from '@/components/Buttons';
 import PrimaryButton from '@/components/Buttons/PrimaryButton';
 import Typo from '@/components/typography/Typo';
 
-import { SubscriptionProductsDetails } from '@/models/admin/admin.types';
+import {
+  ActiveProduct,
+  SubscriptionProductsDetails,
+} from '@/models/admin/admin.types';
 import { ProductPlanId } from '@/models/user/user.types';
 
 interface SubscriptionCardProps {
   className?: string;
   isActive?: boolean;
-  product: SubscriptionProductsDetails;
-  onClick: (product: SubscriptionProductsDetails) => void;
+  product: ActiveProduct | SubscriptionProductsDetails;
+  onClick: (product: ActiveProduct | SubscriptionProductsDetails) => void;
 }
 const SubscriptionCard: FC<SubscriptionCardProps> = ({
   className,
@@ -58,7 +61,10 @@ const SubscriptionCard: FC<SubscriptionCardProps> = ({
           onClick={() => onClick(product)}
           className='px-5 py-2.5 border border-green-500 rounded-[10px] bg-black-1 font-secondary text-white font-semibold text-xl tracking-[-0.1px]'
         >
-          Cancel plan
+          {isActiveProduct(product) &&
+          product.subscription?.status === 'delete_after_expiration'
+            ? 'Renew plan'
+            : 'Cancel plan'}
         </Button>
       ) : (
         <PrimaryButton
@@ -87,3 +93,9 @@ const getSubscriptionPeriod = (name: ProductPlanId) => {
       return '';
   }
 };
+
+function isActiveProduct(
+  product: ActiveProduct | SubscriptionProductsDetails,
+): product is ActiveProduct {
+  return (product as ActiveProduct).subscription !== undefined;
+}

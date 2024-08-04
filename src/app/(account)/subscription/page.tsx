@@ -26,6 +26,7 @@ import {
 
 const stripeKey = APP_CONFIG.STRIPE_PUBLISHABLE_KEY;
 let stripePromise: Promise<Stripe | null>;
+
 if (stripeKey) stripePromise = loadStripe(stripeKey);
 const SubscriptionScreen = () => {
   const [openPaymentDialog, setPaymentDialog] = useState(false);
@@ -72,9 +73,17 @@ const SubscriptionScreen = () => {
   const cancelSubscription = async () => {
     if (!activeSubscription?.subscription) return;
     try {
-      await adminModel.cancelSubscription(
-        activeSubscription?.subscription?.stripeSubscriptionId,
-      );
+      if (
+        activeSubscription?.subscription?.status === 'delete_after_expiration'
+      ) {
+        await adminModel.renewCancelSubscription(
+          activeSubscription?.subscription?.stripeSubscriptionId,
+        );
+      } else {
+        await adminModel.cancelSubscription(
+          activeSubscription?.subscription?.stripeSubscriptionId,
+        );
+      }
       setOpenCancelSubscriptionDialog(false);
     } catch (error) {
       if (isAxiosError(error))

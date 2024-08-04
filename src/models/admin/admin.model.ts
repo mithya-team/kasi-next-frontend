@@ -78,6 +78,15 @@ const adminModel = {
       method: 'POST',
     });
   },
+
+  async renewCancelSubscription(subscriptionId: string) {
+    return request(`/coach-payment/renew-canceled-subscription/`, {
+      method: 'POST',
+      data: {
+        subscriptionId,
+      },
+    });
+  },
   async updatePassword(
     id: string,
     data: { oldPassword: string; newPassword: string },

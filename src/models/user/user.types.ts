@@ -8,6 +8,7 @@ export interface UserPreferences {
   _id: string;
 }
 
+export type SubscriptionStatus = 'active' | 'delete_after_expiration';
 export interface AthleteSubscription {
   creditDurationInDays: number;
   creditDurationInMonths: number;
@@ -21,7 +22,7 @@ export interface AthleteSubscription {
     userId: string;
     stripeSubscriptionId: string;
     planId: string;
-    status: string;
+    status: SubscriptionStatus;
     createdAt: string;
     updatedAt: string;
     __v: number;
