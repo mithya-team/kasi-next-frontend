@@ -66,7 +66,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({
           <div className='flex flex-col gap-4 text-left'>
             <TextInput
               label='Email address'
-              className='gap-1.5 pt-2 w-full'
+              className='w-full'
               name='email'
               value={values?.email}
               onChange={handleChange}

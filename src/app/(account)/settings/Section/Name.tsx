@@ -25,9 +25,6 @@ const NameSetting: FC<FormikProps<SettingItemFormValues>> = ({
       value={nameValue?.name}
       error={nameErrors?.name}
       className='w-full mt-2'
-      classNames={{
-        label: 'leading-[20px]',
-      }}
     />
   );
 };

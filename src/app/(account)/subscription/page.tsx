@@ -14,7 +14,7 @@ import Typo from '@/components/typography/Typo';
 import SubscriptionInfo from '@/app/(account)/subscription/SubscriptionInfo';
 import Success from '@/app/(account)/subscription/Success';
 import { APP_CONFIG } from '@/constant/config';
-import CheckoutForm from '@/features/Auth/CheckoutForm';
+import CheckoutForm from '@/features/CheckoutForm';
 import ConfirmationDialog from '@/features/ConfirmationDialog';
 import withAuth from '@/hoc/withAuth';
 import adminModel from '@/models/admin/admin.model';

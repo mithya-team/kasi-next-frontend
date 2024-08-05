@@ -47,12 +47,11 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
           label={field.label}
           classNames={{
             label: 'font-primary text-xs text-gray-500 h-5 mb-0',
-            inputRoot: 'p-0 border-b border-b-gray-500 rounded-none',
             input:
               'font-primary font-medium text-base text-white p-1 pl-4 mb-1 border-l h-6 border-gray-700',
             startAdornment: 'min-w-fit',
           }}
-          className='pt-2 gap-1.5 flex-1 w-full'
+          className=' flex-1 w-full'
           startAdornment={
             <CountrySelect
               value={selectedDialCode}
@@ -69,7 +68,7 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
       return (
         <PasswordInput
           label={label}
-          className='gap-1.5 pt-2 w-full'
+          className='w-full'
           name={name}
           value={(values as any)[name]}
           onChange={handleChange}
@@ -81,7 +80,7 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
         <TextInput
           type={type}
           label={label}
-          className='gap-1.5 pt-2 w-full'
+          className='w-full'
           name={name}
           value={(values as any)[name]}
           onChange={handleChange}
