@@ -68,7 +68,8 @@ const UpcomingRunScreen: FC = () => {
         </div>
         {diffInMinutes > 30 ? (
           <Typo classes='font-secondary text-center font-semibold text-gray-200 text-2xl tracking-[-0.144px]'>
-            You can start or receive calls for Ac reps 30 minutes before the
+            You can start or receive calls for{' '}
+            {workoutSessionDetails?.workoutConfig?.name} 30 minutes before the
             session begins.
           </Typo>
         ) : (

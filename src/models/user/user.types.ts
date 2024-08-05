@@ -8,7 +8,10 @@ export interface UserPreferences {
   _id: string;
 }
 
-export type SubscriptionStatus = 'active' | 'delete_after_expiration';
+export type SubscriptionStatus =
+  | 'active'
+  | 'delete_after_expiration'
+  | 'deleted';
 export interface AthleteSubscription {
   creditDurationInDays: number;
   creditDurationInMonths: number;

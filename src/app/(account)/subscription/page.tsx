@@ -52,7 +52,7 @@ const SubscriptionScreen = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [isPaymentSuccessful]);
 
   const handleOnSubscribe = async (product: SubscriptionProductsDetails) => {
     try {
@@ -79,10 +79,32 @@ const SubscriptionScreen = () => {
         await adminModel.renewCancelSubscription(
           activeSubscription?.subscription?.stripeSubscriptionId,
         );
+        // Update the status to 'active' after successful renewal
+        setActiveSubscription((prev) => {
+          if (!prev || !prev.subscription) return prev;
+          return {
+            ...prev,
+            subscription: {
+              ...prev.subscription,
+              status: 'active',
+            },
+          };
+        });
       } else {
         await adminModel.cancelSubscription(
           activeSubscription?.subscription?.stripeSubscriptionId,
         );
+        // Update the status to 'delete_after_expiration' after successful cancellation
+        setActiveSubscription((prev) => {
+          if (!prev || !prev.subscription) return prev;
+          return {
+            ...prev,
+            subscription: {
+              ...prev.subscription,
+              status: 'delete_after_expiration',
+            },
+          };
+        });
       }
       setOpenCancelSubscriptionDialog(false);
     } catch (error) {
@@ -169,7 +191,11 @@ const SubscriptionScreen = () => {
         open={openCancelSubscriptionDialog}
         onClose={() => setOpenCancelSubscriptionDialog(false)}
         onAgree={cancelSubscription}
-        agreeText='Cancel plan'
+        agreeText={
+          activeSubscription?.subscription?.status === 'delete_after_expiration'
+            ? 'Renew plan'
+            : 'Cancel plan'
+        }
       >
         <SvgIcon name='remove-user' />
         <div className='flex flex-col justify-center items-center gap-5'>
@@ -177,11 +203,18 @@ const SubscriptionScreen = () => {
             level='h2'
             classes='font-secondary font-semibold text-white text-center tracking-[-0.225px]'
           >
-            Confirm Cancellation of Membership Plan
+            Confirm{' '}
+            {activeSubscription?.subscription?.status ===
+            'delete_after_expiration'
+              ? 'Renewal'
+              : 'Cancellation'}{' '}
+            of Membership Plan
           </Typo>
           <Typo classes='font-primary text-gray-500 text-center'>
-            Canceling your membership will end all benefits as soon as your
-            active cycle is over.{' '}
+            {activeSubscription?.subscription?.status ===
+            'delete_after_expiration'
+              ? 'Renewing your membership will restore your benefits according to your last purchased plan '
+              : 'Canceling your membership will end all benefits as soon as your active cycle is over.'}{' '}
           </Typo>
         </div>
       </ConfirmationDialog>
