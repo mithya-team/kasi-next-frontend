@@ -84,9 +84,11 @@ const SearchView: FC<LeftHeaderProps> = ({ onSearch }) => {
           placeholder='Search'
           classNames={{
             inputRoot: 'border-none border-0 p-0 gap-3',
+            container: 'border-0 p-0',
             input:
               'border-0 border-none placeholder:text-gray-300 text-white h-3.5 font-medium text-sm font-primary leading-[14px]',
           }}
+          className='gap-0'
         />
       </div>
       <div className='px-[15px] w-[54px] flex justify-center items-center h-[54px] py-[18px] border-[1px] border-gray-600 rounded-xl'>

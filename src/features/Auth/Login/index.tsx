@@ -17,11 +17,6 @@ export interface LoginProps {
   onLogin: (values: LoginFormData) => void;
   onForgotPasswordClick: () => void;
 }
-const classNames = {
-  label: 'text-xs text-gray-500 mb-0',
-  inputRoot: 'p-0 border-b border-b-gray-500 rounded-none',
-  input: 'font-primary font-medium text-base text-white p-0',
-};
 
 const Login: FC<LoginProps> = ({
   onSignupPress,
@@ -54,8 +49,7 @@ const Login: FC<LoginProps> = ({
           <div className='flex flex-col gap-4 text-left'>
             <TextInput
               label='Email'
-              classNames={classNames}
-              className='gap-1.5 pt-2 w-full'
+              className='w-full'
               name='email'
               value={values?.email}
               onChange={handleChange}
@@ -63,7 +57,6 @@ const Login: FC<LoginProps> = ({
             />
             <PasswordInput
               label='Password'
-              classNames={classNames}
               className='gap-1.5 pt-2 w-full'
               name='password'
               value={values?.password}

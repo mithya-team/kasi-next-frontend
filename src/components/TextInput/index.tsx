@@ -21,6 +21,7 @@ export interface TextInputProps
     endAdornment?: string;
     helperText?: string;
     error?: string;
+    container?: string;
   };
 }
 
@@ -40,72 +41,85 @@ const TextInput: FC<TextInputProps> = (props) => {
 
   return (
     <div
-      className={cn(className, 'cmp-TextInput', 'flex flex-col font-primary ')}
+      className={cn(
+        'cmp-TextInput',
+        'flex flex-col gap-2.5 font-primary ',
+        className,
+      )}
     >
-      {label ? (
-        <label
-          className={cn(
-            'cmp-TextInput__label font-primary text-xs text-gray-500 mb-0',
-            classNames?.label,
-          )}
-        >
-          {label}
-        </label>
-      ) : null}
       <div
         className={cn(
-          'flex items-center border-0 p-0 border-b border-b-gray-500 rounded-none',
-          classNames?.inputRoot,
+          'pb-1.5 border-b border-b-gray-500',
+          classNames?.container,
         )}
       >
-        {startAdornment ? (
-          <div
+        {label ? (
+          <label
             className={cn(
-              'cmp-TextInput__start-adornment px-1',
-              classNames?.startAdornment,
+              'cmp-TextInput__label font-primary text-xs leading-5 text-gray-500 mb-1.5',
+              classNames?.label,
             )}
           >
-            {startAdornment}
-          </div>
+            {label}
+          </label>
         ) : null}
-        <input
-          disabled={disabled}
-          autoComplete='false'
-          type={type}
+        <div
           className={cn(
-            'cmp-TextInput__input',
-            'w-full leading-normal border-0  bg-transparent font-primary font-medium text-base text-white p-0',
-            classNames?.input,
-            {
-              'bg-gray-1': disabled,
-            },
+            'flex items-center border-0 p-0 rounded-none',
+            classNames?.inputRoot,
           )}
-          {...inputProps}
-        />
-        {endAdornment ? (
+        >
+          {startAdornment ? (
+            <div
+              className={cn(
+                'cmp-TextInput__start-adornment px-1',
+                classNames?.startAdornment,
+              )}
+            >
+              {startAdornment}
+            </div>
+          ) : null}
+          <input
+            disabled={disabled}
+            autoComplete='false'
+            type={type}
+            className={cn(
+              'cmp-TextInput__input',
+              'w-full leading-normal border-0  bg-transparent font-primary font-medium text-base text-white p-0',
+              classNames?.input,
+              {
+                'bg-gray-1': disabled,
+              },
+            )}
+            {...inputProps}
+          />
+          {endAdornment ? (
+            <div
+              className={cn(
+                'cmp-TextInput__end-adornment flex justify-center items-center px-1',
+                classNames?.endAdornment,
+              )}
+            >
+              {endAdornment}
+            </div>
+          ) : null}
+        </div>
+      </div>
+      <div>
+        {!!error && typeof error === 'string' ? (
+          <ErrorMessage error={error} />
+        ) : null}
+        {helperText ? (
           <div
             className={cn(
-              'cmp-TextInput__end-adornment flex justify-center items-center px-1',
-              classNames?.endAdornment,
+              'cmp-TextInput__helper-text font-primary text-xs font-medium text-gray-500 mt-1',
+              classNames?.helperText,
             )}
           >
-            {endAdornment}
+            {helperText}
           </div>
         ) : null}
       </div>
-      {helperText ? (
-        <div
-          className={cn(
-            'cmp-TextInput__helper-text font-primary text-xs font-medium text-gray-500 mt-1',
-            classNames?.helperText,
-          )}
-        >
-          {helperText}
-        </div>
-      ) : null}
-      {!!error && typeof error === 'string' ? (
-        <ErrorMessage error={error} />
-      ) : null}
     </div>
   );
 };

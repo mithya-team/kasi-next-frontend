@@ -25,9 +25,6 @@ const Password: FC<FormikProps<SettingItemFormValues>> = ({
         value={passwordFields.oldPassword}
         error={passwordErrors.oldPassword}
         className='w-full mt-2'
-        classNames={{
-          label: 'leading-[20px]',
-        }}
       />
 
       <PasswordInput
@@ -38,9 +35,6 @@ const Password: FC<FormikProps<SettingItemFormValues>> = ({
         value={passwordFields.newPassword}
         error={passwordErrors.newPassword}
         className='w-full mt-2'
-        classNames={{
-          label: 'leading-[20px]',
-        }}
       />
       <PasswordInput
         id='confirmNewPassword'
@@ -50,9 +44,6 @@ const Password: FC<FormikProps<SettingItemFormValues>> = ({
         value={passwordFields.confirmNewPassword}
         error={passwordErrors.confirmNewPassword}
         className='w-full mt-2'
-        classNames={{
-          label: 'leading-[20px]',
-        }}
       />
     </>
   );

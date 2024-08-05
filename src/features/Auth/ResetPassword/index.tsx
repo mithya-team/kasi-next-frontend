@@ -92,7 +92,7 @@ const ResetForm: FC<ResetFormProps> = ({ onResetPassword }) => {
           <div className='flex flex-col gap-4 text-left'>
             <PasswordInput
               label='Password'
-              className='gap-1.5 pt-2 w-full'
+              className='w-full'
               name='password'
               value={values?.password}
               onChange={handleChange}
@@ -101,7 +101,7 @@ const ResetForm: FC<ResetFormProps> = ({ onResetPassword }) => {
             />
             <PasswordInput
               label='Confirm Password'
-              className='gap-1.5 pt-2 w-full'
+              className='w-full'
               name='confirmPassword'
               value={values?.confirmPassword}
               onChange={handleChange}
