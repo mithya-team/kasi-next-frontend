@@ -71,6 +71,7 @@ const Header: FC<HeaderProps> = ({
   };
 
   const onSearch = (term: string) => {
+    if (!term) return;
     if (isUserListingPage || isUserDetailsPage)
       fetchUsersList({ search: term });
   };

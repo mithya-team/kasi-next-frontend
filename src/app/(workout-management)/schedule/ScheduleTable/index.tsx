@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FC } from 'react';
 
-import { getHref, parseDate, parseTime } from '@/lib/utils';
+import { cn, getHref, parseDate, parseTime } from '@/lib/utils';
 
 import StartCallButton from '@/components/Buttons/StartCallButton';
 import SvgIcon from '@/components/SvgIcon';
@@ -47,6 +47,11 @@ const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
             data?.status === WorkoutSessionStatus?.PAST ||
             data?.status === WorkoutSessionStatus?.YET_TO_START
           }
+          className={cn('', {
+            ['opacity-60']:
+              data?.status === WorkoutSessionStatus?.PAST ||
+              data?.status === WorkoutSessionStatus?.YET_TO_START,
+          })}
         >
           Start call
         </StartCallButton>

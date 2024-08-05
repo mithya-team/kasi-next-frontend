@@ -1,5 +1,7 @@
 'use client';
 import dayjs from 'dayjs';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { FC, useMemo } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -19,6 +21,9 @@ const timerLabelClass =
 const timerContainerClass = 'flex flex-col gap-[5px] w-1/3 ';
 
 const UpcomingRunScreen: FC = () => {
+  const pathname = usePathname();
+  const clientId = pathname.split('/')[2];
+  const sessionId = pathname.split('/')[4];
   const { workoutSessionDetails } = useStoreState(
     ({ WorkoutStore: { workoutSessionDetails } }) => ({
       workoutSessionDetails,
@@ -68,11 +73,15 @@ const UpcomingRunScreen: FC = () => {
         </div>
         {diffInMinutes > 30 ? (
           <Typo classes='font-secondary text-center font-semibold text-gray-200 text-2xl tracking-[-0.144px]'>
-            You can start or receive calls for Ac reps 30 minutes before the
+            You can start or receive calls for{' '}
+            {workoutSessionDetails?.workoutConfig?.name} 30 minutes before the
             session begins.
           </Typo>
         ) : (
-          <div className='px-32 py-5 bg-gray-800 rounded-xl'>
+          <Link
+            href={`/user/${clientId}/workout/${sessionId}/live`}
+            className='px-32 py-5 bg-gray-800 rounded-xl'
+          >
             <StartCallButton
               disabled={isPast}
               className={cn('p-3.5', { ['opacity-60']: isPast })}
@@ -81,7 +90,7 @@ const UpcomingRunScreen: FC = () => {
             >
               Start Call
             </StartCallButton>
-          </div>
+          </Link>
         )}
       </div>
     </div>
