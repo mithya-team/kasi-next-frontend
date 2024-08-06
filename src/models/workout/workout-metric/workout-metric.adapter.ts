@@ -56,7 +56,7 @@ export function initializeMetrics(
       case 'TimeForEachKMDistance':
         initialMetrics.push({
           id: crypto.randomUUID(),
-          label: 'Time for each KM',
+          label: 'Time for each Kilometer',
           value: '00:00',
           key: 'TimeForEachKMDistance',
           type: MetricType.Tabular,
@@ -225,7 +225,7 @@ export function updateMetricPrettified(
 
     const timeForEachKMMetric: MetricPresentView = {
       id: crypto.randomUUID(),
-      label: 'Time for each KM',
+      label: 'Time for each Kilometer',
       value: '',
       key: 'TimeForEachKMDistance',
       type: MetricType.Tabular,

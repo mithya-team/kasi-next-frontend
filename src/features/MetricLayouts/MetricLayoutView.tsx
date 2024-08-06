@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { cn } from '@/lib/utils';
+
 import Button from '@/components/Buttons';
 
 import SingleMetricViewFlex from '@/features/MetricLayouts/SingleValueMetricFlex';
@@ -28,7 +30,7 @@ const MetricLayoutView: React.FC<MetricLayoutViewProps> = ({
   singleMatricesClass,
 }) => {
   return (
-    <div className={className}>
+    <div className={cn('w-full', className)}>
       <div className='p-4'>
         <div className='space-y-3'>
           <SingleMetricViewFlex

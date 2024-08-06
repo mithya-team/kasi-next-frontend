@@ -13,7 +13,7 @@ const SingleMetricViewFlex: React.FC<SingleMetricViewFlexProps> = ({
   className,
 }) => {
   return (
-    <div className={cn('flex gap-3', className)}>
+    <div className={cn('flex gap-3 items-center justify-center', className)}>
       {metrics.map((metric) => (
         <SingleValueView key={metric.id} metric={metric} />
       ))}

@@ -10,7 +10,9 @@ const SetsView: React.FC<SetsViewProps> = ({ title, sets }) => {
   return (
     <div className='p-2'>
       {title && (
-        <div className='text-white font-semibold text-xl mb-4'>{title}</div>
+        <div className='text-white text-center font-secondary font-semibold text-2xl mb-2'>
+          {title}
+        </div>
       )}
       {sets.map((set) => (
         <div key={set.id} className='space-y-4'>

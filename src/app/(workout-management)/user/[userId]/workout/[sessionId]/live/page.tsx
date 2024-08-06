@@ -69,7 +69,7 @@ const LiveScreen: FC = () => {
   return (
     <div className='relative flex flex-row w-full h-full'>
       <div className='text-white mt-[60px] w-[60vw] flex flex-col gap-5'>
-        <div className='flex flex-col justify-center items-center mt-5'>
+        <div className='flex flex-col justify-center items-center mt-5 min-w-[23rem] mx-auto'>
           {metricLayout.length && (
             <MetricLayoutView
               metricLayout={metricLayout[0]}
