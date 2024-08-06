@@ -1,4 +1,7 @@
-import { FC, useEffect, useMemo } from 'react';
+import { isAxiosError } from 'axios';
+import { FC, useEffect, useMemo, useState } from 'react';
+
+import { toast } from '@/lib/toast';
 
 import Button from '@/components/Buttons';
 import SvgIcon from '@/components/SvgIcon';
@@ -9,11 +12,14 @@ import { useStoreActions, useStoreState } from '@/store';
 import { SettingItemConfig } from '@/app/(account)/settings/@types';
 import { getSettingItem } from '@/app/(account)/settings/config';
 import PlanStatus from '@/app/(account)/settings/Section/PlanStatus';
+import adminModel from '@/models/admin/admin.model';
+import { ActiveProduct } from '@/models/admin/admin.types';
 
 interface AdminInfoProps {
   onItemClick: (item: SettingItemConfig) => void;
 }
 const AdminInfo: FC<AdminInfoProps> = ({ onItemClick }) => {
+  const [activeSubscription, setActiveSubscription] = useState<ActiveProduct>();
   const { admin, adminCode } = useStoreState(
     ({ AdminStore: { admin, adminCode } }) => ({
       admin,
@@ -25,6 +31,19 @@ const AdminInfo: FC<AdminInfoProps> = ({ onItemClick }) => {
       fetchAdminCode,
     }),
   );
+  const fetchProducts = async () => {
+    try {
+      const activeProduct = await adminModel.getActiveProduct();
+      if (activeProduct) setActiveSubscription(activeProduct[0]);
+    } catch (error) {
+      if (isAxiosError(error))
+        toast.error(error?.response?.data?.message || 'Try Again');
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     if (!adminCode && admin) fetchAdminCode(admin?._id);
@@ -37,7 +56,7 @@ const AdminInfo: FC<AdminInfoProps> = ({ onItemClick }) => {
 
   return (
     <>
-      <PlanStatus />
+      <PlanStatus activeProduct={activeSubscription} />
       {settingConfig?.map((config) => {
         return (
           <div

@@ -66,8 +66,6 @@ const LiveScreen: FC = () => {
     workoutSessionDetails,
     updatedMetricPrettified,
   );
-
-  console.log({ user });
   return (
     <div className='relative flex flex-row w-full h-full'>
       <div className='text-white mt-[60px] w-[60vw] flex flex-col gap-5'>

@@ -33,7 +33,6 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
   );
 
   const handleSelectChange = (value: string, text: string) => {
-    console.log({ value, text });
     setFieldValue('phone.countryCode', value);
     setFieldValue('phone.countryCodeText', text);
     setSelectedDialCode(value);

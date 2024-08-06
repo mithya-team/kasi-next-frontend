@@ -1,8 +1,23 @@
-import { FC, PropsWithChildren } from 'react';
+'use client';
+import { FC, PropsWithChildren, useEffect } from 'react';
+
+import { useStoreActions, useStoreState } from '@/store';
 
 import Header from '@/features/Header';
 
-const workoutManagementLayout: FC<PropsWithChildren> = ({ children }) => {
+const WorkoutManagementLayout: FC<PropsWithChildren> = ({ children }) => {
+  const { usersList } = useStoreState(({ UserStore: { usersList } }) => ({
+    usersList,
+  }));
+
+  const { fetchUsersList } = useStoreActions(
+    ({ UserStore: { fetchUsersList } }) => ({
+      fetchUsersList,
+    }),
+  );
+  useEffect(() => {
+    if (!usersList?.length) fetchUsersList({});
+  }, []);
   return (
     <div className='flex flex-col w-full ml-20'>
       <Header />
@@ -11,4 +26,4 @@ const workoutManagementLayout: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-export default workoutManagementLayout;
+export default WorkoutManagementLayout;

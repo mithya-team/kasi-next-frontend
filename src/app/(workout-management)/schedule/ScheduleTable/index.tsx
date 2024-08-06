@@ -1,16 +1,12 @@
 import Link from 'next/link';
 import { FC } from 'react';
 
-import { cn, getHref, parseDate, parseTime } from '@/lib/utils';
+import { getHref, parseDate, parseTime } from '@/lib/utils';
 
-import StartCallButton from '@/components/Buttons/StartCallButton';
 import SvgIcon from '@/components/SvgIcon';
 import WorkoutStatus from '@/components/WorkoutStatus';
 
-import {
-  WorkoutScheduleData,
-  WorkoutSessionStatus,
-} from '@/models/workout/workout.types';
+import { WorkoutScheduleData } from '@/models/workout/workout.types';
 
 interface ScheduleTableProps {
   data: WorkoutScheduleData;
@@ -20,7 +16,7 @@ const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
   const { user } = data;
   return (
     <div className='flex border-b border-gray-800 text-sm leading-[14px] text-white'>
-      <div className='w-[19%] p-5 text-ellipsis overflow-hidden'>
+      <div className='w-[25%] p-5 text-ellipsis overflow-hidden'>
         <Link
           href={getHref(data?._id, data?.status, data?.userId) ?? '/'}
           onClick={onClick}
@@ -31,14 +27,14 @@ const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
       <div className='w-[15%] px-5 py-[15px]'>
         <WorkoutStatus status={data?.status} />
       </div>
-      <div className='w-[19%] p-5 text-ellipsis overflow-hidden'>
+      <div className='w-[25%] p-5 text-ellipsis overflow-hidden'>
         {data?.workoutConfig?.name ?? '-'}
       </div>
       <div className='w-[12%] p-5'>
         {parseDate(user?.createdAt ?? '', 'MMMM D, YYYY')}
       </div>
       <div className='w-[10%] p-5'> {parseTime(user?.createdAt ?? '')}</div>
-      <Link
+      {/* <Link
         href={`user/${data?.userId}/workout/${data?._id}/live`}
         className='w-[19%] px-5 py-2.5'
       >
@@ -55,7 +51,7 @@ const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
         >
           Start call
         </StartCallButton>
-      </Link>
+      </Link> */}
       <button className='w-[5.00%] p-5'>
         <SvgIcon name='three-dots' />
       </button>

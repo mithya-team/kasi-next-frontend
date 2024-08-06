@@ -1,11 +1,8 @@
 'use client';
 import { FC } from 'react';
 
-import logger from '@/lib/logger';
-
 import { useStoreState } from '@/store';
 
-import { MetricTestData } from '@/constant/DummyData/workout-metric';
 import { MetricLayoutView } from '@/features/MetricLayouts/MetricLayoutView';
 import withAuth from '@/hoc/withAuth';
 import {
@@ -40,14 +37,12 @@ const PastScreen: FC = () => {
     workoutSessionDetails,
     updatedMetricPrettified,
   );
-  logger({ metricLayout }, 'page.tsx line 42');
   return (
     <div className='text-white mt-[60px] flex flex-col gap-5'>
       <div className='flex flex-col justify-center items-center mt-5'>
         {metricLayout.length && (
           <MetricLayoutView metricLayout={metricLayout[0]} />
         )}
-        <MetricLayoutView metricLayout={MetricTestData[0]} />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 
 import { SvgIconProps } from '@/components/SvgIcon/@types';
+import ActiveSubscription from '@/components/SvgIcon/ActiveSubscription';
 import CallIcon from '@/components/SvgIcon/Call';
 import ClockIcon from '@/components/SvgIcon/Clock';
 import CoachRun from '@/components/SvgIcon/CoachRun';
@@ -110,7 +111,8 @@ export type IconName =
   | 'code'
   | 'update-password'
   | 'email'
-  | 'expired';
+  | 'expired'
+  | 'active-subscription';
 
 const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   run: RunIcon,
@@ -165,6 +167,7 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   code: CodeIcon,
   email: EmailIcon,
   expired: ExpiredIcon,
+  'active-subscription': ActiveSubscription,
 };
 
 const SvgIcon: FC<ISvgIconProps> = ({ name, ...svgProps }) => {
