@@ -3,7 +3,6 @@ import { FC } from 'react';
 
 import { useStoreState } from '@/store';
 
-import { MetricTestData } from '@/constant/DummyData/workout-metric';
 import { MetricLayoutView } from '@/features/MetricLayouts/MetricLayoutView';
 import withAuth from '@/hoc/withAuth';
 import {
@@ -44,7 +43,7 @@ const PastScreen: FC = () => {
         {metricLayout.length && (
           <MetricLayoutView metricLayout={metricLayout[0]} />
         )}
-        <MetricLayoutView metricLayout={MetricTestData[0]} />
+        {/* <MetricLayoutView metricLayout={MetricTestData[0]} /> */}
       </div>
     </div>
   );
