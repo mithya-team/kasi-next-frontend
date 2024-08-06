@@ -6,8 +6,6 @@ import {
   UserListResponse,
   UsersListParams,
 } from '@/models/user/user.types';
-
-const LIMIT = 10;
 export interface TUserState {
   user: User | null;
   setUser: Action<TUserState, User | null>;
@@ -75,23 +73,24 @@ const UserStore: TUserState = {
     }
   }),
 
-  fetchUsersList: thunk(async (actions, params, { getState }) => {
+  fetchUsersList: thunk(async (actions, params) => {
     actions.setUsersListLoading(true);
     try {
       const response: UserListResponse = await UserModel.fetchUsersList(params);
-      if (response) {
-        const { usersList } = getState();
-        if (params.page === 1) {
-          actions.setUsersList(response.data);
-        } else {
-          actions.appendUsersList(response.data);
-        }
-        actions.setTotalUsers(response.total);
-        actions.setHasMore(
-          response.data.length === LIMIT &&
-            (usersList?.length || 0) + response.data.length <= response.total,
-        );
-      }
+      if (response) actions.setUsersList(response?.data);
+      // if (response) {
+      //   const { usersList } = getState();
+      //   if (params.page === 1) {
+      //     actions.setUsersList(response.data);
+      //   } else {
+      //     actions.appendUsersList(response.data);
+      //   }
+      //   actions.setTotalUsers(response.total);
+      //   actions.setHasMore(
+      //     response.data.length === LIMIT &&
+      //       (usersList?.length || 0) + response.data.length <= response.total,
+      //   );
+      // }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn('Failed to fetch users:', error);
