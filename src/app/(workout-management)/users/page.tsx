@@ -106,11 +106,18 @@ const UsersListingPage: FC = () => {
   const filteredUnconfirmedUsers = unConfirmedUsers?.filter(
     (unconfirmedUser) =>
       unconfirmedUser.status !== 'connected' &&
-      !usersList?.some((user) => user._id === unconfirmedUser._id),
+      usersList?.some((user) => user._id === unconfirmedUser._id),
+  );
+
+  const filteredUsersList = usersList?.filter(
+    (user) =>
+      !filteredUnconfirmedUsers?.some(
+        (unconfirmedUser) => unconfirmedUser._id === user._id,
+      ),
   );
 
   const allUsers = useMemo(
-    () => [...(filteredUnconfirmedUsers || []), ...(usersList || [])],
+    () => [...(filteredUnconfirmedUsers || []), ...(filteredUsersList || [])],
     [filteredUnconfirmedUsers, usersList],
   );
 
