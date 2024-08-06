@@ -1,3 +1,5 @@
+import { TPhone } from '@/models/auth/auth.types';
+
 export interface UserPreferences {
   dateOfBirth: string;
   maxHeartRate: number;
@@ -46,6 +48,7 @@ export interface User {
   userPreferences: UserPreferences;
   roles: string[];
   athleteSubscription: AthleteSubscription[];
+  phone: TPhone;
   stripeCustomerId?: string;
   emailVerified?: boolean;
 }

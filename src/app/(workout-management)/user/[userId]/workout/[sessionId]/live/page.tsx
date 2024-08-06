@@ -2,6 +2,8 @@
 import { usePathname } from 'next/navigation';
 import { FC, useEffect } from 'react';
 
+import Typo from '@/components/typography/Typo';
+
 import { useStoreActions, useStoreState } from '@/store';
 
 import Call from '@/features/BrowserCall';
@@ -18,12 +20,17 @@ const POLLING_INTERVAL = 5000; // 5 seconds
 const LiveScreen: FC = () => {
   const pathname = usePathname();
   const sessionId = pathname.split('/')[4];
-  const { workoutSessionDetails, workoutDataByConfigSlug } = useStoreState(
-    ({ WorkoutStore: { workoutSessionDetails, workoutDataByConfigSlug } }) => ({
-      workoutSessionDetails,
-      workoutDataByConfigSlug,
-    }),
-  );
+  const { workoutSessionDetails, workoutDataByConfigSlug, user } =
+    useStoreState(
+      ({
+        WorkoutStore: { workoutSessionDetails, workoutDataByConfigSlug },
+        UserStore: { user },
+      }) => ({
+        workoutSessionDetails,
+        workoutDataByConfigSlug,
+        user,
+      }),
+    );
 
   const { fetchWorkoutSessionDetails } = useStoreActions(
     ({ WorkoutStore: { fetchWorkoutSessionDetails } }) => ({
@@ -60,6 +67,7 @@ const LiveScreen: FC = () => {
     updatedMetricPrettified,
   );
 
+  console.log({ user });
   return (
     <div className='relative flex flex-row w-full h-full'>
       <div className='text-white mt-[60px] w-[60vw] flex flex-col gap-5'>
@@ -74,7 +82,18 @@ const LiveScreen: FC = () => {
         </div>
       </div>
       <div className='fixed flex bottom-5 justify-center items-center right-7 bg-gray-800 rounded-xl w-fit'>
-        <Call phoneNumber='+918777250782' />
+        {user?.phone ? (
+          <Call
+            phoneNumber={`${user?.phone?.countryCode}${user?.phone?.number}`}
+          />
+        ) : (
+          <Typo
+            level='h4'
+            classes='font-secondary font-semibold text-lg p-4 text-white'
+          >
+            Please update your phone number
+          </Typo>
+        )}
       </div>
     </div>
   );

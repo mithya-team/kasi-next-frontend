@@ -7,7 +7,7 @@ import { COUNTRY_LIST } from '@/constant/countryList';
 
 interface CountrySelectProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string, text: string) => void;
 }
 
 const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
@@ -15,7 +15,8 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
   const selectRef = useRef<HTMLSelectElement>(null);
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(e.target.value);
+    const selectedOption = e.target.options[e.target.selectedIndex];
+    onChange(e.target.value, selectedOption.dataset.countryname || '');
     setIsOpen(false);
   };
 
@@ -30,8 +31,9 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
           key={country.code}
           className='p-2 border-b hover:bg-gray-600 active:bg-gray-600 border-gray-800'
           value={country.dial_code}
+          data-countryname={country.name}
         >
-          {country.name} ({country.dial_code})
+          {`${country.name} (${country.dial_code})`}
         </option>
       )),
     [],

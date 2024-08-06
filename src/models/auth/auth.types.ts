@@ -1,12 +1,13 @@
 import { User } from '@/models/user/user.types';
 
+export interface TPhone {
+  number: string;
+  countryCode: string;
+  countryCodeText: string;
+}
 export interface SignupFormData {
   email: string;
-  phone: {
-    number: string;
-    countryCode: string;
-    countryCodeText: string;
-  };
+  phone: TPhone;
   password: string;
   fullName: string;
 }

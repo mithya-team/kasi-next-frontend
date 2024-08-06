@@ -32,8 +32,10 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
     COUNTRY_LIST[0].dial_code,
   );
 
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: string, text: string) => {
+    console.log({ value, text });
     setFieldValue('phone.countryCode', value);
+    setFieldValue('phone.countryCodeText', text);
     setSelectedDialCode(value);
   };
 
