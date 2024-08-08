@@ -44,7 +44,7 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   if (!appInitialized) return <Loader />;
 
   return (
-    <div className='flex flex-row min-h-screen bg-gray-900'>
+    <div className='flex flex-row min-h-screen h-[100vh] overflow-hidden bg-gray-900'>
       <DashboardSidebar />
       {children}
     </div>

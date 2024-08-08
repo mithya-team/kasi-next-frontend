@@ -21,7 +21,7 @@ const WorkoutManagementLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <div className='flex flex-col w-full ml-20'>
       <Header />
-      {children}
+      <div className='w-full h-full overflow-hidden'>{children}</div>
     </div>
   );
 };

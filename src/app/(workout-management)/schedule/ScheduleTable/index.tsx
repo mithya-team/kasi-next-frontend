@@ -3,7 +3,6 @@ import { FC } from 'react';
 
 import { getHref, parseDate, parseTime } from '@/lib/utils';
 
-import SvgIcon from '@/components/SvgIcon';
 import WorkoutStatus from '@/components/WorkoutStatus';
 
 import { WorkoutScheduleData } from '@/models/workout/workout.types';
@@ -15,8 +14,8 @@ interface ScheduleTableProps {
 const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
   const { user } = data;
   return (
-    <div className='flex border-b border-gray-800 text-sm leading-[14px] text-white'>
-      <div className='w-[25%] p-5 text-ellipsis overflow-hidden'>
+    <div className='flex border-b justify-center items-center border-gray-800 text-sm leading-[14px] text-white'>
+      <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
         <Link
           href={getHref(data?._id, data?.status, data?.userId) ?? '/'}
           onClick={onClick}
@@ -24,37 +23,16 @@ const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
           {user?.fullName}
         </Link>
       </div>
-      <div className='w-[15%] px-5 py-[15px]'>
+      <div className='w-[20%] p-5'>
         <WorkoutStatus status={data?.status} />
       </div>
-      <div className='w-[25%] p-5 text-ellipsis overflow-hidden'>
+      <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
         {data?.workoutConfig?.name ?? '-'}
       </div>
-      <div className='w-[12%] p-5'>
+      <div className='w-[15%] p-5'>
         {parseDate(user?.createdAt ?? '', 'MMMM D, YYYY')}
       </div>
-      <div className='w-[10%] p-5'> {parseTime(user?.createdAt ?? '')}</div>
-      {/* <Link
-        href={`user/${data?.userId}/workout/${data?._id}/live`}
-        className='w-[19%] px-5 py-2.5'
-      >
-        <StartCallButton
-          disabled={
-            data?.status === WorkoutSessionStatus?.PAST ||
-            data?.status === WorkoutSessionStatus?.YET_TO_START
-          }
-          className={cn('', {
-            ['opacity-60']:
-              data?.status === WorkoutSessionStatus?.PAST ||
-              data?.status === WorkoutSessionStatus?.YET_TO_START,
-          })}
-        >
-          Start call
-        </StartCallButton>
-      </Link> */}
-      <button className='w-[5.00%] p-5'>
-        <SvgIcon name='three-dots' />
-      </button>
+      <div className='w-[15%] p-5'> {parseTime(user?.createdAt ?? '')}</div>
     </div>
   );
 };

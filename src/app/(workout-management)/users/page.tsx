@@ -139,12 +139,11 @@ const UsersListingPage: FC = () => {
   return (
     <div className='w-full px-5 font-medium font-primary overflow-auto'>
       <div className='flex bg-gray-800 text-base  text-gray-400 mb-5'>
-        <div className='w-[21.62%] py-3 pl-5'>Username</div>
-        <div className='w-[10.29%] py-3 pl-5'>Joined</div>
+        <div className='flex-1 py-3 pl-5'>Username</div>
+        <div className='w-[12%] py-3 pl-5'>Joined</div>
         <div className='w-[16.91%] py-3 pl-5'>Status</div>
-        <div className='w-[21.62%] py-3 pl-5'>Email</div>
-        <div className='w-[21.62%] py-3 pl-5'>Status</div>
-        <div className='w-[5.00%] py-3 pl-5' />
+        <div className='flex-1 py-3 pl-5'>Email</div>
+        <div className='w-[18%] py-3 pl-5'>Membership Status</div>
       </div>
       {!allUsers.length ? (
         <Empty />

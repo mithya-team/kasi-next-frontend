@@ -73,12 +73,14 @@ const UserDetails = () => {
   };
 
   return (
-    <div className='flex flex-row'>
-      <div className='w-[23%] h-[100vh] border-r border-gray-800'>
+    <div className='flex flex-row h-[100vh] overflow-hidden'>
+      <div className='w-[23%] h-full border-r border-gray-800 overflow-y-auto'>
         {renderUserList()}
       </div>
-      <div className='w-[45%] my-5 mx-auto flex flex-col gap-5 text-sm text-white font-primary font-medium leading-[14px]'>
-        {renderContent()}
+      <div className='flex-1 overflow-y-auto'>
+        <div className='my-5 w-[55%] mx-auto flex flex-col gap-5 text-sm text-white font-primary font-medium leading-[14px]'>
+          {renderContent()}
+        </div>
       </div>
     </div>
   );
