@@ -13,7 +13,7 @@ import {
 } from '@/models/admin/admin.types';
 import { ProductPlanId } from '@/models/user/user.types';
 
-interface SubscriptionCardProps {
+export interface SubscriptionCardProps {
   className?: string;
   isActive?: boolean;
   product: ActiveProduct | SubscriptionProductsDetails;
@@ -55,24 +55,27 @@ const SubscriptionCard: FC<SubscriptionCardProps> = ({
           {getSubscriptionPeriod(product?.planId)}
         </Typo>
       </div>
-      {isActive ? (
-        <Button
-          disabled={product?.planId === 'FREE_TIER'}
-          onClick={() => onClick(product)}
-          className='px-5 py-2.5 border border-green-500 rounded-[10px] bg-black-1 font-secondary text-white font-semibold text-xl tracking-[-0.1px]'
-        >
-          {isActiveProduct(product) &&
-          product.subscription?.status === 'delete_after_expiration'
-            ? 'Renew plan'
-            : 'Cancel plan'}
-        </Button>
+      {product?.planId !== 'FREE_TIER' ? (
+        isActive ? (
+          <Button
+            onClick={() => onClick(product)}
+            className='px-5 py-2.5 border border-green-500 rounded-[10px] bg-black-1 font-secondary text-white font-semibold text-xl tracking-[-0.1px]'
+          >
+            {isActiveProduct(product) &&
+            product.subscription?.status === 'delete_after_expiration'
+              ? 'Renew plan'
+              : 'Cancel plan'}
+          </Button>
+        ) : (
+          <PrimaryButton
+            isLoading={onClickTask.isLoading}
+            onClick={() => onClickTask.run(product)}
+          >
+            Subscribe now
+          </PrimaryButton>
+        )
       ) : (
-        <PrimaryButton
-          isLoading={onClickTask.isLoading}
-          onClick={() => onClickTask.run(product)}
-        >
-          Subscribe now
-        </PrimaryButton>
+        <></>
       )}
     </div>
   );

@@ -137,7 +137,7 @@ const UsersListingPage: FC = () => {
   if (isLoading) return <Loader className='h-[100vh]' />;
 
   return (
-    <div className='w-full px-5 font-medium font-primary overflow-auto'>
+    <div className='w-full px-5 font-medium font-primary overflow-y-auto'>
       <div className='flex bg-gray-800 text-base  text-gray-400 mb-5'>
         <div className='flex-1 py-3 pl-5'>Username</div>
         <div className='w-[12%] py-3 pl-5'>Joined</div>

@@ -21,7 +21,7 @@ const AccountLayout: FC<PropsWithChildren> = ({ children }) => {
         </Typo>
         <RightHeader />
       </div>
-      {children}
+      <div className='w-full h-full overflow-y-auto'>{children}</div>
     </div>
   );
 };

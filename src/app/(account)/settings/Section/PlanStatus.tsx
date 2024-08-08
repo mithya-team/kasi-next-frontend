@@ -19,7 +19,10 @@ const PlanStatus: FC<PlanStatusProps> = ({ activeProduct }) => {
   const onClick = () => router.push(ROUTE.SUBSCRIPTION_ROUTE.path);
 
   return (
-    <div className='flex flex-col gap-5 p-5 w-full bg-gray-800 rounded-[14px] relative'>
+    <div
+      onClick={onClick}
+      className='cursor-pointer flex flex-col gap-5 p-5 w-full bg-gray-800 rounded-[14px] relative'
+    >
       <div className='bg-violet-1 w-24 h-14 absolute left-0 top-0 opacity-30 blur-[45px]' />
       <div className='bg-green-500 w-24 h-14 absolute right-0 bottom-0 opacity-30 blur-[45px]' />
       <div className='flex flex-row gap-5'>

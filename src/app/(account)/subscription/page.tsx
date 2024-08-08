@@ -11,6 +11,7 @@ import SubscriptionCard from '@/components/SubscriptionCard';
 import SvgIcon from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
 
+import Cards from '@/app/(account)/subscription/Cards';
 import SubscriptionInfo from '@/app/(account)/subscription/SubscriptionInfo';
 import Success from '@/app/(account)/subscription/Success';
 import { APP_CONFIG } from '@/constant/config';
@@ -128,26 +129,10 @@ const SubscriptionScreen = () => {
         activeSubscription.creditDurationInDays <= 0 ? (
           <>
             <SubscriptionInfo />
-            <div className='grid grid-cols-2 gap-x-5 gap-y-5'>
-              {subscriptionProducts && (
-                <SubscriptionCard
-                  onClick={handleOnSubscribe}
-                  product={subscriptionProducts?.PAID_TIER_1_MONTH}
-                />
-              )}
-              {subscriptionProducts && (
-                <SubscriptionCard
-                  onClick={handleOnSubscribe}
-                  product={subscriptionProducts?.PAID_TIER_6_MONTHS}
-                />
-              )}
-              {subscriptionProducts && (
-                <SubscriptionCard
-                  onClick={handleOnSubscribe}
-                  product={subscriptionProducts?.PAID_TIER_12_MONTHS}
-                />
-              )}
-            </div>
+            <Cards
+              subscriptionProducts={subscriptionProducts}
+              onClick={handleOnSubscribe}
+            />
           </>
         ) : (
           <>
@@ -162,6 +147,12 @@ const SubscriptionScreen = () => {
               onClick={openCancelPlanDialog}
               product={activeSubscription}
             />
+            {activeSubscription?.planId === 'FREE_TIER' ? (
+              <Cards
+                subscriptionProducts={subscriptionProducts}
+                onClick={handleOnSubscribe}
+              />
+            ) : null}
           </>
         )
       ) : null}

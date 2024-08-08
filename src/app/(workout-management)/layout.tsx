@@ -19,9 +19,9 @@ const WorkoutManagementLayout: FC<PropsWithChildren> = ({ children }) => {
     if (!usersList?.length) fetchUsersList({});
   }, []);
   return (
-    <div className='flex flex-col w-full ml-20'>
+    <div className='flex flex-col w-full ml-20 overflow-hidden'>
       <Header />
-      <div className='w-full h-full overflow-hidden'>{children}</div>
+      <div className='w-full h-full overflow-auto'>{children}</div>
     </div>
   );
 };
