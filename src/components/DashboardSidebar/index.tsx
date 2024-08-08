@@ -40,19 +40,22 @@ const DashboardSidebar: FC<DashboardSidebarProps> = ({ className }) => {
         className,
       )}
     >
-      <Link className='py-[15px] pl-[8px]' href={ROUTE.USER_LIST_ROUTE.path}>
-        <Image
-          width={64}
-          height={54}
-          src='/images/kasi_logo.png'
-          alt='kasi_logo'
-        />
-      </Link>
-      <ul className='p-5 gap-2.5'>
+      <div className='my-[15px] mx-[8px]'>
+        <Link href={ROUTE.USER_LIST_ROUTE.path}>
+          <Image
+            width={64}
+            height={54}
+            src='/images/kasi_logo.png'
+            alt='kasi_logo'
+          />
+        </Link>
+      </div>
+
+      <ul className='py-5 px-3.5 gap-2.5 flex flex-col justify-center items-center'>
         {links?.map(({ name, ...link }, idx) => {
           const isActive = pathname === link.href;
           return (
-            <Link className='py-2 px-2.5' key={idx} href={link?.href}>
+            <Link className='p-2.5' key={idx} href={link?.href}>
               <SvgIcon name={name} pathFill={isActive ? 'white' : '#6B7280'} />
             </Link>
           );

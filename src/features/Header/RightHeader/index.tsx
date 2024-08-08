@@ -6,7 +6,7 @@ import useAuthActions from '@/hooks/useAuthActions';
 
 import Button from '@/components/Buttons';
 import Popover from '@/components/Popover';
-import SvgIcon, { IconName, ISvgIconProps } from '@/components/SvgIcon';
+import SvgIcon, { IconName } from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
 
 import { useStoreState } from '@/store';
@@ -30,14 +30,14 @@ const RightHeader: FC<RightHeaderProps> = ({ rightHeaderClass }) => {
         rightHeaderClass,
       )}
     >
-      {rightHeaderNavs?.map(({ name, ...nav }, index) => (
+      {/* {rightHeaderNavs?.map(({ name, ...nav }, index) => (
         <div
           className='px-[18px] py-[15px] w-[54px] h-[54px] rounded-xl flex flex-row border-[1px] gap-5 border-gray-600'
           key={index}
         >
           <SvgIcon name={name} {...nav} />
         </div>
-      ))}
+      ))} */}
       <div className='ml-3 flex flex-row justify-center items-center gap-3'>
         <Typo
           level='h4'
@@ -52,7 +52,7 @@ const RightHeader: FC<RightHeaderProps> = ({ rightHeaderClass }) => {
         >
           <div
             onClick={() => setOpenPopover(!openPopover)}
-            className='w-6 flex justify-center items-center'
+            className='w-6 h-full flex justify-center items-center'
           >
             <SvgIcon name='down-arrow' />
           </div>
@@ -64,24 +64,24 @@ const RightHeader: FC<RightHeaderProps> = ({ rightHeaderClass }) => {
 
 export default RightHeader;
 
-interface INavs {
-  name: ISvgIconProps['name'];
-  width: string;
-  height: string;
-}
+// interface INavs {
+//   name: ISvgIconProps['name'];
+//   width: string;
+//   height: string;
+// }
 
-const rightHeaderNavs: INavs[] = [
-  {
-    name: 'notification',
-    width: '18',
-    height: '24',
-  },
-  {
-    name: 'profile',
-    width: '20',
-    height: '20',
-  },
-];
+// const rightHeaderNavs: INavs[] = [
+//   {
+//     name: 'notification',
+//     width: '18',
+//     height: '24',
+//   },
+//   {
+//     name: 'profile',
+//     width: '20',
+//     height: '20',
+//   },
+// ];
 
 interface PopoverContentProps {
   closePopover: () => void;
@@ -92,16 +92,16 @@ const PopoverContent: FC<PopoverContentProps> = ({ closePopover }) => {
   const router = useRouter();
 
   const contentConfig = [
+    // {
+    //   title: 'Settings',
+    //   icon: 'setting' as IconName,
+    //   onClick: () => {
+    //     router.push(ROUTE.SETTING_ROUTE.path);
+    //     closePopover();
+    //   },
+    // },
     {
-      title: 'Settings',
-      icon: 'setting' as IconName,
-      onClick: () => {
-        router.push(ROUTE.SETTING_ROUTE.path);
-        closePopover();
-      },
-    },
-    {
-      title: 'Payments',
+      title: 'subscriptions',
       icon: 'payment' as IconName,
       onClick: () => {
         router.push(ROUTE.SUBSCRIPTION_ROUTE.path);
