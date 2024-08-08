@@ -6,6 +6,7 @@ interface RepsViewProps {
 }
 
 const RepsView: React.FC<RepsViewProps> = ({ title, reps }) => {
+  if (!reps.length) return <></>;
   return (
     <div className=''>
       {title && (
@@ -13,8 +14,8 @@ const RepsView: React.FC<RepsViewProps> = ({ title, reps }) => {
           {title}
         </div>
       )}
-      {reps.map((rep) => (
-        <div key={rep.id} className='space-y-2 p-5 bg-gray-800 rounded-lg mb-5'>
+      {reps?.map((rep) => (
+        <div key={rep.id} className='space-y-2 p-5 bg-gray-800 rounded-lg mb-4'>
           <div className='flex flex-col items-center justify-between text-white text-sm'>
             <div className='flex flex-row w-full justify-between items-center'>
               <div className=''>{rep.name}</div>

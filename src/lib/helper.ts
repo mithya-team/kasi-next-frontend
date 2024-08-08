@@ -14,14 +14,14 @@ export function getFromSessionStorage(key: string): string | null {
   return null;
 }
 
-export function copyToClipboard(text: string) {
+export function copyToClipboard(text: string, toastMessage?: string) {
   if (!navigator.clipboard) {
     return; // Clipboard API not supported
   }
   navigator.clipboard
     .writeText(text)
     .then(() => {
-      toast.success('Text copied to clipboard successfully!');
+      toast.success(toastMessage ?? 'Code copied to clipboard successfully!');
     })
     .catch((err) => {
       toast.error('Failed to copy text to clipboard:', err);

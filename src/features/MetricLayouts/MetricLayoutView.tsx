@@ -32,29 +32,30 @@ const MetricLayoutView: React.FC<MetricLayoutViewProps> = ({
   return (
     <div className={cn('w-full', className)}>
       <div className='p-4'>
-        <div className='space-y-3'>
+        <div className='flex flex-col gap-9'>
           <SingleMetricViewFlex
             metrics={metricLayout.metrics.filter(
               (metric: MetricPresentView) => metric.type === 'singleValue',
             )}
             className={singleMatricesClass}
           />
-
-          {metricLayout.metrics
-            .filter((metric: MetricPresentView) => metric.type === 'tabular')
-            .map((metric: MetricPresentView) => (
-              <div key={metric.id}>
-                {metric.reps && (
-                  <RepsView title={metric.label} reps={metric.reps} />
-                )}
-                {metric.sets && (
-                  <SetsView title={metric.label} sets={metric.sets} />
-                )}
-                {metric.laps && (
-                  <LapsView title={metric.label} laps={metric.laps} />
-                )}
-              </div>
-            ))}
+          <div className='flex flex-col gap-4 w-[26rem] mx-auto'>
+            {metricLayout.metrics
+              .filter((metric: MetricPresentView) => metric.type === 'tabular')
+              .map((metric: MetricPresentView) => (
+                <div key={metric.id}>
+                  {metric.reps && (
+                    <RepsView title={metric.label} reps={metric.reps} />
+                  )}
+                  {metric.sets && (
+                    <SetsView title={metric.label} sets={metric.sets} />
+                  )}
+                  {metric.laps && (
+                    <LapsView title={metric.label} laps={metric.laps} />
+                  )}
+                </div>
+              ))}
+          </div>
         </div>
 
         {buttonLabel && (

@@ -38,13 +38,10 @@ const PastScreen: FC = () => {
     updatedMetricPrettified,
   );
   return (
-    <div className='text-white mt-[60px] flex flex-col gap-5'>
-      <div className='flex flex-col justify-center items-center mt-5 min-w-[23rem] mx-auto'>
-        {metricLayout.length && (
-          <MetricLayoutView metricLayout={metricLayout[0]} />
-        )}
-        {/* <MetricLayoutView metricLayout={MetricTestData[0]} /> */}
-      </div>
+    <div className='text-white mt-[60px] items-center justify-center'>
+      {metricLayout.length && (
+        <MetricLayoutView metricLayout={metricLayout[0]} />
+      )}
     </div>
   );
 };

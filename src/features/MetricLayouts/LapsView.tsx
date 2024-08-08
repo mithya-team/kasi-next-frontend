@@ -6,6 +6,7 @@ interface LapsViewProps {
 }
 
 const LapsView: React.FC<LapsViewProps> = ({ title, laps }) => {
+  if (!laps.length) return <></>;
   return (
     <div className='p-2 w-full'>
       {title && (

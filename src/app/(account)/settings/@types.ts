@@ -12,6 +12,7 @@ export interface SettingItemConfig {
   value: string;
   icon: IconName;
   id: SettingItemType;
+  href: string;
 }
 
 export interface EmailFormValues {

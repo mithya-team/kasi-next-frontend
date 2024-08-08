@@ -68,16 +68,10 @@ const LiveScreen: FC = () => {
   );
   return (
     <div className='relative flex flex-row w-full h-full'>
-      <div className='text-white mt-[60px] w-[60vw] flex flex-col gap-5'>
-        <div className='flex flex-col justify-center items-center mt-5 min-w-[23rem] mx-auto'>
-          {metricLayout.length && (
-            <MetricLayoutView
-              metricLayout={metricLayout[0]}
-              className='w-[50%]'
-              singleMatricesClass='justify-center'
-            />
-          )}
-        </div>
+      <div className='text-white mt-[60px] w-[65vw] items-center justify-center'>
+        {metricLayout.length && (
+          <MetricLayoutView metricLayout={metricLayout[0]} />
+        )}
       </div>
       <div className='fixed flex bottom-5 justify-center items-center right-7 bg-gray-800 rounded-xl w-fit'>
         {user?.phone ? (

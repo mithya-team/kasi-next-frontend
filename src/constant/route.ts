@@ -15,3 +15,20 @@ export const ROUTE = {
     path: '/subscription',
   },
 };
+
+const SETTING_BASE_PATH = `${ROUTE.SETTING_ROUTE.path}`;
+
+export const SETTING_ROUTE = {
+  NAME: {
+    path: `${SETTING_BASE_PATH}/name`,
+  },
+  CODE: {
+    path: `${SETTING_BASE_PATH}/code`,
+  },
+  EMAIL: {
+    path: `${SETTING_BASE_PATH}/email`,
+  },
+  PASSWORD: {
+    path: `${SETTING_BASE_PATH}/password`,
+  },
+};
