@@ -1,6 +1,7 @@
 'use client';
 import { isAxiosError } from 'axios';
 import { FC, useEffect, useMemo, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { toast } from '@/lib/toast';
 
@@ -25,24 +26,25 @@ export type ActionType = 'decline' | 'accept';
 const UsersListingPage: FC = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<ActionType>();
-  // const [currPage, setCurrPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedUser] = useState<
     User | UnConfirmedUserWithDetails | null
   >(null);
 
-  const { usersList, isLoading, admin, unConfirmedUsers } = useStoreState(
-    ({
-      UserStore: { usersList, isLoading, totalUsers, hasMore },
-      AdminStore: { admin, unConfirmedUsers },
-    }) => ({
-      usersList,
-      isLoading,
-      admin,
-      unConfirmedUsers,
-      totalUsers,
-      hasMore,
-    }),
-  );
+  const { usersList, isLoading, admin, unConfirmedUsers, hasMore, totalUsers } =
+    useStoreState(
+      ({
+        UserStore: { usersList, isLoading, totalUsers, hasMore },
+        AdminStore: { admin, unConfirmedUsers },
+      }) => ({
+        usersList,
+        isLoading,
+        admin,
+        unConfirmedUsers,
+        totalUsers,
+        hasMore,
+      }),
+    );
 
   const { fetchUsersList, fetchUserConnections, updateConfirmedUsers } =
     useStoreActions(
@@ -95,7 +97,7 @@ const UsersListingPage: FC = () => {
   };
 
   useEffect(() => {
-    fetchUsersList({});
+    fetchUsersList({ page: currentPage });
 
     return () => {
       setDialogOpen(false);
@@ -121,12 +123,16 @@ const UsersListingPage: FC = () => {
     [filteredUnconfirmedUsers, usersList],
   );
 
-  // const fetchMoreData = () => {
-  //   setCurrPage(currPage + 1);
-  //   if (hasMore) {
-  //     fetchUsersList({ page: currPage + 1 });
-  //   }
-  // };
+  const fetchMoreUsers = async () => {
+    try {
+      fetchUsersList({ page: currentPage + 1 }); // Fetch next page
+      setCurrentPage(currentPage + 1);
+    } catch (error) {
+      if (isAxiosError(error))
+        toast.error(error?.response?.data?.message || 'Try Again');
+    }
+  };
+
   useEffect(() => {
     if (usersList?.length && admin) {
       const userIds = usersList?.map((user) => user._id);
@@ -137,8 +143,11 @@ const UsersListingPage: FC = () => {
   if (isLoading) return <Loader className='h-[100vh]' />;
 
   return (
-    <div className='w-full px-5 font-medium font-primary overflow-y-auto'>
-      <div className='flex bg-gray-800 text-base  text-gray-400 mb-5'>
+    <div
+      id='users-scrollable-div'
+      className='w-full px-5 font-medium font-primary h-full overflow-y-scroll'
+    >
+      <div className='flex bg-gray-800 text-base text-gray-400 mb-5'>
         <div className='flex-1 py-3 pl-5'>Username</div>
         <div className='w-[12%] py-3 pl-5'>Joined</div>
         <div className='w-[16.91%] py-3 pl-5'>Status</div>
@@ -148,14 +157,13 @@ const UsersListingPage: FC = () => {
       {!allUsers.length ? (
         <Empty />
       ) : (
-        // <InfiniteScroll
-        //   next={fetchMoreData}
-        //   hasMore={hasMore}
-        //   loader={<Loader />}
-        //   dataLength={totalUsers}
-        //   className='mb-10'
-        // >
-        <>
+        <InfiniteScroll
+          next={fetchMoreUsers}
+          hasMore={hasMore}
+          loader={<Loader />}
+          dataLength={totalUsers}
+          scrollableTarget='users-scrollable-div'
+        >
           {allUsers?.map((user) => (
             <UsersListTable
               onAction={openConfirmationDialog}
@@ -163,7 +171,7 @@ const UsersListingPage: FC = () => {
               key={user?._id}
             />
           ))}
-        </>
+        </InfiniteScroll>
       )}
       <ConfirmationDialog
         open={isDialogOpen}

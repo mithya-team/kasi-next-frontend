@@ -8,7 +8,7 @@ import {
 
 const userModel = {
   async fetchUsersList(params: UsersListParams) {
-    const { page = 1, limit = 20, search, sort } = params;
+    const { page = 1, limit = 15, search, sort } = params;
     const response = await request<UserListResponse>('/coach/users', {
       method: 'GET',
       params: {
