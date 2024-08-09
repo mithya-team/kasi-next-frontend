@@ -1,5 +1,6 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import EmptyUserWorkout from '@/components/EmptyUserWorkout';
 import Loader from '@/components/Loader';
@@ -10,12 +11,21 @@ import ScheduleTable from '@/app/(workout-management)/schedule/ScheduleTable';
 import withAuth from '@/hoc/withAuth';
 
 const Schedule = () => {
-  const { workoutScheduleData, isWorkoutScheduleLoading } = useStoreState(
-    ({ WorkoutStore: { workoutScheduleData, isWorkoutScheduleLoading } }) => ({
-      workoutScheduleData,
-      isWorkoutScheduleLoading,
-    }),
-  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const { workoutScheduleData, isWorkoutScheduleLoading, hasMore } =
+    useStoreState(
+      ({
+        WorkoutStore: {
+          workoutScheduleData,
+          isWorkoutScheduleLoading,
+          hasMore,
+        },
+      }) => ({
+        workoutScheduleData,
+        isWorkoutScheduleLoading,
+        hasMore,
+      }),
+    );
 
   const { fetchWorkoutScheduleData } = useStoreActions(
     ({ WorkoutStore: { fetchWorkoutScheduleData } }) => ({
@@ -24,13 +34,17 @@ const Schedule = () => {
   );
 
   useEffect(() => {
-    fetchWorkoutScheduleData({});
-  }, []);
+    fetchWorkoutScheduleData({ page: currentPage });
+  }, [currentPage]);
 
-  if (isWorkoutScheduleLoading) return <Loader />;
+  if (isWorkoutScheduleLoading && !workoutScheduleData?.length)
+    return <Loader />;
 
   return (
-    <div className='w-full px-5 font-medium font-primary overflow-auto'>
+    <div
+      id='schedule-scrollable-div'
+      className='w-full px-5 font-medium font-primary overflow-y-scroll h-full'
+    >
       <div className='flex bg-gray-800 text-base  text-gray-400 mb-5'>
         <div className='flex-1 py-3 pl-5'>Username</div>
         <div className='w-[20%] py-3 pl-5'>Workout</div>
@@ -44,9 +58,18 @@ const Schedule = () => {
           className='gap-9 mt-4'
         />
       ) : (
-        workoutScheduleData?.map((data) => {
-          return <ScheduleTable data={data} key={data?._id} />;
-        })
+        <InfiniteScroll
+          next={() => setCurrentPage((prevPage) => prevPage + 1)}
+          hasMore={hasMore}
+          loader={undefined}
+          dataLength={workoutScheduleData?.length ?? 0}
+          scrollableTarget='schedule-scrollable-div'
+          scrollThreshold={0.5}
+        >
+          {workoutScheduleData?.map((data, idx) => {
+            return <ScheduleTable data={data} key={idx} />;
+          })}
+        </InfiniteScroll>
       )}
     </div>
   );

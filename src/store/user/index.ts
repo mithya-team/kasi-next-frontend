@@ -6,8 +6,6 @@ import {
   UserListResponse,
   UsersListParams,
 } from '@/models/user/user.types';
-
-const USERS_PAGE_LIMIT = 10;
 export interface TUserState {
   user: User | null;
   setUser: Action<TUserState, User | null>;
@@ -20,8 +18,6 @@ export interface TUserState {
   setUsersList: Action<TUserState, User[] | null>;
   usersListLoading: boolean;
   setUsersListLoading: Action<TUserState, boolean>;
-  totalUsers: number;
-  setTotalUsers: Action<TUserState, number>;
   hasMore: boolean;
   setHasMore: Action<TUserState, boolean>;
   fetchUsersList: Thunk<TUserState, UsersListParams>;
@@ -48,10 +44,6 @@ const UserStore: TUserState = {
   setUsersListLoading: action((state, payload) => {
     state.isLoading = payload;
   }),
-  totalUsers: 0,
-  setTotalUsers: action((state, payload) => {
-    state.totalUsers = payload;
-  }),
   hasMore: true,
   setHasMore: action((state, payload) => {
     state.hasMore = payload;
@@ -74,7 +66,6 @@ const UserStore: TUserState = {
   fetchUsersList: thunk(async (actions, params, { getState }) => {
     actions.setUsersListLoading(true);
     try {
-      console.log({ params });
       const { page = 1 } = params;
       const response: UserListResponse = await UserModel.fetchUsersList(params);
       const { usersList } = getState();
@@ -84,8 +75,7 @@ const UserStore: TUserState = {
         } else {
           actions.setUsersList([...(usersList || []), ...response.data]);
         }
-        actions.setTotalUsers(response.total);
-        actions.setHasMore(response.data.length >= USERS_PAGE_LIMIT);
+        actions.setHasMore((usersList ?? [])?.length < response.total);
       }
     } catch (error) {
       // eslint-disable-next-line no-console

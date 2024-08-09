@@ -23,17 +23,23 @@ const Header: FC<HeaderProps> = ({
 }) => {
   const pathname = usePathname();
 
-  const { isUserDetailsPage, isUserListingPage, isUsersWorkoutDetailsPage } =
-    useMemo(() => {
-      const isUserDetailsPage = pathname.split('/')[1] === 'user';
-      const isUserListingPage = pathname.split('/')[1] === 'users';
-      const isUsersWorkoutDetailsPage = pathname.split('/')[3] === 'workout';
-      return {
-        isUserDetailsPage,
-        isUserListingPage,
-        isUsersWorkoutDetailsPage,
-      };
-    }, [pathname]);
+  const {
+    isUserDetailsPage,
+    isUserListingPage,
+    isUsersWorkoutDetailsPage,
+    isSchedulePage,
+  } = useMemo(() => {
+    const isUserDetailsPage = pathname.split('/')[1] === 'user';
+    const isUserListingPage = pathname.split('/')[1] === 'users';
+    const isUsersWorkoutDetailsPage = pathname.split('/')[3] === 'workout';
+    const isSchedulePage = pathname.split('/')[1] === 'schedule';
+    return {
+      isUserDetailsPage,
+      isUserListingPage,
+      isUsersWorkoutDetailsPage,
+      isSchedulePage,
+    };
+  }, [pathname]);
 
   const userId = pathname.split('/')[2];
 
@@ -42,15 +48,17 @@ const Header: FC<HeaderProps> = ({
     fetchUsersList,
     fetchUser,
     fetchUserWorkoutData,
+    fetchWorkoutScheduleData,
   } = useStoreActions(
     ({
       UserStore: { setShowUserWorkoutContent, fetchUsersList, fetchUser },
-      WorkoutStore: { fetchUserWorkoutData },
+      WorkoutStore: { fetchUserWorkoutData, fetchWorkoutScheduleData },
     }) => ({
       setShowUserWorkoutContent,
       fetchUsersList,
       fetchUser,
       fetchUserWorkoutData,
+      fetchWorkoutScheduleData,
     }),
   );
   useEffect(() => {
@@ -72,7 +80,9 @@ const Header: FC<HeaderProps> = ({
 
   const onSearch = (term: string) => {
     if (!term) return;
-    if (isUserListingPage || isUserDetailsPage)
+    if (isSchedulePage) {
+      fetchWorkoutScheduleData({ search: term, page: 1 });
+    } else if (isUserListingPage || isUserDetailsPage)
       fetchUsersList({ search: term, page: 1 });
   };
 

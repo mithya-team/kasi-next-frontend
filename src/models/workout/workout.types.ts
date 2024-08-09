@@ -13,6 +13,7 @@ export interface UserWorkoutSessionParams {
   status?: WorkoutSessionStatus;
   page?: number;
   limit?: number;
+  search?: string;
 }
 export enum LengthUnit {
   KM = 'km',

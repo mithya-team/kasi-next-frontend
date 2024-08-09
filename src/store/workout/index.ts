@@ -39,6 +39,8 @@ export interface TWorkoutStore {
   fetchWorkoutDataByConfigSlug: Thunk<TWorkoutStore, string>;
   isWorkoutDetailPage: boolean;
   setIsWorkoutDetailPage: Action<TWorkoutStore, boolean>;
+  hasMore: boolean;
+  setHasMore: Action<TWorkoutStore, boolean>;
 }
 
 const WorkoutStore: TWorkoutStore = {
@@ -77,12 +79,24 @@ const WorkoutStore: TWorkoutStore = {
   setIsWorkoutScheduleLoading: action((state, payload) => {
     state.isWorkoutScheduleLoading = payload;
   }),
-  fetchWorkoutScheduleData: thunk(async (actions, params) => {
+  fetchWorkoutScheduleData: thunk(async (actions, params, { getState }) => {
     actions.setIsWorkoutScheduleLoading(true);
     try {
+      const { page = 1 } = params;
       const response = await workoutModel.fetchWorkoutSchedule(params);
+      const { workoutScheduleData } = getState();
       if (response) {
-        actions.setWorkoutScheduleData(response.data);
+        if (page === 1) {
+          actions.setWorkoutScheduleData(response.data);
+        } else {
+          actions.setWorkoutScheduleData([
+            ...(workoutScheduleData || []),
+            ...response.data,
+          ]);
+        }
+        actions.setHasMore(
+          (workoutScheduleData ?? [])?.length < response.totalCount,
+        );
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -138,6 +152,10 @@ const WorkoutStore: TWorkoutStore = {
     } finally {
       actions.setIsWorkoutDataByConfigSlugLoading(false);
     }
+  }),
+  hasMore: true,
+  setHasMore: action((state, payload) => {
+    state.hasMore = payload;
   }),
 };
 

@@ -16,9 +16,20 @@ const workoutModel = {
   },
 
   async fetchWorkoutSchedule(params: Omit<UserWorkoutSessionParams, 'userId'>) {
-    return request<WorkoutScheduleResponse>('/workout-sessions/schedule', {
-      params,
-    });
+    const { page = 1, limit = 15, search, sort } = params;
+    const response = request<WorkoutScheduleResponse>(
+      '/workout-sessions/schedule',
+      {
+        method: 'GET',
+        params: {
+          page,
+          limit,
+          search,
+          sort,
+        },
+      },
+    );
+    return response;
   },
 
   async fetchWorkoutSessionsDetails(id: string) {

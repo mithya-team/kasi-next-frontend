@@ -81,6 +81,10 @@
     @apply min-h-[calc(100vh-56px)];
   }
 
+  .infinite-scroll-component {
+    overflow: 'unset !important';
+  }
+
   .user-overview {
     border-radius: 12px;
     -webkit-backdrop-filter: 25px;

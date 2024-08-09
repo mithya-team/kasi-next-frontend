@@ -31,17 +31,16 @@ const UsersListingPage: FC = () => {
     User | UnConfirmedUserWithDetails | null
   >(null);
 
-  const { usersList, isLoading, admin, unConfirmedUsers, hasMore, totalUsers } =
+  const { usersList, isLoading, admin, unConfirmedUsers, hasMore } =
     useStoreState(
       ({
-        UserStore: { usersList, isLoading, totalUsers, hasMore },
+        UserStore: { usersList, isLoading, hasMore },
         AdminStore: { admin, unConfirmedUsers },
       }) => ({
         usersList,
         isLoading,
         admin,
         unConfirmedUsers,
-        totalUsers,
         hasMore,
       }),
     );
@@ -96,18 +95,9 @@ const UsersListingPage: FC = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUsersList({ page: currentPage });
-
-    return () => {
-      setDialogOpen(false);
-      setActionType(undefined);
-    };
-  }, []);
-
   const filteredUnconfirmedUsers = unConfirmedUsers?.filter(
     (unconfirmedUser) =>
-      unconfirmedUser.status !== 'connected' &&
+      unconfirmedUser.status === 'requested' &&
       usersList?.some((user) => user._id === unconfirmedUser._id),
   );
 
@@ -123,15 +113,14 @@ const UsersListingPage: FC = () => {
     [filteredUnconfirmedUsers, usersList],
   );
 
-  const fetchMoreUsers = async () => {
-    try {
-      fetchUsersList({ page: currentPage + 1 }); // Fetch next page
-      setCurrentPage(currentPage + 1);
-    } catch (error) {
-      if (isAxiosError(error))
-        toast.error(error?.response?.data?.message || 'Try Again');
-    }
-  };
+  useEffect(() => {
+    fetchUsersList({ page: currentPage });
+
+    return () => {
+      setDialogOpen(false);
+      setActionType(undefined);
+    };
+  }, [currentPage]);
 
   useEffect(() => {
     if (usersList?.length && admin) {
@@ -140,7 +129,7 @@ const UsersListingPage: FC = () => {
     }
   }, [usersList, admin]);
 
-  if (isLoading) return <Loader className='h-[100vh]' />;
+  if (isLoading && !usersList?.length) return <Loader className='h-[100vh]' />;
 
   return (
     <div
@@ -150,7 +139,7 @@ const UsersListingPage: FC = () => {
       <div className='flex bg-gray-800 text-base text-gray-400 mb-5'>
         <div className='flex-1 py-3 pl-5'>Username</div>
         <div className='w-[12%] py-3 pl-5'>Joined</div>
-        <div className='w-[16.91%] py-3 pl-5'>Status</div>
+        <div className='w-[16.91%] py-3 pl-5'>Plan</div>
         <div className='flex-1 py-3 pl-5'>Email</div>
         <div className='w-[18%] py-3 pl-5'>Membership Status</div>
       </div>
@@ -158,11 +147,12 @@ const UsersListingPage: FC = () => {
         <Empty />
       ) : (
         <InfiniteScroll
-          next={fetchMoreUsers}
+          next={() => setCurrentPage((prevPage) => prevPage + 1)}
           hasMore={hasMore}
-          loader={<Loader />}
-          dataLength={totalUsers}
+          loader={undefined}
+          dataLength={usersList?.length ?? 0}
           scrollableTarget='users-scrollable-div'
+          scrollThreshold={0.5}
         >
           {allUsers?.map((user) => (
             <UsersListTable
