@@ -1,8 +1,8 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 
-import LiveTracker from '@/components/LiveTracker';
+import AthleteTrack from '@/components/LiveTracker/AthleteTrackCanvas';
 import Typo from '@/components/typography/Typo';
 
 import { useStoreActions, useStoreState } from '@/store';
@@ -21,6 +21,7 @@ const POLLING_INTERVAL = 5000; // 5 seconds
 const LiveScreen: FC = () => {
   const pathname = usePathname();
   const sessionId = pathname.split('/')[4];
+  const [percentage, setPercentage] = useState<number>(0);
   const { workoutSessionDetails, workoutDataByConfigSlug, user } =
     useStoreState(
       ({
@@ -67,6 +68,14 @@ const LiveScreen: FC = () => {
     workoutSessionDetails,
     updatedMetricPrettified,
   );
+
+  // Simulate percentage change for demonstration purposes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPercentage((prev) => (prev < 100 ? prev + 1 : 0));
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className='flex flex-row w-full h-full'>
       <div className='text-white mt-[60px] w-[65vw]'>
@@ -75,12 +84,13 @@ const LiveScreen: FC = () => {
         )}
       </div>
       <div className='flex flex-col gap-5 flex-1 m-5'>
-        <LiveTracker
+        {/* <LiveTracker
           totalDistance={600}
           coveredDistance={300}
           lap={3}
           rep={4}
-        />
+        /> */}
+        <AthleteTrack percentage={percentage} />
         <div className='flex justify-center w-full items-center bg-gray-800 rounded-xl'>
           {user?.phone ? (
             <Call
