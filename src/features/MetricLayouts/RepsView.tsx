@@ -1,11 +1,16 @@
+import Typo from '@/components/typography/Typo';
+import WorkoutStatus from '@/components/WorkoutStatus';
+
+import { WorkoutSessionStatus } from '@/models/workout/workout.types';
 import { MetricRep } from '@/models/workout/workout-metric/workout-metric.types';
 
 interface RepsViewProps {
   title?: string;
   reps: MetricRep[];
+  isLive?: boolean;
 }
 
-const RepsView: React.FC<RepsViewProps> = ({ title, reps }) => {
+const RepsView: React.FC<RepsViewProps> = ({ title, reps, isLive }) => {
   if (!reps.length) return <></>;
   return (
     <div className=''>
@@ -18,7 +23,14 @@ const RepsView: React.FC<RepsViewProps> = ({ title, reps }) => {
         <div key={rep.id} className='space-y-2 p-5 bg-gray-800 rounded-lg mb-4'>
           <div className='flex flex-col items-center justify-between text-white text-sm'>
             <div className='flex flex-row w-full justify-between items-center'>
-              <div className=''>{rep.name}</div>
+              <div className='flex flex-row gap-2.5'>
+                <Typo>{rep.name}</Typo>
+                {isLive ? (
+                  <WorkoutStatus status={WorkoutSessionStatus.RUNNING} />
+                ) : (
+                  <></>
+                )}
+              </div>
               <div className='text-gray-300 text-right'>{rep.value}</div>
             </div>
             <hr className='border-gray-600 w-full my-4' />

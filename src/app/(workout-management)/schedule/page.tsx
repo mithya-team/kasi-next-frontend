@@ -2,8 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import Button from '@/components/Buttons';
 import EmptyUserWorkout from '@/components/EmptyUserWorkout';
 import Loader from '@/components/Loader';
+import SvgIcon from '@/components/SvgIcon';
+import Typo from '@/components/typography/Typo';
 
 import { useStoreActions, useStoreState } from '@/store';
 
@@ -12,6 +15,7 @@ import withAuth from '@/hoc/withAuth';
 
 const Schedule = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const { workoutScheduleData, isWorkoutScheduleLoading, hasMore } =
     useStoreState(
       ({
@@ -32,10 +36,17 @@ const Schedule = () => {
       fetchWorkoutScheduleData,
     }),
   );
+  const handleSortClick = () => {
+    setSortOrder((prevSortOrder) => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
+    setCurrentPage(1); // Reset to the first page when sorting
+  };
 
   useEffect(() => {
-    fetchWorkoutScheduleData({ page: currentPage });
-  }, [currentPage]);
+    fetchWorkoutScheduleData({
+      page: currentPage,
+      sort: `${sortOrder === 'asc' ? '+' : '-'}createdAt`,
+    });
+  }, [currentPage, sortOrder]);
 
   if (isWorkoutScheduleLoading && !workoutScheduleData?.length)
     return <Loader />;
@@ -49,7 +60,17 @@ const Schedule = () => {
         <div className='flex-1 py-3 pl-5'>Username</div>
         <div className='w-[20%] py-3 pl-5'>Workout</div>
         <div className='flex-1 py-3 pl-5'>Workout Name</div>
-        <div className='w-[15%] py-3 pl-5'>Date</div>
+        <div className='w-[15%] flex flex-row justify-between py-3 pl-5'>
+          <Typo>Joined</Typo>
+          <Button
+            onClick={handleSortClick}
+            className={`mr-14 transform transition-transform ${
+              sortOrder === 'desc' ? '' : 'rotate-180'
+            }`}
+          >
+            <SvgIcon pathFill='#9CA3AF' name='down-arrow' />
+          </Button>
+        </div>
         <div className='w-[15%] py-3 pl-5'>Time</div>
       </div>
       {!workoutScheduleData?.length ? (

@@ -2,6 +2,7 @@
 import { usePathname } from 'next/navigation';
 import { FC, useEffect } from 'react';
 
+import LiveTracker from '@/components/LiveTracker';
 import Typo from '@/components/typography/Typo';
 
 import { useStoreActions, useStoreState } from '@/store';
@@ -67,25 +68,33 @@ const LiveScreen: FC = () => {
     updatedMetricPrettified,
   );
   return (
-    <div className='relative flex flex-row w-full h-full'>
-      <div className='text-white mt-[60px] w-[65vw] items-center justify-center'>
+    <div className='flex flex-row w-full h-full'>
+      <div className='text-white mt-[60px] w-[65vw]'>
         {metricLayout.length && (
-          <MetricLayoutView metricLayout={metricLayout[0]} />
+          <MetricLayoutView metricLayout={metricLayout[0]} isLive />
         )}
       </div>
-      <div className='fixed flex bottom-5 justify-center items-center right-7 bg-gray-800 rounded-xl w-fit'>
-        {user?.phone ? (
-          <Call
-            phoneNumber={`${user?.phone?.countryCodeText}${user?.phone?.number}`}
-          />
-        ) : (
-          <Typo
-            level='h4'
-            classes='font-secondary font-semibold text-lg p-4 text-white'
-          >
-            Please update your phone number
-          </Typo>
-        )}
+      <div className='flex flex-col gap-5 flex-1 m-5'>
+        <LiveTracker
+          totalDistance={600}
+          coveredDistance={300}
+          lap={3}
+          rep={4}
+        />
+        <div className='flex justify-center w-full items-center bg-gray-800 rounded-xl'>
+          {user?.phone ? (
+            <Call
+              phoneNumber={`${user?.phone?.countryCodeText}${user?.phone?.number}`}
+            />
+          ) : (
+            <Typo
+              level='h4'
+              classes='font-secondary font-semibold text-lg p-4 w-fit text-white'
+            >
+              Please update your phone number
+            </Typo>
+          )}
+        </div>
       </div>
     </div>
   );

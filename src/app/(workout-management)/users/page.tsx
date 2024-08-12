@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { toast } from '@/lib/toast';
 
+import Button from '@/components/Buttons';
 import Loader from '@/components/Loader';
 import SvgIcon from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
@@ -30,6 +31,7 @@ const UsersListingPage: FC = () => {
   const [selectedUser, setSelectedUser] = useState<
     User | UnConfirmedUserWithDetails | null
   >(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const { usersList, isLoading, admin, unConfirmedUsers, hasMore } =
     useStoreState(
@@ -113,14 +115,22 @@ const UsersListingPage: FC = () => {
     [filteredUnconfirmedUsers, usersList],
   );
 
+  const handleSortClick = () => {
+    setSortOrder((prevSortOrder) => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
+    setCurrentPage(1); // Reset to the first page when sorting
+  };
+
   useEffect(() => {
-    fetchUsersList({ page: currentPage });
+    fetchUsersList({
+      page: currentPage,
+      sort: `${sortOrder === 'asc' ? '+' : '-'}createdAt`,
+    });
 
     return () => {
       setDialogOpen(false);
       setActionType(undefined);
     };
-  }, [currentPage]);
+  }, [currentPage, sortOrder]);
 
   useEffect(() => {
     if (usersList?.length && admin) {
@@ -138,7 +148,17 @@ const UsersListingPage: FC = () => {
     >
       <div className='flex bg-gray-800 text-base text-gray-400 mb-5'>
         <div className='flex-1 py-3 pl-5'>Username</div>
-        <div className='w-[12%] py-3 pl-5'>Joined</div>
+        <div className='w-[12%] flex flex-row justify-between py-3 pl-5'>
+          <Typo>Joined</Typo>
+          <Button
+            onClick={handleSortClick}
+            className={`mr-5 transform transition-transform ${
+              sortOrder === 'desc' ? '' : 'rotate-180'
+            }`}
+          >
+            <SvgIcon pathFill='#9CA3AF' name='down-arrow' />
+          </Button>
+        </div>
         <div className='w-[16.91%] py-3 pl-5'>Plan</div>
         <div className='flex-1 py-3 pl-5'>Email</div>
         <div className='w-[18%] py-3 pl-5'>Membership Status</div>

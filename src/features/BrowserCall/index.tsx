@@ -202,74 +202,82 @@ const CallComponent: React.FC<ICallBlockProps> = ({ phoneNumber }) => {
   };
 
   return (
-    <div className='flex flex-row justify-center items-center font-primary text-white text-base font-medium gap-4 px-7 py-5'>
-      {isReady ? (
-        <>
-          {isCalling ? (
+    <div className='font-primary text-white text-base font-medium  px-7 py-5'>
+      <div className='flex flex-col justify-center items-center gap-4'>
+        <div>
+          {isReady ? (
             <>
-              <Typo>{formatTime(timer)}</Typo>
-              <EndCallButton id='button-hangup-outgoing' className='p-[14px]'>
-                End Call
-              </EndCallButton>
-              <Button
-                className='p-[14px] rounded-xl bg-gray-700'
-                onClick={handleMuteToggle}
-              >
-                <SvgIcon name={isMuted ? 'mute' : 'unmute'} />
-              </Button>
+              {isCalling ? (
+                <div className='flex flex-row gap-5 justify-center items-center'>
+                  <Typo>{formatTime(timer)}</Typo>
+                  <EndCallButton
+                    id='button-hangup-outgoing'
+                    className='p-[14px]'
+                  >
+                    End Call
+                  </EndCallButton>
+                  <Button
+                    className='p-[14px] rounded-xl bg-gray-700'
+                    onClick={handleMuteToggle}
+                  >
+                    <SvgIcon name={isMuted ? 'mute' : 'unmute'} />
+                  </Button>
+                </div>
+              ) : (
+                <StartCallButton
+                  className='p-[14px]'
+                  id='button-call'
+                  onClick={makeOutgoingCall}
+                >
+                  Start Call
+                </StartCallButton>
+              )}
             </>
           ) : (
-            <StartCallButton
-              className='p-[14px]'
-              id='button-call'
-              onClick={makeOutgoingCall}
-            >
-              Start Call
+            <StartCallButton className='p-[14px]' onClick={startupClient}>
+              Start Client
             </StartCallButton>
           )}
-        </>
-      ) : (
-        <StartCallButton className='p-[14px]' onClick={startupClient}>
-          Start Client
-        </StartCallButton>
-      )}
-
-      {audioSelectionVisible && (
-        <div id='output-selection' className='flex gap-4'>
-          <div>
-            <Typo>Speaker</Typo>
-
-            <select
-              className='inline-block font-primary text-xs rounded-xl font-semibold bg-gray-700 w-[10vw] text-white p-2'
-              id='speaker-devices'
-              value={selectedSpeakerDevice || ''}
-              onChange={handleSpeakerDeviceChange}
-            >
-              {speakerDevices.map((device) => (
-                <option key={device.deviceId} value={device.deviceId}>
-                  {device.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <Typo>Ringtone Device</Typo>
-            <select
-              className='inline-block font-primary text-xs rounded-xl font-semibold bg-gray-700 w-[10vw] text-white p-2'
-              id='ringtone-devices'
-              value={selectedRingtoneDevice || ''}
-              onChange={handleRingtoneDeviceChange}
-            >
-              {ringtoneDevices.map((device) => (
-                <option key={device.deviceId} value={device.deviceId}>
-                  {device.label}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
-      )}
+        <div>
+          {audioSelectionVisible && (
+            <div id='output-selection' className='flex gap-4'>
+              <div>
+                <Typo classes='pb-2'>Speaker</Typo>
+
+                <select
+                  className='inline-block font-primary text-xs rounded-xl font-semibold bg-gray-700 w-[10vw] text-white p-2'
+                  id='speaker-devices'
+                  value={selectedSpeakerDevice || ''}
+                  onChange={handleSpeakerDeviceChange}
+                >
+                  {speakerDevices.map((device) => (
+                    <option key={device.deviceId} value={device.deviceId}>
+                      {device.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <Typo classes='pb-2'>Ringtone Device</Typo>
+                <select
+                  className='inline-block font-primary text-xs rounded-xl font-semibold bg-gray-700 w-[10vw] text-white p-2'
+                  id='ringtone-devices'
+                  value={selectedRingtoneDevice || ''}
+                  onChange={handleRingtoneDeviceChange}
+                >
+                  {ringtoneDevices.map((device) => (
+                    <option key={device.deviceId} value={device.deviceId}>
+                      {device.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* {isReady && (
         <Button onClick={handleToggleAudioSelection}>
