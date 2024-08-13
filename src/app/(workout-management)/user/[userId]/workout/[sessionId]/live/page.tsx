@@ -47,6 +47,17 @@ const LiveScreen: FC = () => {
 
   useEffect(() => {
     fetchData();
+    //  // Calculate the percentage
+    //  if (workoutSessionDetails) {
+    //   const { currentRepIndex, currentLapIndex, sets } = workoutSessionDetails;
+
+    //   const currentRep = sets[currentRepIndex];
+    //   const currentLap = currentRep.reps[currentLapIndex];
+    //   const elapsedDistance = currentLap.laps[currentLapIndex];
+    //   const percentage = (elapsedDistance / 5) * 100;
+
+    //   setPercentage(percentage);
+    // }
 
     const intervalId = setInterval(fetchData, POLLING_INTERVAL); // Polling
 
@@ -76,6 +87,7 @@ const LiveScreen: FC = () => {
     }, 100);
     return () => clearInterval(interval);
   }, []);
+
   return (
     <div className='flex flex-row w-full h-full'>
       <div className='text-white mt-[60px] w-[65vw]'>
@@ -84,13 +96,23 @@ const LiveScreen: FC = () => {
         )}
       </div>
       <div className='flex flex-col gap-5 flex-1 m-5'>
-        {/* <LiveTracker
-          totalDistance={600}
-          coveredDistance={300}
-          lap={3}
-          rep={4}
-        /> */}
-        <AthleteTrack percentage={percentage} />
+        <div className='bg-gray-800 rounded-xl h-full py-[72px] px-5 flex justify-center items-center'>
+          <div className='relative w-[15rem] h-[27rem] flex flex-col justify-between'>
+            <AthleteTrack
+              percentage={percentage}
+              rep={
+                workoutSessionDetails?.sets[
+                  workoutSessionDetails?.currentRepIndex
+                ]?.reps?.length
+              }
+              lap={
+                workoutSessionDetails?.sets[
+                  workoutSessionDetails?.currentRepIndex
+                ]?.reps[workoutSessionDetails?.currentLapIndex]?.laps?.length
+              }
+            />
+          </div>
+        </div>
         <div className='flex justify-center w-full items-center bg-gray-800 rounded-xl'>
           {user?.phone ? (
             <Call
