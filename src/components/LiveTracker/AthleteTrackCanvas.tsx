@@ -43,7 +43,8 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
     const coveredColor = '#ffffff';
     const insideTrackColor = 'rgba(107, 114, 128, 0.2)';
 
-    // Fill the inside of the track with the red color
+    //#region  //*=========== Inside field color fill ===========
+    // Fill the inside of the track with color
     ctx.fillStyle = insideTrackColor;
     ctx.beginPath();
 
@@ -89,6 +90,8 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
     ctx.lineTo(canvas.width / 2 + radius, radius + ctx.lineWidth / 2);
     ctx.closePath();
     ctx.fill();
+
+    //#endregion  //*======== Inside field color fill ===========
 
     // Draw the entire track in trackColor
     ctx.strokeStyle = trackColor;
