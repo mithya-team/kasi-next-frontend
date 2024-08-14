@@ -22,10 +22,12 @@ import EndCallIcon from '@/components/SvgIcon/EndCall';
 import ErrorIcon from '@/components/SvgIcon/Error';
 import ExpandedIcon from '@/components/SvgIcon/Expanded';
 import ExpiredIcon from '@/components/SvgIcon/Expired';
+import FlagIcon from '@/components/SvgIcon/flag';
 import GoogleIcon from '@/components/SvgIcon/Google';
 import HeartRateIcon from '@/components/SvgIcon/HeartRate';
 import HideIcon from '@/components/SvgIcon/Hide';
 import KasiIcon from '@/components/SvgIcon/Kasi';
+import LiveRunIcon from '@/components/SvgIcon/LiveRun';
 import LogoutIcon from '@/components/SvgIcon/Logout';
 import MatchedIcon from '@/components/SvgIcon/Matched';
 import MuteIcon from '@/components/SvgIcon/Mute';
@@ -112,7 +114,9 @@ export type IconName =
   | 'update-password'
   | 'email'
   | 'expired'
-  | 'active-subscription';
+  | 'active-subscription'
+  | 'flag'
+  | 'live-run';
 
 const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   run: RunIcon,
@@ -168,6 +172,8 @@ const IconMap: Record<IconName, FC<Omit<ISvgIconProps, 'name'>>> = {
   email: EmailIcon,
   expired: ExpiredIcon,
   'active-subscription': ActiveSubscription,
+  flag: FlagIcon,
+  'live-run': LiveRunIcon,
 };
 
 const SvgIcon: FC<ISvgIconProps> = ({ name, ...svgProps }) => {

@@ -1,11 +1,14 @@
 'use client';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
+import AthleteTrack from '@/components/AtheleteTrack';
 import Typo from '@/components/typography/Typo';
 
 import { useStoreActions, useStoreState } from '@/store';
 
+import { isStraightRunSlug } from '@/constant/straightRunSlug';
 import Call from '@/features/BrowserCall';
 import { MetricLayoutView } from '@/features/MetricLayouts/MetricLayoutView';
 import withAuth from '@/hoc/withAuth';
@@ -15,11 +18,14 @@ import {
   updateMetricPrettified,
 } from '@/models/workout/workout-metric/workout-metric.adapter';
 
+import STRAIGHT_RUN from '/public/images/straight-run.png';
+
 const POLLING_INTERVAL = 5000; // 5 seconds
 
 const LiveScreen: FC = () => {
   const pathname = usePathname();
   const sessionId = pathname.split('/')[4];
+  const [percentage, setPercentage] = useState<number>(0);
   const { workoutSessionDetails, workoutDataByConfigSlug, user } =
     useStoreState(
       ({
@@ -40,12 +46,25 @@ const LiveScreen: FC = () => {
 
   const fetchData = async () => {
     if (!sessionId) return;
-    await fetchWorkoutSessionDetails(sessionId);
+    const res = await fetchWorkoutSessionDetails(sessionId);
+    if (res) {
+      const { currentSetIndex, currentRepIndex, currentLapIndex, sets } = res;
+
+      const currentSet = sets[currentSetIndex];
+      const currentRep = currentSet.reps[currentRepIndex];
+      const totalDistance = currentRep.laps[currentLapIndex];
+      const elapsedDistance =
+        res.workoutData[currentSetIndex].reps[currentRepIndex].laps[
+          currentLapIndex
+        ].elapsedDistance;
+
+      const newPercentage = (elapsedDistance / totalDistance) * 100 ?? 0;
+      setPercentage(newPercentage);
+    }
   };
 
   useEffect(() => {
     fetchData();
-
     const intervalId = setInterval(fetchData, POLLING_INTERVAL); // Polling
 
     return () => clearInterval(intervalId);
@@ -66,26 +85,60 @@ const LiveScreen: FC = () => {
     workoutSessionDetails,
     updatedMetricPrettified,
   );
+
+  const showStraightRun = useMemo(
+    () => isStraightRunSlug(workoutSessionDetails?.workoutSlug),
+    [workoutSessionDetails],
+  );
+
   return (
-    <div className='relative flex flex-row w-full h-full'>
-      <div className='text-white mt-[60px] w-[65vw] items-center justify-center'>
+    <div className='flex flex-row w-full h-full'>
+      <div className='text-white mt-[60px] w-[65vw]'>
         {metricLayout.length && (
-          <MetricLayoutView metricLayout={metricLayout[0]} />
+          <MetricLayoutView metricLayout={metricLayout[0]} isLive />
         )}
       </div>
-      <div className='fixed flex bottom-5 justify-center items-center right-7 bg-gray-800 rounded-xl w-fit'>
-        {user?.phone ? (
-          <Call
-            phoneNumber={`${user?.phone?.countryCode}${user?.phone?.number}`}
-          />
-        ) : (
-          <Typo
-            level='h4'
-            classes='font-secondary font-semibold text-lg p-4 text-white'
-          >
-            Please update your phone number
-          </Typo>
-        )}
+      <div className='flex flex-col gap-5 flex-1 m-5'>
+        <div className='bg-gray-800 rounded-xl h-full py-[72px] px-5 flex justify-center items-center'>
+          {showStraightRun ? (
+            <Image
+              src={STRAIGHT_RUN}
+              width={288}
+              height={544}
+              alt='straight-run'
+            />
+          ) : (
+            <div className='relative w-[15rem] h-[29rem] flex flex-col justify-between'>
+              <AthleteTrack
+                percentage={percentage}
+                rep={
+                  workoutSessionDetails?.sets[
+                    workoutSessionDetails?.currentRepIndex
+                  ]?.reps?.length
+                }
+                lap={
+                  workoutSessionDetails?.sets[
+                    workoutSessionDetails?.currentRepIndex
+                  ]?.reps[workoutSessionDetails?.currentLapIndex]?.laps?.length
+                }
+              />
+            </div>
+          )}
+        </div>
+        <div className='flex justify-center w-full items-center bg-gray-800 rounded-xl'>
+          {user?.phone ? (
+            <Call
+              phoneNumber={`${user?.phone?.countryCodeText}${user?.phone?.number}`}
+            />
+          ) : (
+            <Typo
+              level='h4'
+              classes='font-secondary font-semibold text-lg p-4 w-fit text-white'
+            >
+              Please update your phone number
+            </Typo>
+          )}
+        </div>
       </div>
     </div>
   );

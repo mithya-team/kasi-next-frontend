@@ -26,7 +26,7 @@ const DownArrowIcon: FC<DownArrowIconProps> = (props) => {
       </g>
       <defs>
         <clipPath id='clip0_2404_8403'>
-          <rect width='24' height='24' fill='white' />
+          <rect width='24' height='24' fill={pathFill ?? 'white'} />
         </clipPath>
       </defs>
     </svg>

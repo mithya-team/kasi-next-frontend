@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 import { request } from '@/lib/axios/request';
 
 import {
@@ -8,16 +10,21 @@ import {
 
 const userModel = {
   async fetchUsersList(params: UsersListParams) {
-    const { page = 1, limit = 15, search, sort } = params;
-    const response = await request<UserListResponse>('/coach/users', {
-      method: 'GET',
-      params: {
-        page,
-        limit,
-        search,
-        sort,
+    const { page = 1, limit = 15, search, sort, planIds } = params;
+    // Transform planIds array into the correct query string format
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // Serialize parameters, ensuring no "[]" for array
+    const queryString = qs.stringify(
+      { page, limit, search, sort, planIds },
+      { indices: false, arrayFormat: 'repeat' },
+    );
+
+    const response = await request<UserListResponse>(
+      `/coach/users?${queryString}`,
+      {
+        method: 'GET',
       },
-    });
+    );
     return response;
   },
   async fetchUserById(id: string) {

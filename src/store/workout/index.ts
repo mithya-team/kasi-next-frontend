@@ -122,6 +122,7 @@ const WorkoutStore: TWorkoutStore = {
         await workoutModel.fetchWorkoutSessionsDetails(workoutId);
       if (response) {
         actions.setWorkoutSessionDetails(response);
+        return response;
       }
     } catch (error) {
       // eslint-disable-next-line no-console

@@ -21,7 +21,11 @@ const UsersListTable: FC<UsersListTableProps> = ({ user, onAction }) => {
   const { status, className } = getPlanStatusTag(
     user?.athleteSubscription?.[0],
   );
-  if (!user) return <></>;
+  if (
+    !user ||
+    (isUnConfirmedUserWithDetails(user) && user?.status === 'declined')
+  )
+    return <></>;
   return (
     <div className='flex border-b border-gray-800 text-sm leading-[14px] text-white'>
       <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
@@ -48,8 +52,6 @@ function renderUnconfirmedUserStatus(
   if (isUnConfirmedUserWithDetails(user)) {
     if (user.status === 'requested') {
       return <CoachActions onClick={(action) => onAction?.(user, action)} />;
-    } else if (user.status === 'declined') {
-      return <div className='w-[18%] p-5 text-gray-500'>Declined</div>;
     } else if (user.status === 'connected') {
       return <div className='w-[18%] p-5 text-gray-500'>Accepted</div>;
     }

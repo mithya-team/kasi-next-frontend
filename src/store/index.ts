@@ -2,6 +2,7 @@ import { createStore, createTypedHooks, State } from 'easy-peasy';
 import { isEqual } from 'lodash';
 
 import AdminStore from '@/store/admin';
+import filterStore from '@/store/filter';
 import UserStore from '@/store/user';
 import WorkoutStore from '@/store/workout';
 
@@ -9,6 +10,7 @@ const RootStore = {
   UserStore,
   WorkoutStore,
   AdminStore,
+  filterStore,
 };
 export type TRootStore = typeof RootStore;
 export const store = createStore(RootStore, {

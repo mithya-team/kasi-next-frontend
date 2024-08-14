@@ -65,6 +65,7 @@ export interface UsersListParams {
   limit?: number;
   search?: string;
   sort?: string;
+  planIds?: ProductPlanId[];
 }
 
 export type ProductPlanId =

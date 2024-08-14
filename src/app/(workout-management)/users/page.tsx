@@ -4,7 +4,9 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { toast } from '@/lib/toast';
+import { isProductPlanId } from '@/lib/workout';
 
+import Button from '@/components/Buttons';
 import Loader from '@/components/Loader';
 import SvgIcon from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
@@ -19,7 +21,7 @@ import ConfirmationDialog from '@/features/ConfirmationDialog';
 import withAuth from '@/hoc/withAuth';
 import adminModel from '@/models/admin/admin.model';
 import { UnConfirmedUserWithDetails } from '@/models/admin/admin.types';
-import { User } from '@/models/user/user.types';
+import { ProductPlanId, User } from '@/models/user/user.types';
 
 export type ActionType = 'decline' | 'accept';
 
@@ -30,35 +32,50 @@ const UsersListingPage: FC = () => {
   const [selectedUser, setSelectedUser] = useState<
     User | UnConfirmedUserWithDetails | null
   >(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  const { usersList, isLoading, admin, unConfirmedUsers, hasMore } =
-    useStoreState(
-      ({
-        UserStore: { usersList, isLoading, hasMore },
-        AdminStore: { admin, unConfirmedUsers },
-      }) => ({
-        usersList,
-        isLoading,
-        admin,
-        unConfirmedUsers,
-        hasMore,
-      }),
-    );
+  const {
+    usersList,
+    isLoading,
+    admin,
+    unConfirmedUsers,
+    hasMore,
+    selectedFilters,
+  } = useStoreState(
+    ({
+      UserStore: { usersList, isLoading, hasMore },
+      AdminStore: { admin, unConfirmedUsers },
+      filterStore: { selectedFilters },
+    }) => ({
+      usersList,
+      isLoading,
+      admin,
+      unConfirmedUsers,
+      hasMore,
+      selectedFilters,
+    }),
+  );
 
-  const { fetchUsersList, fetchUserConnections, updateConfirmedUsers } =
-    useStoreActions(
-      ({
-        UserStore: { fetchUsersList },
-        AdminStore: {
-          fetchUnConfirmedUsers: fetchUserConnections,
-          updateConfirmedUsers,
-        },
-      }) => ({
-        fetchUsersList,
-        fetchUserConnections,
+  const {
+    fetchUsersList,
+    fetchUserConnections,
+    updateConfirmedUsers,
+    updateSelectedFilter,
+  } = useStoreActions(
+    ({
+      UserStore: { fetchUsersList },
+      AdminStore: {
+        fetchUnConfirmedUsers: fetchUserConnections,
         updateConfirmedUsers,
-      }),
-    );
+      },
+      filterStore: { updateSelectedFilter },
+    }) => ({
+      fetchUsersList,
+      fetchUserConnections,
+      updateConfirmedUsers,
+      updateSelectedFilter,
+    }),
+  );
 
   const openConfirmationDialog = (
     user: User | UnConfirmedUserWithDetails,
@@ -97,7 +114,8 @@ const UsersListingPage: FC = () => {
 
   const filteredUnconfirmedUsers = unConfirmedUsers?.filter(
     (unconfirmedUser) =>
-      unconfirmedUser.status === 'requested' &&
+      (unconfirmedUser.status === 'requested' ||
+        unconfirmedUser.status === 'connected') &&
       usersList?.some((user) => user._id === unconfirmedUser._id),
   );
 
@@ -113,14 +131,28 @@ const UsersListingPage: FC = () => {
     [filteredUnconfirmedUsers, usersList],
   );
 
+  const handleSortClick = () => {
+    setSortOrder((prevSortOrder) => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
+    setCurrentPage(1); // Reset to the first page when sorting
+  };
+
   useEffect(() => {
-    fetchUsersList({ page: currentPage });
+    const filteredPlanId =
+      selectedFilters.length > 0 && selectedFilters.every(isProductPlanId)
+        ? (selectedFilters as ProductPlanId[])
+        : [];
+    fetchUsersList({
+      page: currentPage,
+      sort: `${sortOrder === 'asc' ? '+' : '-'}createdAt`,
+      planIds: filteredPlanId,
+    });
 
     return () => {
       setDialogOpen(false);
       setActionType(undefined);
+      updateSelectedFilter([]);
     };
-  }, [currentPage]);
+  }, [currentPage, sortOrder]);
 
   useEffect(() => {
     if (usersList?.length && admin) {
@@ -138,7 +170,17 @@ const UsersListingPage: FC = () => {
     >
       <div className='flex bg-gray-800 text-base text-gray-400 mb-5'>
         <div className='flex-1 py-3 pl-5'>Username</div>
-        <div className='w-[12%] py-3 pl-5'>Joined</div>
+        <div className='w-[12%] flex flex-row justify-between py-3 pl-5'>
+          <Typo>Joined</Typo>
+          <Button
+            onClick={handleSortClick}
+            className={`mr-5 transform transition-transform ${
+              sortOrder === 'desc' ? '' : 'rotate-180'
+            }`}
+          >
+            <SvgIcon pathFill='#9CA3AF' name='down-arrow' />
+          </Button>
+        </div>
         <div className='w-[16.91%] py-3 pl-5'>Plan</div>
         <div className='flex-1 py-3 pl-5'>Email</div>
         <div className='w-[18%] py-3 pl-5'>Membership Status</div>

@@ -16,7 +16,7 @@ const workoutModel = {
   },
 
   async fetchWorkoutSchedule(params: Omit<UserWorkoutSessionParams, 'userId'>) {
-    const { page = 1, limit = 15, search, sort } = params;
+    const { page = 1, limit = 15, search, sort, status } = params;
     const response = request<WorkoutScheduleResponse>(
       '/workout-sessions/schedule',
       {
@@ -26,6 +26,7 @@ const workoutModel = {
           limit,
           search,
           sort,
+          status,
         },
       },
     );

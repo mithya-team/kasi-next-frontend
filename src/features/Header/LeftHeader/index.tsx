@@ -11,6 +11,7 @@ import TextInput from '@/components/TextInput';
 import { useStoreState } from '@/store';
 
 import WorkoutLeftHeader from '@/features/Header/WorkoutLeftHeader';
+import HeaderFilter from '@/features/HeaderFilter';
 import { WorkoutSessionStatus } from '@/models/workout/workout.types';
 
 export interface LeftHeaderProps {
@@ -91,9 +92,7 @@ const SearchView: FC<LeftHeaderProps> = ({ onSearch }) => {
           className='gap-0'
         />
       </div>
-      <div className='px-[15px] w-[54px] flex justify-center items-center h-[54px] py-[18px] border-[1px] border-gray-600 rounded-xl'>
-        <SvgIcon name='sort' />
-      </div>
+      <HeaderFilter />
     </>
   );
 };
