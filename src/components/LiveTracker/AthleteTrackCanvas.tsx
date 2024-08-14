@@ -192,11 +192,11 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
           ctx.beginPath();
           ctx.arc(
             canvas.width / 2,
-            radius - ctx.lineWidth / 2 - straightLength,
+            radius + ctx.lineWidth / 2 + straightLength,
             radius,
             Math.PI, // Start angle (left side)
-            Math.PI + angle, // End angle
-            false, // Clockwise direction
+            Math.PI - angle, // End angle
+            true, // Clockwise direction
           );
           ctx.stroke();
         } else {
