@@ -48,14 +48,20 @@ const LiveScreen: FC = () => {
   useEffect(() => {
     fetchData();
     //  // Calculate the percentage
-    //  if (workoutSessionDetails) {
-    //   const { currentRepIndex, currentLapIndex, sets } = workoutSessionDetails;
+    // if (workoutSessionDetails) {
+    //   const { currentSetIndex, currentRepIndex, currentLapIndex, sets } =
+    //     workoutSessionDetails;
 
-    //   const currentRep = sets[currentRepIndex];
-    //   const currentLap = currentRep.reps[currentLapIndex];
-    //   const elapsedDistance = currentLap.laps[currentLapIndex];
-    //   const percentage = (elapsedDistance / 5) * 100;
+    //   const currentSet = sets[currentSetIndex];
+    //   const currentRep = currentSet.reps[currentRepIndex];
+    //   const totalDistance = currentRep.laps[currentLapIndex];
 
+    //   const elapsedDistance =
+    //     workoutSessionDetails.workoutData[currentSetIndex].reps[currentRepIndex]
+    //       .laps[currentLapIndex].elapsedDistance;
+
+    //   const percentage = (elapsedDistance / totalDistance) * 100 ?? 0;
+    //   console.log({ percentage });
     //   setPercentage(percentage);
     // }
 
