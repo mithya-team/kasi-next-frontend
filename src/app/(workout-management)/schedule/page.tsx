@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import { isWorkoutSessionStatus } from '@/lib/workout';
+
 import Button from '@/components/Buttons';
 import EmptyUserWorkout from '@/components/EmptyUserWorkout';
 import Loader from '@/components/Loader';
@@ -12,28 +14,35 @@ import { useStoreActions, useStoreState } from '@/store';
 
 import ScheduleTable from '@/app/(workout-management)/schedule/ScheduleTable';
 import withAuth from '@/hoc/withAuth';
+import { WorkoutSessionStatus } from '@/models/workout/workout.types';
 
 const Schedule = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const { workoutScheduleData, isWorkoutScheduleLoading, hasMore } =
-    useStoreState(
-      ({
-        WorkoutStore: {
-          workoutScheduleData,
-          isWorkoutScheduleLoading,
-          hasMore,
-        },
-      }) => ({
-        workoutScheduleData,
-        isWorkoutScheduleLoading,
-        hasMore,
-      }),
-    );
+  const {
+    workoutScheduleData,
+    isWorkoutScheduleLoading,
+    hasMore,
+    selectedFilters,
+  } = useStoreState(
+    ({
+      WorkoutStore: { workoutScheduleData, isWorkoutScheduleLoading, hasMore },
+      filterStore: { selectedFilters },
+    }) => ({
+      workoutScheduleData,
+      isWorkoutScheduleLoading,
+      hasMore,
+      selectedFilters,
+    }),
+  );
 
-  const { fetchWorkoutScheduleData } = useStoreActions(
-    ({ WorkoutStore: { fetchWorkoutScheduleData } }) => ({
+  const { fetchWorkoutScheduleData, updateSelectedFilter } = useStoreActions(
+    ({
+      WorkoutStore: { fetchWorkoutScheduleData },
+      filterStore: { updateSelectedFilter },
+    }) => ({
       fetchWorkoutScheduleData,
+      updateSelectedFilter,
     }),
   );
   const handleSortClick = () => {
@@ -42,10 +51,19 @@ const Schedule = () => {
   };
 
   useEffect(() => {
+    const filteredStatus =
+      selectedFilters.length > 0 &&
+      selectedFilters.every(isWorkoutSessionStatus)
+        ? (selectedFilters as WorkoutSessionStatus[])
+        : [];
     fetchWorkoutScheduleData({
       page: currentPage,
       sort: `${sortOrder === 'asc' ? '+' : '-'}createdAt`,
+      status: filteredStatus,
     });
+    return () => {
+      updateSelectedFilter([]);
+    };
   }, [currentPage, sortOrder]);
 
   if (isWorkoutScheduleLoading && !workoutScheduleData?.length)

@@ -33,7 +33,7 @@ const adminModel = {
   },
 
   async deleteRequest(userId: string, coachId: string) {
-    return request(`/coach-user-connection/request/${userId}/${coachId}`, {
+    return request(`/coach-user-connection/connection/${userId}/${coachId}`, {
       method: 'DELETE',
     });
   },

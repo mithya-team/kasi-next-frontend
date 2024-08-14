@@ -10,7 +10,7 @@ export enum WorkoutSessionStatus {
 export interface UserWorkoutSessionParams {
   userId: string;
   sort?: string;
-  status?: WorkoutSessionStatus;
+  status?: WorkoutSessionStatus[];
   page?: number;
   limit?: number;
   search?: string;

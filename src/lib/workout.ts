@@ -1,6 +1,10 @@
 import dayjs from 'dayjs';
 
-import { LengthUnit } from '@/models/workout/workout.types';
+import { ProductPlanId } from '@/models/user/user.types';
+import {
+  LengthUnit,
+  WorkoutSessionStatus,
+} from '@/models/workout/workout.types';
 
 export function convertDistance(lengthUnit: LengthUnit, totalDistance: number) {
   if (lengthUnit === LengthUnit.KM) {
@@ -23,3 +27,17 @@ export const formatTime = (date: dayjs.Dayjs) => {
 
   return { days, hours, minutes, seconds };
 };
+
+export const isProductPlanId = (id: string): id is ProductPlanId =>
+  [
+    'FREE_TIER',
+    'NONE',
+    'PAID_TIER_1_MONTH',
+    'PAID_TIER_6_MONTHS',
+    'PAID_TIER_12_MONTHS',
+  ].includes(id);
+
+export const isWorkoutSessionStatus = (
+  id: string,
+): id is WorkoutSessionStatus =>
+  ['RUNNING', 'YET_TO_START', 'RECOVERY', 'PAST'].includes(id);

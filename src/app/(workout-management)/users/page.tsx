@@ -4,6 +4,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { toast } from '@/lib/toast';
+import { isProductPlanId } from '@/lib/workout';
 
 import Button from '@/components/Buttons';
 import Loader from '@/components/Loader';
@@ -20,7 +21,7 @@ import ConfirmationDialog from '@/features/ConfirmationDialog';
 import withAuth from '@/hoc/withAuth';
 import adminModel from '@/models/admin/admin.model';
 import { UnConfirmedUserWithDetails } from '@/models/admin/admin.types';
-import { User } from '@/models/user/user.types';
+import { ProductPlanId, User } from '@/models/user/user.types';
 
 export type ActionType = 'decline' | 'accept';
 
@@ -33,34 +34,48 @@ const UsersListingPage: FC = () => {
   >(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  const { usersList, isLoading, admin, unConfirmedUsers, hasMore } =
-    useStoreState(
-      ({
-        UserStore: { usersList, isLoading, hasMore },
-        AdminStore: { admin, unConfirmedUsers },
-      }) => ({
-        usersList,
-        isLoading,
-        admin,
-        unConfirmedUsers,
-        hasMore,
-      }),
-    );
+  const {
+    usersList,
+    isLoading,
+    admin,
+    unConfirmedUsers,
+    hasMore,
+    selectedFilters,
+  } = useStoreState(
+    ({
+      UserStore: { usersList, isLoading, hasMore },
+      AdminStore: { admin, unConfirmedUsers },
+      filterStore: { selectedFilters },
+    }) => ({
+      usersList,
+      isLoading,
+      admin,
+      unConfirmedUsers,
+      hasMore,
+      selectedFilters,
+    }),
+  );
 
-  const { fetchUsersList, fetchUserConnections, updateConfirmedUsers } =
-    useStoreActions(
-      ({
-        UserStore: { fetchUsersList },
-        AdminStore: {
-          fetchUnConfirmedUsers: fetchUserConnections,
-          updateConfirmedUsers,
-        },
-      }) => ({
-        fetchUsersList,
-        fetchUserConnections,
+  const {
+    fetchUsersList,
+    fetchUserConnections,
+    updateConfirmedUsers,
+    updateSelectedFilter,
+  } = useStoreActions(
+    ({
+      UserStore: { fetchUsersList },
+      AdminStore: {
+        fetchUnConfirmedUsers: fetchUserConnections,
         updateConfirmedUsers,
-      }),
-    );
+      },
+      filterStore: { updateSelectedFilter },
+    }) => ({
+      fetchUsersList,
+      fetchUserConnections,
+      updateConfirmedUsers,
+      updateSelectedFilter,
+    }),
+  );
 
   const openConfirmationDialog = (
     user: User | UnConfirmedUserWithDetails,
@@ -121,14 +136,20 @@ const UsersListingPage: FC = () => {
   };
 
   useEffect(() => {
+    const filteredPlanId =
+      selectedFilters.length > 0 && selectedFilters.every(isProductPlanId)
+        ? (selectedFilters as ProductPlanId[])
+        : [];
     fetchUsersList({
       page: currentPage,
       sort: `${sortOrder === 'asc' ? '+' : '-'}createdAt`,
+      planId: filteredPlanId,
     });
 
     return () => {
       setDialogOpen(false);
       setActionType(undefined);
+      updateSelectedFilter([]);
     };
   }, [currentPage, sortOrder]);
 

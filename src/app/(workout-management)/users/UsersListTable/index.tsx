@@ -21,7 +21,11 @@ const UsersListTable: FC<UsersListTableProps> = ({ user, onAction }) => {
   const { status, className } = getPlanStatusTag(
     user?.athleteSubscription?.[0],
   );
-  if (!user) return <></>;
+  if (
+    !user ||
+    (isUnConfirmedUserWithDetails(user) && user?.status === 'declined')
+  )
+    return <></>;
   return (
     <div className='flex border-b border-gray-800 text-sm leading-[14px] text-white'>
       <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
