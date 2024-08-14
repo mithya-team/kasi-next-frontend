@@ -1,12 +1,14 @@
 'use client';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
-import AthleteTrack from '@/components/LiveTracker/AthleteTrackCanvas';
+import AthleteTrack from '@/components/AtheleteTrack';
 import Typo from '@/components/typography/Typo';
 
 import { useStoreActions, useStoreState } from '@/store';
 
+import { isStraightRunSlug } from '@/constant/straightRunSlug';
 import Call from '@/features/BrowserCall';
 import { MetricLayoutView } from '@/features/MetricLayouts/MetricLayoutView';
 import withAuth from '@/hoc/withAuth';
@@ -15,6 +17,8 @@ import {
   initializeMetrics,
   updateMetricPrettified,
 } from '@/models/workout/workout-metric/workout-metric.adapter';
+
+import STRAIGHT_RUN from '/public/images/straight-run.png';
 
 const POLLING_INTERVAL = 5000; // 5 seconds
 
@@ -42,29 +46,25 @@ const LiveScreen: FC = () => {
 
   const fetchData = async () => {
     if (!sessionId) return;
-    await fetchWorkoutSessionDetails(sessionId);
+    const res = await fetchWorkoutSessionDetails(sessionId);
+    if (res) {
+      const { currentSetIndex, currentRepIndex, currentLapIndex, sets } = res;
+
+      const currentSet = sets[currentSetIndex];
+      const currentRep = currentSet.reps[currentRepIndex];
+      const totalDistance = currentRep.laps[currentLapIndex];
+      const elapsedDistance =
+        res.workoutData[currentSetIndex].reps[currentRepIndex].laps[
+          currentLapIndex
+        ].elapsedDistance;
+
+      const newPercentage = (elapsedDistance / totalDistance) * 100 ?? 0;
+      setPercentage(newPercentage);
+    }
   };
 
   useEffect(() => {
     fetchData();
-    //  // Calculate the percentage
-    // if (workoutSessionDetails) {
-    //   const { currentSetIndex, currentRepIndex, currentLapIndex, sets } =
-    //     workoutSessionDetails;
-
-    //   const currentSet = sets[currentSetIndex];
-    //   const currentRep = currentSet.reps[currentRepIndex];
-    //   const totalDistance = currentRep.laps[currentLapIndex];
-
-    //   const elapsedDistance =
-    //     workoutSessionDetails.workoutData[currentSetIndex].reps[currentRepIndex]
-    //       .laps[currentLapIndex].elapsedDistance;
-
-    //   const percentage = (elapsedDistance / totalDistance) * 100 ?? 0;
-    //   console.log({ percentage });
-    //   setPercentage(percentage);
-    // }
-
     const intervalId = setInterval(fetchData, POLLING_INTERVAL); // Polling
 
     return () => clearInterval(intervalId);
@@ -86,13 +86,10 @@ const LiveScreen: FC = () => {
     updatedMetricPrettified,
   );
 
-  // Simulate percentage change for demonstration purposes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPercentage((prev) => (prev < 100 ? prev + 1 : 0));
-    }, 100);
-    return () => clearInterval(interval);
-  }, []);
+  const showStraightRun = useMemo(
+    () => isStraightRunSlug(workoutSessionDetails?.workoutSlug),
+    [workoutSessionDetails],
+  );
 
   return (
     <div className='flex flex-row w-full h-full'>
@@ -103,21 +100,30 @@ const LiveScreen: FC = () => {
       </div>
       <div className='flex flex-col gap-5 flex-1 m-5'>
         <div className='bg-gray-800 rounded-xl h-full py-[72px] px-5 flex justify-center items-center'>
-          <div className='relative w-[15rem] h-[27rem] flex flex-col justify-between'>
-            <AthleteTrack
-              percentage={percentage}
-              rep={
-                workoutSessionDetails?.sets[
-                  workoutSessionDetails?.currentRepIndex
-                ]?.reps?.length
-              }
-              lap={
-                workoutSessionDetails?.sets[
-                  workoutSessionDetails?.currentRepIndex
-                ]?.reps[workoutSessionDetails?.currentLapIndex]?.laps?.length
-              }
+          {showStraightRun ? (
+            <Image
+              src={STRAIGHT_RUN}
+              width={288}
+              height={544}
+              alt='straight-run'
             />
-          </div>
+          ) : (
+            <div className='relative w-[15rem] h-[29rem] flex flex-col justify-between'>
+              <AthleteTrack
+                percentage={percentage}
+                rep={
+                  workoutSessionDetails?.sets[
+                    workoutSessionDetails?.currentRepIndex
+                  ]?.reps?.length
+                }
+                lap={
+                  workoutSessionDetails?.sets[
+                    workoutSessionDetails?.currentRepIndex
+                  ]?.reps[workoutSessionDetails?.currentLapIndex]?.laps?.length
+                }
+              />
+            </div>
+          )}
         </div>
         <div className='flex justify-center w-full items-center bg-gray-800 rounded-xl'>
           {user?.phone ? (

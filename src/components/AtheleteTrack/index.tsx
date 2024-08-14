@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import SvgIcon from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
 
-import liveRunImage from '../../../public/images/live-run.png';
+import liveRunImage from '/public/images/live-run.png';
 
 interface AthleteTrackProps {
   percentage: number; // A number between 0 and 100
@@ -34,6 +34,7 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
     // Track dimensions
     const radius = 36.5 * 2.5; // Scaled radius for the semicircles
     const straightLength = 84.39 * 2.5; // Scaled length for the straight sections
+    const offsetY = 50; // Offset from the top
 
     const totalLength = 2 * Math.PI * radius + 2 * straightLength;
     const distance = (percentage / 100) * totalLength;
@@ -51,7 +52,7 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
     // Top semicircle
     ctx.arc(
       canvas.width / 2,
-      radius + ctx.lineWidth / 2,
+      radius + ctx.lineWidth / 2 + offsetY,
       radius,
       Math.PI, // Start angle
       2 * Math.PI, // End angle
@@ -61,13 +62,13 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
     // Left vertical straight line (moving down)
     ctx.lineTo(
       canvas.width / 2 - radius,
-      radius + ctx.lineWidth / 2 + straightLength,
+      radius + ctx.lineWidth / 2 + straightLength + offsetY,
     );
 
     // Bottom semicircle
     ctx.arc(
       canvas.width / 2,
-      radius + ctx.lineWidth / 2 + straightLength,
+      radius + ctx.lineWidth / 2 + straightLength + offsetY,
       radius,
       0, // Start angle
       Math.PI, // End angle
@@ -75,19 +76,19 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
     );
 
     // Right vertical straight line (moving up)
-    ctx.lineTo(canvas.width / 2 + radius, radius + ctx.lineWidth / 2);
+    ctx.lineTo(canvas.width / 2 + radius, radius + ctx.lineWidth / 2 + offsetY);
 
     // Fill the rectangular part between the semicircles
-    ctx.moveTo(canvas.width / 2 - radius, radius + ctx.lineWidth / 2);
+    ctx.moveTo(canvas.width / 2 - radius, radius + ctx.lineWidth / 2 + offsetY);
     ctx.lineTo(
       canvas.width / 2 - radius,
-      radius + ctx.lineWidth / 2 + straightLength,
+      radius + ctx.lineWidth / 2 + straightLength + offsetY,
     );
     ctx.lineTo(
       canvas.width / 2 + radius,
-      radius + ctx.lineWidth / 2 + straightLength,
+      radius + ctx.lineWidth / 2 + straightLength + offsetY,
     );
-    ctx.lineTo(canvas.width / 2 + radius, radius + ctx.lineWidth / 2);
+    ctx.lineTo(canvas.width / 2 + radius, radius + ctx.lineWidth / 2 + offsetY);
     ctx.closePath();
     ctx.fill();
 
@@ -101,7 +102,7 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
     ctx.beginPath();
     ctx.arc(
       canvas.width / 2,
-      radius + ctx.lineWidth / 2,
+      radius + ctx.lineWidth / 2 + offsetY,
       radius,
       Math.PI, // Start angle
       2 * Math.PI, // End angle
@@ -111,10 +112,10 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
 
     // Draw the left vertical straight
     ctx.beginPath();
-    ctx.moveTo(canvas.width / 2 - radius, radius + ctx.lineWidth / 2);
+    ctx.moveTo(canvas.width / 2 - radius, radius + ctx.lineWidth / 2 + offsetY);
     ctx.lineTo(
       canvas.width / 2 - radius,
-      radius + ctx.lineWidth / 2 + straightLength,
+      radius + ctx.lineWidth / 2 + straightLength + offsetY,
     );
     ctx.stroke();
 
@@ -122,7 +123,7 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
     ctx.beginPath();
     ctx.arc(
       canvas.width / 2,
-      radius + ctx.lineWidth / 2 + straightLength,
+      radius + ctx.lineWidth / 2 + straightLength + offsetY,
       radius,
       0, // Start angle
       Math.PI, // End angle
@@ -134,9 +135,9 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
     ctx.beginPath();
     ctx.moveTo(
       canvas.width / 2 + radius,
-      radius + ctx.lineWidth / 2 + straightLength,
+      radius + ctx.lineWidth / 2 + straightLength + offsetY,
     );
-    ctx.lineTo(canvas.width / 2 + radius, radius + ctx.lineWidth / 2);
+    ctx.lineTo(canvas.width / 2 + radius, radius + ctx.lineWidth / 2 + offsetY);
     ctx.stroke();
 
     // Draw covered track in coveredColor
@@ -150,7 +151,7 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
       ctx.beginPath();
       ctx.arc(
         canvas.width / 2,
-        radius + ctx.lineWidth / 2,
+        radius + ctx.lineWidth / 2 + offsetY,
         radius,
         2 * Math.PI, // Start angle at the top right
         angle, // End angle moving left
@@ -161,7 +162,7 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
       ctx.beginPath();
       ctx.arc(
         canvas.width / 2,
-        radius + ctx.lineWidth / 2,
+        radius + ctx.lineWidth / 2 + offsetY,
         radius,
         Math.PI,
         2 * Math.PI,
@@ -173,18 +174,24 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
       // Covered left vertical straight
       if (coveredDistance <= straightLength) {
         ctx.beginPath();
-        ctx.moveTo(canvas.width / 2 - radius, radius + ctx.lineWidth / 2);
+        ctx.moveTo(
+          canvas.width / 2 - radius,
+          radius + ctx.lineWidth / 2 + offsetY,
+        );
         ctx.lineTo(
           canvas.width / 2 - radius,
-          radius + ctx.lineWidth / 2 + coveredDistance,
+          radius + ctx.lineWidth / 2 + coveredDistance + offsetY,
         );
         ctx.stroke();
       } else {
         ctx.beginPath();
-        ctx.moveTo(canvas.width / 2 - radius, radius + ctx.lineWidth / 2);
+        ctx.moveTo(
+          canvas.width / 2 - radius,
+          radius + ctx.lineWidth / 2 + offsetY,
+        );
         ctx.lineTo(
           canvas.width / 2 - radius,
-          radius + ctx.lineWidth / 2 + straightLength,
+          radius + ctx.lineWidth / 2 + straightLength + offsetY,
         );
         ctx.stroke();
         coveredDistance -= straightLength;
@@ -195,7 +202,7 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
           ctx.beginPath();
           ctx.arc(
             canvas.width / 2,
-            radius + ctx.lineWidth / 2 + straightLength,
+            radius + ctx.lineWidth / 2 + straightLength + offsetY,
             radius,
             Math.PI, // Start angle (left side)
             Math.PI - angle, // End angle
@@ -206,7 +213,7 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
           ctx.beginPath();
           ctx.arc(
             canvas.width / 2,
-            radius + ctx.lineWidth / 2 + straightLength,
+            radius + ctx.lineWidth / 2 + straightLength + offsetY,
             radius,
             0, // Start angle (right side)
             Math.PI, // End angle (left side)
@@ -219,11 +226,15 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
           ctx.beginPath();
           ctx.moveTo(
             canvas.width / 2 + radius,
-            radius + ctx.lineWidth / 2 + straightLength,
+            radius + ctx.lineWidth / 2 + straightLength + offsetY,
           );
           ctx.lineTo(
             canvas.width / 2 + radius,
-            radius + ctx.lineWidth / 2 + straightLength - coveredDistance,
+            radius +
+              ctx.lineWidth / 2 +
+              straightLength -
+              coveredDistance +
+              offsetY,
           );
           ctx.stroke();
         }
@@ -237,16 +248,20 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
       // Top semicircle (right to left)
       const angle = 2 * Math.PI - distance / radius;
       x = canvas.width / 2 + radius * Math.cos(angle);
-      y = radius + ctx.lineWidth / 2 + radius * Math.sin(angle);
+      y = radius + ctx.lineWidth / 2 + radius * Math.sin(angle) + offsetY;
     } else if (distance <= Math.PI * radius + straightLength) {
       // Left vertical straight
       x = canvas.width / 2 - radius;
-      y = radius + ctx.lineWidth / 2 + (distance - Math.PI * radius);
+      y = radius + ctx.lineWidth / 2 + (distance - Math.PI * radius) + offsetY;
     } else if (distance <= 2 * Math.PI * radius + straightLength) {
       const angle = (distance - Math.PI * radius - straightLength) / radius;
       x = canvas.width / 2 - radius * Math.cos(angle);
       y =
-        radius + ctx.lineWidth / 2 + straightLength + radius * Math.sin(angle);
+        radius +
+        ctx.lineWidth / 2 +
+        straightLength +
+        radius * Math.sin(angle) +
+        offsetY;
     } else {
       // Right vertical straight
       x = canvas.width / 2 + radius;
@@ -254,7 +269,8 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
         radius +
         ctx.lineWidth / 2 +
         straightLength -
-        (distance - 2 * Math.PI * radius - straightLength);
+        (distance - 2 * Math.PI * radius - straightLength) +
+        offsetY;
     }
 
     // Draw the athlete's position using the image
@@ -281,7 +297,7 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
 
       {/* Start Section */}
       <div
-        className='absolute -top-2.5 -right-3 flex items-center space-x-2'
+        className='absolute top-10 -right-3 flex items-center space-x-2'
         style={{
           transform: `translateY(${36.5 * 2.5}px)`,
         }}
@@ -292,9 +308,9 @@ const AthleteTrack: React.FC<AthleteTrackProps> = ({
       </div>
 
       {/* Centered Rep and Lap info */}
-      <div className='absolute -right-10 font-secondary text-center font-semibold inset-0 text-green-400 flex flex-col justify-center items-center'>
-        <Typo level='h3'>{`Rep ${rep}`}</Typo>
-        <Typo level='h3'>{`Lap ${lap}`}</Typo>
+      <div className='absolute -right-10 top-10 font-secondary text-center font-semibold inset-0 text-green-400 flex flex-col justify-center items-center'>
+        <Typo level='h3'>{`Rep ${rep.toString().padStart(2, '0')}`}</Typo>
+        <Typo level='h3'>{`Lap ${lap.toString().padStart(2, '0')}`}</Typo>
       </div>
     </div>
   );

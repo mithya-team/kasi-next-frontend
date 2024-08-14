@@ -52,8 +52,6 @@ function renderUnconfirmedUserStatus(
   if (isUnConfirmedUserWithDetails(user)) {
     if (user.status === 'requested') {
       return <CoachActions onClick={(action) => onAction?.(user, action)} />;
-    } else if (user.status === 'declined') {
-      return <div className='w-[18%] p-5 text-gray-500'>Declined</div>;
     } else if (user.status === 'connected') {
       return <div className='w-[18%] p-5 text-gray-500'>Accepted</div>;
     }

@@ -42,7 +42,7 @@ const HeaderFilter: FC = () => {
           status: selectedFilters as WorkoutSessionStatus[],
         });
       } else {
-        await fetchUsersList({ planId: selectedFilters as ProductPlanId[] });
+        await fetchUsersList({ planIds: selectedFilters as ProductPlanId[] });
       }
     } catch (error) {
       if (isAxiosError(error))
@@ -77,7 +77,7 @@ const HeaderFilter: FC = () => {
           isScheduleScreen={isScheduleScreen}
         />
       }
-      containerClassName={cn({ ['w-[20rem]']: !isScheduleScreen })}
+      containerClassName={cn({ ['w-[15rem]']: !isScheduleScreen })}
     >
       <div
         onClick={() => setOpenPopover(!openPopover)}
@@ -163,16 +163,8 @@ const getRows = (isScheduleScreen = false): IConfig[] => {
         label: 'Annual Subscription',
       },
       {
-        id: 'PAID_TIER_6_MONTHS',
-        label: 'Half yearly Subscription',
-      },
-      {
         label: 'Monthly Subscription',
         id: 'PAID_TIER_1_MONTH',
-      },
-      {
-        label: 'Free Trial',
-        id: 'FREE_TIER',
       },
     ];
   }

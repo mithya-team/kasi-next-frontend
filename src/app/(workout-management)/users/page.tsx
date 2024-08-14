@@ -114,7 +114,8 @@ const UsersListingPage: FC = () => {
 
   const filteredUnconfirmedUsers = unConfirmedUsers?.filter(
     (unconfirmedUser) =>
-      unconfirmedUser.status === 'requested' &&
+      (unconfirmedUser.status === 'requested' ||
+        unconfirmedUser.status === 'connected') &&
       usersList?.some((user) => user._id === unconfirmedUser._id),
   );
 
@@ -143,7 +144,7 @@ const UsersListingPage: FC = () => {
     fetchUsersList({
       page: currentPage,
       sort: `${sortOrder === 'asc' ? '+' : '-'}createdAt`,
-      planId: filteredPlanId,
+      planIds: filteredPlanId,
     });
 
     return () => {
