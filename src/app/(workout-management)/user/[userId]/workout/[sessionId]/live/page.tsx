@@ -111,16 +111,8 @@ const LiveScreen: FC = () => {
             <div className='relative w-[15rem] h-[29rem] flex flex-col justify-between'>
               <AthleteTrack
                 percentage={percentage}
-                rep={
-                  workoutSessionDetails?.sets[
-                    workoutSessionDetails?.currentRepIndex
-                  ]?.reps?.length
-                }
-                lap={
-                  workoutSessionDetails?.sets[
-                    workoutSessionDetails?.currentRepIndex
-                  ]?.reps[workoutSessionDetails?.currentLapIndex]?.laps?.length
-                }
+                rep={(workoutSessionDetails?.currentRepIndex ?? 0) + 1}
+                lap={(workoutSessionDetails?.currentLapIndex ?? 0) + 1}
               />
             </div>
           )}

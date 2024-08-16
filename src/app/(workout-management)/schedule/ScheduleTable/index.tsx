@@ -30,7 +30,7 @@ const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
         {data?.workoutConfig?.name ?? '-'}
       </div>
       <div className='w-[15%] p-5'>
-        {parseDate(user?.createdAt ?? '', 'MMMM D, YYYY')}
+        {parseDate(data?.startTime ?? '', 'MMMM D, YYYY')}
       </div>
       <div className='w-[15%] p-5'> {parseTime(user?.createdAt ?? '')}</div>
     </div>

@@ -101,7 +101,7 @@ const PopoverContent: FC<PopoverContentProps> = ({ closePopover }) => {
     //   },
     // },
     {
-      title: 'subscriptions',
+      title: 'Subscriptions',
       icon: 'payment' as IconName,
       onClick: () => {
         router.push(ROUTE.SUBSCRIPTION_ROUTE.path);

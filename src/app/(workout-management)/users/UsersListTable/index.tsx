@@ -53,7 +53,7 @@ function renderUnconfirmedUserStatus(
     if (user.status === 'requested') {
       return <CoachActions onClick={(action) => onAction?.(user, action)} />;
     } else if (user.status === 'connected') {
-      return <div className='w-[18%] p-5 text-gray-500'>Accepted</div>;
+      return <div className='w-[18%] p-5 text-gray-500'>Connected</div>;
     }
   }
   return <div className='w-[18%] p-5 text-gray-500'>Member already exists</div>;
