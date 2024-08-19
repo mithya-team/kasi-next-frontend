@@ -31,4 +31,7 @@ export const SETTING_ROUTE = {
   PASSWORD: {
     path: `${SETTING_BASE_PATH}/password`,
   },
+  PHONE: {
+    path: `${SETTING_BASE_PATH}/phone-number`,
+  },
 };

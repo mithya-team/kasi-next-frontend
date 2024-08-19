@@ -4,7 +4,6 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { toast } from '@/lib/toast';
-import { isProductPlanId } from '@/lib/workout';
 
 import Button from '@/components/Buttons';
 import Loader from '@/components/Loader';
@@ -40,42 +39,36 @@ const UsersListingPage: FC = () => {
     admin,
     unConfirmedUsers,
     hasMore,
-    selectedFilters,
+    usersScreenFilter,
   } = useStoreState(
     ({
       UserStore: { usersList, isLoading, hasMore },
       AdminStore: { admin, unConfirmedUsers },
-      filterStore: { selectedFilters },
+      filterStore: { usersScreenFilter },
     }) => ({
       usersList,
       isLoading,
       admin,
       unConfirmedUsers,
       hasMore,
-      selectedFilters,
+      usersScreenFilter,
     }),
   );
 
-  const {
-    fetchUsersList,
-    fetchUserConnections,
-    updateConfirmedUsers,
-    updateSelectedFilter,
-  } = useStoreActions(
-    ({
-      UserStore: { fetchUsersList },
-      AdminStore: {
-        fetchUnConfirmedUsers: fetchUserConnections,
+  const { fetchUsersList, fetchUserConnections, updateConfirmedUsers } =
+    useStoreActions(
+      ({
+        UserStore: { fetchUsersList },
+        AdminStore: {
+          fetchUnConfirmedUsers: fetchUserConnections,
+          updateConfirmedUsers,
+        },
+      }) => ({
+        fetchUsersList,
+        fetchUserConnections,
         updateConfirmedUsers,
-      },
-      filterStore: { updateSelectedFilter },
-    }) => ({
-      fetchUsersList,
-      fetchUserConnections,
-      updateConfirmedUsers,
-      updateSelectedFilter,
-    }),
-  );
+      }),
+    );
 
   const openConfirmationDialog = (
     user: User | UnConfirmedUserWithDetails,
@@ -137,20 +130,15 @@ const UsersListingPage: FC = () => {
   };
 
   useEffect(() => {
-    const filteredPlanId =
-      selectedFilters.length > 0 && selectedFilters.every(isProductPlanId)
-        ? (selectedFilters as ProductPlanId[])
-        : [];
     fetchUsersList({
       page: currentPage,
       sort: `${sortOrder === 'asc' ? '+' : '-'}createdAt`,
-      planIds: filteredPlanId,
+      planIds: usersScreenFilter as ProductPlanId[],
     });
 
     return () => {
       setDialogOpen(false);
       setActionType(undefined);
-      updateSelectedFilter([]);
     };
   }, [currentPage, sortOrder]);
 

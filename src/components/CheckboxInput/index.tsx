@@ -30,7 +30,7 @@ const CheckboxInput: FC<CheckboxProps> = ({
         <input
           type='checkbox'
           className={cn(
-            'form-checkbox cursor-pointer h-5 w-5 transition duration-150 ease-in-out',
+            'form-checkbox cursor-pointer h-5 w-5 transition opacity-90 duration-150 text-violet-1 ease-in-out',
             checkboxClassName,
           )}
           {...props}

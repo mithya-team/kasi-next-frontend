@@ -5,6 +5,7 @@ export enum SettingItemType {
   NAME = 'name',
   EMAIL = 'email',
   PASSWORD = 'password',
+  PHONE = 'phone',
 }
 
 export interface SettingItemConfig {

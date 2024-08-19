@@ -6,6 +6,7 @@ import { toast } from '@/lib/toast';
 import { cn } from '@/lib/utils';
 
 import Button from '@/components/Buttons';
+import CheckboxInput from '@/components/CheckboxInput';
 import Popover from '@/components/Popover';
 import SvgIcon from '@/components/SvgIcon';
 
@@ -19,30 +20,38 @@ const HeaderFilter: FC = () => {
   const pathName = usePathname();
 
   const isScheduleScreen = pathName.split('/')[1] === 'schedule';
-  const { selectedFilters } = useStoreState(
-    ({ filterStore: { selectedFilters } }) => ({ selectedFilters }),
+  const { usersScreenFilter, scheduleFilters } = useStoreState(
+    ({ filterStore: { usersScreenFilter, scheduleFilters } }) => ({
+      scheduleFilters,
+      usersScreenFilter,
+    }),
   );
-  const { fetchUsersList, fetchWorkoutScheduleData, updateSelectedFilter } =
-    useStoreActions(
-      ({
-        UserStore: { fetchUsersList },
-        WorkoutStore: { fetchWorkoutScheduleData },
-        filterStore: { updateSelectedFilter },
-      }) => ({
-        fetchUsersList,
-        fetchWorkoutScheduleData,
-        updateSelectedFilter,
-      }),
-    );
+  const {
+    fetchUsersList,
+    fetchWorkoutScheduleData,
+    updateScheduleFilters,
+    updateUsersScreenFilter,
+  } = useStoreActions(
+    ({
+      UserStore: { fetchUsersList },
+      WorkoutStore: { fetchWorkoutScheduleData },
+      filterStore: { updateUsersScreenFilter, updateScheduleFilters },
+    }) => ({
+      fetchUsersList,
+      fetchWorkoutScheduleData,
+      updateScheduleFilters,
+      updateUsersScreenFilter,
+    }),
+  );
 
   const handleOnClick = async () => {
     try {
       if (isScheduleScreen) {
         await fetchWorkoutScheduleData({
-          status: selectedFilters as WorkoutSessionStatus[],
+          status: scheduleFilters,
         });
       } else {
-        await fetchUsersList({ planIds: selectedFilters as ProductPlanId[] });
+        await fetchUsersList({ planIds: usersScreenFilter as ProductPlanId[] });
       }
     } catch (error) {
       if (isAxiosError(error))
@@ -51,20 +60,29 @@ const HeaderFilter: FC = () => {
   };
 
   const handleCheckboxChange = (config: IConfig) => {
-    const isSelected = selectedFilters.includes(config.id);
+    const isSelected = isScheduleScreen
+      ? scheduleFilters.includes(config.id as WorkoutSessionStatus)
+      : usersScreenFilter.includes(config.id as ProductPlanId);
+
     const newSelectedItems = isSelected
-      ? selectedFilters.filter((id) => id !== (config.id as ProductPlanId))
-      : [...selectedFilters, config.id];
-    updateSelectedFilter(newSelectedItems);
+      ? (isScheduleScreen ? scheduleFilters : usersScreenFilter).filter(
+          (id) => id !== config.id,
+        )
+      : [
+          ...(isScheduleScreen ? scheduleFilters : usersScreenFilter),
+          config.id,
+        ];
+
+    if (isScheduleScreen) {
+      updateScheduleFilters(newSelectedItems as WorkoutSessionStatus[]);
+    } else {
+      updateUsersScreenFilter(newSelectedItems as ProductPlanId[]);
+    }
   };
 
   useEffect(() => {
     handleOnClick();
-  }, [selectedFilters]);
-
-  useEffect(() => {
-    updateSelectedFilter([]);
-  }, [pathName]);
+  }, [scheduleFilters, usersScreenFilter]);
 
   return (
     <Popover
@@ -73,11 +91,11 @@ const HeaderFilter: FC = () => {
       content={
         <PopoverContent
           handleCheckboxChange={handleCheckboxChange}
-          selectedItems={selectedFilters}
+          selectedItems={isScheduleScreen ? scheduleFilters : usersScreenFilter}
           isScheduleScreen={isScheduleScreen}
         />
       }
-      containerClassName={cn({ ['w-[15rem]']: !isScheduleScreen })}
+      containerClassName={cn({ ['w-[17rem]']: !isScheduleScreen })}
     >
       <div
         onClick={() => setOpenPopover(!openPopover)}
@@ -116,16 +134,15 @@ const PopoverContent: FC<PopoverContentProps> = ({
             className='flex flex-col justify-center items-center'
             onClick={() => handleCheckboxChange(config)}
           >
-            <div className='flex flex-row justify-between p-2 w-full'>
+            <div className='flex flex-row text-left gap-4 items-center p-2 h-full w-full'>
+              <CheckboxInput
+                checked={isChecked}
+                onChange={() => handleCheckboxChange(config)}
+                checkboxClassName='h-4 w-4 rounded'
+              />
               <span className='font-primary font-medium text-gray-50'>
                 {config.label}
               </span>
-              <input
-                type='checkbox'
-                checked={isChecked}
-                onChange={() => handleCheckboxChange(config)}
-                className='form-checkbox h-4 w-4 text-green-500 rounded transition duration-150 ease-in-out '
-              />
             </div>
             <div className='w-full h-[1px] opacity-20 bg-gray-1' />
           </Button>

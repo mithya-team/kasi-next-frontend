@@ -54,6 +54,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
         </select>
       )}
       <button
+        type='button'
         className='font-primary w-full flex flex-row text-xs text-white p-0 border-none bg-transparent'
         onClick={toggleSelect}
       >

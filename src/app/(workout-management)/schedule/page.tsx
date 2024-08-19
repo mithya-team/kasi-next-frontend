@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { isWorkoutSessionStatus } from '@/lib/workout';
-
 import Button from '@/components/Buttons';
 import EmptyUserWorkout from '@/components/EmptyUserWorkout';
 import Loader from '@/components/Loader';
@@ -14,7 +12,6 @@ import { useStoreActions, useStoreState } from '@/store';
 
 import ScheduleTable from '@/app/(workout-management)/schedule/ScheduleTable';
 import withAuth from '@/hoc/withAuth';
-import { WorkoutSessionStatus } from '@/models/workout/workout.types';
 
 const Schedule = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,26 +20,22 @@ const Schedule = () => {
     workoutScheduleData,
     isWorkoutScheduleLoading,
     hasMore,
-    selectedFilters,
+    scheduleFilters,
   } = useStoreState(
     ({
       WorkoutStore: { workoutScheduleData, isWorkoutScheduleLoading, hasMore },
-      filterStore: { selectedFilters },
+      filterStore: { scheduleFilters },
     }) => ({
       workoutScheduleData,
       isWorkoutScheduleLoading,
       hasMore,
-      selectedFilters,
+      scheduleFilters,
     }),
   );
 
-  const { fetchWorkoutScheduleData, updateSelectedFilter } = useStoreActions(
-    ({
-      WorkoutStore: { fetchWorkoutScheduleData },
-      filterStore: { updateSelectedFilter },
-    }) => ({
+  const { fetchWorkoutScheduleData } = useStoreActions(
+    ({ WorkoutStore: { fetchWorkoutScheduleData } }) => ({
       fetchWorkoutScheduleData,
-      updateSelectedFilter,
     }),
   );
   const handleSortClick = () => {
@@ -51,19 +44,11 @@ const Schedule = () => {
   };
 
   useEffect(() => {
-    const filteredStatus =
-      selectedFilters.length > 0 &&
-      selectedFilters.every(isWorkoutSessionStatus)
-        ? (selectedFilters as WorkoutSessionStatus[])
-        : [];
     fetchWorkoutScheduleData({
       page: currentPage,
       sort: `${sortOrder === 'asc' ? '+' : '-'}createdAt`,
-      status: filteredStatus,
+      status: scheduleFilters,
     });
-    return () => {
-      updateSelectedFilter([]);
-    };
   }, [currentPage, sortOrder]);
 
   if (isWorkoutScheduleLoading && !workoutScheduleData?.length)
@@ -76,10 +61,10 @@ const Schedule = () => {
     >
       <div className='flex bg-gray-800 text-base  text-gray-400 mb-5'>
         <div className='flex-1 py-3 pl-5'>Username</div>
-        <div className='w-[20%] py-3 pl-5'>Workout</div>
+        <div className='w-[20%] py-3 pl-5'>Workout Status</div>
         <div className='flex-1 py-3 pl-5'>Workout Name</div>
         <div className='w-[15%] flex flex-row justify-between py-3 pl-5'>
-          <Typo>Joined</Typo>
+          <Typo>Start Date</Typo>
           <Button
             onClick={handleSortClick}
             className={`mr-14 transform transition-transform ${

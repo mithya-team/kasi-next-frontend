@@ -45,5 +45,14 @@ export const getSettingItem = (
     href: SETTING_ROUTE.PASSWORD.path,
   });
 
+  if (admin.phone)
+    settings.push({
+      label: 'Phone',
+      value: `${admin?.phone?.countryCode}-${admin?.phone?.number}`,
+      id: SettingItemType.PHONE,
+      icon: 'update-password',
+      href: SETTING_ROUTE.PHONE.path,
+    });
+
   return settings;
 };

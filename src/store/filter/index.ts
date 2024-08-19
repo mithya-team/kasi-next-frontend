@@ -1,15 +1,23 @@
 import { Action, action } from 'easy-peasy';
 
+import { ProductPlanId } from '@/models/user/user.types';
+import { WorkoutSessionStatus } from '@/models/workout/workout.types';
+
 export interface FilterStore {
-  selectedFilters: string[];
-  updateSelectedFilter: Action<FilterStore, string[]>;
+  usersScreenFilter: ProductPlanId[];
+  scheduleFilters: WorkoutSessionStatus[];
+  updateScheduleFilters: Action<FilterStore, WorkoutSessionStatus[]>;
+  updateUsersScreenFilter: Action<FilterStore, ProductPlanId[]>;
 }
 
 const filterStore: FilterStore = {
-  selectedFilters: [],
-
-  updateSelectedFilter: action((state, payload) => {
-    state.selectedFilters = payload;
+  scheduleFilters: [],
+  usersScreenFilter: [],
+  updateScheduleFilters: action((state, payload) => {
+    state.scheduleFilters = payload;
+  }),
+  updateUsersScreenFilter: action((state, payload) => {
+    state.usersScreenFilter = payload;
   }),
 };
 

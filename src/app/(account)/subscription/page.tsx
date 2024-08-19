@@ -126,6 +126,7 @@ const SubscriptionScreen = () => {
     <div className='mx-auto flex flex-col w-[53.75rem] items-center gap-9 py-10'>
       {activeSubscription ? (
         activeSubscription.planId === 'NONE' ||
+        activeSubscription.planId === 'FREE_TIER' ||
         activeSubscription.creditDurationInDays <= 0 ? (
           <>
             <SubscriptionInfo />
@@ -147,12 +148,6 @@ const SubscriptionScreen = () => {
               onClick={openCancelPlanDialog}
               product={activeSubscription}
             />
-            {activeSubscription?.planId === 'FREE_TIER' ? (
-              <Cards
-                subscriptionProducts={subscriptionProducts}
-                onClick={handleOnSubscribe}
-              />
-            ) : null}
           </>
         )
       ) : null}
@@ -168,6 +163,9 @@ const SubscriptionScreen = () => {
               clientSecret: clientSecret,
               appearance: {
                 theme: 'stripe',
+                variables: {
+                  colorText: 'white',
+                },
               },
             }}
           >
