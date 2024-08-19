@@ -31,7 +31,6 @@ const UsersListingPage: FC = () => {
   const [selectedUser, setSelectedUser] = useState<
     User | UnConfirmedUserWithDetails | null
   >(null);
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const {
     usersList,
@@ -40,11 +39,13 @@ const UsersListingPage: FC = () => {
     unConfirmedUsers,
     hasMore,
     usersScreenFilter,
+    isSuperAdmin,
+    usersScreenSort,
   } = useStoreState(
     ({
       UserStore: { usersList, isLoading, hasMore },
-      AdminStore: { admin, unConfirmedUsers },
-      filterStore: { usersScreenFilter },
+      AdminStore: { admin, unConfirmedUsers, isSuperAdmin },
+      filterStore: { usersScreenFilter, usersScreenSort },
     }) => ({
       usersList,
       isLoading,
@@ -52,23 +53,31 @@ const UsersListingPage: FC = () => {
       unConfirmedUsers,
       hasMore,
       usersScreenFilter,
+      isSuperAdmin,
+      usersScreenSort,
     }),
   );
 
-  const { fetchUsersList, fetchUserConnections, updateConfirmedUsers } =
-    useStoreActions(
-      ({
-        UserStore: { fetchUsersList },
-        AdminStore: {
-          fetchUnConfirmedUsers: fetchUserConnections,
-          updateConfirmedUsers,
-        },
-      }) => ({
-        fetchUsersList,
-        fetchUserConnections,
+  const {
+    fetchUsersList,
+    fetchUserConnections,
+    updateConfirmedUsers,
+    updateUsersScreenSort,
+  } = useStoreActions(
+    ({
+      UserStore: { fetchUsersList },
+      AdminStore: {
+        fetchUnConfirmedUsers: fetchUserConnections,
         updateConfirmedUsers,
-      }),
-    );
+      },
+      filterStore: { updateUsersScreenSort },
+    }) => ({
+      fetchUsersList,
+      fetchUserConnections,
+      updateConfirmedUsers,
+      updateUsersScreenSort,
+    }),
+  );
 
   const openConfirmationDialog = (
     user: User | UnConfirmedUserWithDetails,
@@ -125,14 +134,14 @@ const UsersListingPage: FC = () => {
   );
 
   const handleSortClick = () => {
-    setSortOrder((prevSortOrder) => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
+    updateUsersScreenSort(usersScreenSort === 'asc' ? 'desc' : 'asc');
     setCurrentPage(1); // Reset to the first page when sorting
   };
 
   useEffect(() => {
     fetchUsersList({
       page: currentPage,
-      sort: `${sortOrder === 'asc' ? '+' : '-'}createdAt`,
+      sort: `${usersScreenSort === 'asc' ? '+' : '-'}createdAt`,
       planIds: usersScreenFilter as ProductPlanId[],
     });
 
@@ -140,14 +149,14 @@ const UsersListingPage: FC = () => {
       setDialogOpen(false);
       setActionType(undefined);
     };
-  }, [currentPage, sortOrder]);
+  }, [currentPage, usersScreenSort]);
 
   useEffect(() => {
     if (usersList?.length && admin) {
       const userIds = usersList?.map((user) => user._id);
       fetchUserConnections({ coachId: admin._id, userIds });
     }
-  }, [usersList, admin]);
+  }, []);
 
   if (isLoading && !usersList?.length) return <Loader className='h-[100vh]' />;
 
@@ -158,12 +167,13 @@ const UsersListingPage: FC = () => {
     >
       <div className='flex bg-gray-800 text-base text-gray-400 mb-5'>
         <div className='flex-1 py-3 pl-5'>Username</div>
+        {isSuperAdmin ? <div className='flex-1 py-3 pl-5'>Coach</div> : null}
         <div className='w-[12%] flex flex-row justify-between py-3 pl-5'>
           <Typo>Joined</Typo>
           <Button
             onClick={handleSortClick}
             className={`mr-5 transform transition-transform ${
-              sortOrder === 'desc' ? '' : 'rotate-180'
+              usersScreenSort === 'desc' ? '' : 'rotate-180'
             }`}
           >
             <SvgIcon pathFill='#9CA3AF' name='down-arrow' />
@@ -189,6 +199,7 @@ const UsersListingPage: FC = () => {
               onAction={openConfirmationDialog}
               user={user}
               key={user?._id}
+              isSuperAdmin={isSuperAdmin}
             />
           ))}
         </InfiniteScroll>

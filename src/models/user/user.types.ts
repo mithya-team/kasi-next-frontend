@@ -1,3 +1,4 @@
+import { UnConfirmedUserStatus } from '@/models/admin/admin.types';
 import { TPhone } from '@/models/auth/auth.types';
 
 export interface UserPreferences {
@@ -36,6 +37,7 @@ export interface AthleteSubscription {
   };
 }
 
+export type UserRole = 'USER' | 'COACH' | 'ADMIN';
 export interface User {
   _id: string;
   email: string;
@@ -46,11 +48,27 @@ export interface User {
   updatedAt: string;
   __v: number;
   userPreferences: UserPreferences;
-  roles: string[];
+  roles: UserRole[];
   athleteSubscription: AthleteSubscription[];
   phone: TPhone;
   stripeCustomerId?: string;
   emailVerified?: boolean;
+  coachConnection?: ICoachConnections;
+}
+
+export interface ICoachConnections {
+  _id: string;
+  userId: string;
+  coachId: string;
+  status: UnConfirmedUserStatus;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  coachDetails: CoachDetails;
+}
+export interface CoachDetails {
+  fullName: string;
+  email: string;
 }
 
 export interface UserListResponse {
@@ -66,6 +84,7 @@ export interface UsersListParams {
   search?: string;
   sort?: string;
   planIds?: ProductPlanId[];
+  isSuperAdmin?: boolean;
 }
 
 export type ProductPlanId =

@@ -10,8 +10,13 @@ import { WorkoutScheduleData } from '@/models/workout/workout.types';
 interface ScheduleTableProps {
   data: WorkoutScheduleData;
   onClick?: () => void;
+  isSuperAdmin?: boolean;
 }
-const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
+const ScheduleTable: FC<ScheduleTableProps> = ({
+  data,
+  onClick,
+  isSuperAdmin = false,
+}) => {
   const { user } = data;
   return (
     <div className='flex border-b justify-center items-center border-gray-800 text-sm leading-[14px] text-white'>
@@ -23,6 +28,11 @@ const ScheduleTable: FC<ScheduleTableProps> = ({ data, onClick }) => {
           {user?.fullName}
         </Link>
       </div>
+      {isSuperAdmin ? (
+        <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
+          {data?.coachConnections?.coachDetails?.fullName ?? '-'}
+        </div>
+      ) : null}
       <div className='w-[20%] p-5'>
         <WorkoutStatus status={data?.status} />
       </div>

@@ -15,41 +15,50 @@ import withAuth from '@/hoc/withAuth';
 
 const Schedule = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const {
     workoutScheduleData,
     isWorkoutScheduleLoading,
     hasMore,
     scheduleFilters,
+    scheduleScreenSort,
+    isSuperAdmin,
   } = useStoreState(
     ({
       WorkoutStore: { workoutScheduleData, isWorkoutScheduleLoading, hasMore },
-      filterStore: { scheduleFilters },
+      filterStore: { scheduleFilters, scheduleScreenSort },
+      AdminStore: { isSuperAdmin },
     }) => ({
       workoutScheduleData,
       isWorkoutScheduleLoading,
       hasMore,
       scheduleFilters,
+      scheduleScreenSort,
+      isSuperAdmin,
     }),
   );
 
-  const { fetchWorkoutScheduleData } = useStoreActions(
-    ({ WorkoutStore: { fetchWorkoutScheduleData } }) => ({
-      fetchWorkoutScheduleData,
-    }),
-  );
+  const { fetchWorkoutScheduleData, updateScheduleScreenSort } =
+    useStoreActions(
+      ({
+        WorkoutStore: { fetchWorkoutScheduleData },
+        filterStore: { updateScheduleScreenSort },
+      }) => ({
+        fetchWorkoutScheduleData,
+        updateScheduleScreenSort,
+      }),
+    );
   const handleSortClick = () => {
-    setSortOrder((prevSortOrder) => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
+    updateScheduleScreenSort(scheduleScreenSort === 'asc' ? 'desc' : 'asc');
     setCurrentPage(1); // Reset to the first page when sorting
   };
 
   useEffect(() => {
     fetchWorkoutScheduleData({
       page: currentPage,
-      sort: `${sortOrder === 'asc' ? '+' : '-'}createdAt`,
+      sort: `${scheduleScreenSort === 'asc' ? '+' : '-'}createdAt`,
       status: scheduleFilters,
     });
-  }, [currentPage, sortOrder]);
+  }, [currentPage, scheduleScreenSort]);
 
   if (isWorkoutScheduleLoading && !workoutScheduleData?.length)
     return <Loader />;
@@ -61,6 +70,7 @@ const Schedule = () => {
     >
       <div className='flex bg-gray-800 text-base  text-gray-400 mb-5'>
         <div className='flex-1 py-3 pl-5'>Username</div>
+        {isSuperAdmin ? <div className='flex-1 py-3 pl-5'>Coach</div> : null}
         <div className='w-[20%] py-3 pl-5'>Workout Status</div>
         <div className='flex-1 py-3 pl-5'>Workout Name</div>
         <div className='w-[15%] flex flex-row justify-between py-3 pl-5'>
@@ -68,7 +78,7 @@ const Schedule = () => {
           <Button
             onClick={handleSortClick}
             className={`mr-14 transform transition-transform ${
-              sortOrder === 'desc' ? '' : 'rotate-180'
+              scheduleScreenSort === 'desc' ? '' : 'rotate-180'
             }`}
           >
             <SvgIcon pathFill='#9CA3AF' name='down-arrow' />
@@ -91,7 +101,13 @@ const Schedule = () => {
           scrollThreshold={0.5}
         >
           {workoutScheduleData?.map((data, idx) => {
-            return <ScheduleTable data={data} key={idx} />;
+            return (
+              <ScheduleTable
+                data={data}
+                key={idx}
+                isSuperAdmin={isSuperAdmin}
+              />
+            );
           })}
         </InfiniteScroll>
       )}

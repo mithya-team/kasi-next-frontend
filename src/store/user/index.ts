@@ -1,5 +1,7 @@
 import { Action, action, Thunk, thunk } from 'easy-peasy';
 
+import { TRootStore } from '@/store';
+
 import UserModel from '@/models/user/user.model';
 import {
   User,
@@ -20,7 +22,7 @@ export interface TUserState {
   setUsersListLoading: Action<TUserState, boolean>;
   hasMore: boolean;
   setHasMore: Action<TUserState, boolean>;
-  fetchUsersList: Thunk<TUserState, UsersListParams>;
+  fetchUsersList: Thunk<TUserState, UsersListParams, null, TRootStore>;
 }
 
 const UserStore: TUserState = {
@@ -63,27 +65,33 @@ const UserStore: TUserState = {
     }
   }),
 
-  fetchUsersList: thunk(async (actions, params, { getState }) => {
-    actions.setUsersListLoading(true);
-    try {
-      const { page = 1 } = params;
-      const response: UserListResponse = await UserModel.fetchUsersList(params);
-      const { usersList } = getState();
-      if (response) {
-        if (page === 1) {
-          actions.setUsersList(response.data);
-        } else {
-          actions.setUsersList([...(usersList || []), ...response.data]);
+  fetchUsersList: thunk(
+    async (actions, params, { getState, getStoreState }) => {
+      actions.setUsersListLoading(true);
+      try {
+        const { page = 1 } = params;
+        const { usersList } = getState();
+        const { isSuperAdmin } = getStoreState().AdminStore;
+        const response: UserListResponse = await UserModel.fetchUsersList({
+          ...params,
+          isSuperAdmin,
+        });
+        if (response) {
+          if (page === 1) {
+            actions.setUsersList(response.data);
+          } else {
+            actions.setUsersList([...(usersList || []), ...response.data]);
+          }
+          actions.setHasMore((usersList ?? [])?.length < response.total);
         }
-        actions.setHasMore((usersList ?? [])?.length < response.total);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.warn('Failed to fetch users:', error);
+      } finally {
+        actions.setUsersListLoading(false);
       }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn('Failed to fetch users:', error);
-    } finally {
-      actions.setUsersListLoading(false);
-    }
-  }),
+    },
+  ),
 };
 
 export default UserStore;

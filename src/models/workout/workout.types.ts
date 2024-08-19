@@ -1,4 +1,4 @@
-import { User } from '@/models/user/user.types';
+import { ICoachConnections, User } from '@/models/user/user.types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export enum WorkoutSessionStatus {
@@ -14,6 +14,7 @@ export interface UserWorkoutSessionParams {
   page?: number;
   limit?: number;
   search?: string;
+  isSuperAdmin?: boolean;
 }
 export enum LengthUnit {
   KM = 'km',
@@ -43,6 +44,7 @@ export interface UserWorkoutData {
   __v: number;
   workoutConfig: WorkoutConfig;
   endTime?: string;
+  coachConnections?: ICoachConnections;
 }
 export interface UserWorkoutDataResponse {
   data: UserWorkoutData[];

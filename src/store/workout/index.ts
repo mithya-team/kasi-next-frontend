@@ -1,5 +1,7 @@
 import { Action, action, Thunk, thunk } from 'easy-peasy';
 
+import { TRootStore } from '@/store';
+
 import workoutModel from '@/models/workout/workout.model';
 import {
   UserWorkoutData,
@@ -21,7 +23,9 @@ export interface TWorkoutStore {
   setIsWorkoutScheduleLoading: Action<TWorkoutStore, boolean>;
   fetchWorkoutScheduleData: Thunk<
     TWorkoutStore,
-    Omit<UserWorkoutSessionParams, 'userId'>
+    Omit<UserWorkoutSessionParams, 'userId'>,
+    null,
+    TRootStore
   >;
   workoutSessionDetails: WorkoutSessionDetails | null;
   setWorkoutSessionDetails: Action<TWorkoutStore, WorkoutSessionDetails | null>;
@@ -79,32 +83,38 @@ const WorkoutStore: TWorkoutStore = {
   setIsWorkoutScheduleLoading: action((state, payload) => {
     state.isWorkoutScheduleLoading = payload;
   }),
-  fetchWorkoutScheduleData: thunk(async (actions, params, { getState }) => {
-    actions.setIsWorkoutScheduleLoading(true);
-    try {
-      const { page = 1 } = params;
-      const response = await workoutModel.fetchWorkoutSchedule(params);
-      const { workoutScheduleData } = getState();
-      if (response) {
-        if (page === 1) {
-          actions.setWorkoutScheduleData(response.data);
-        } else {
-          actions.setWorkoutScheduleData([
-            ...(workoutScheduleData || []),
-            ...response.data,
-          ]);
+  fetchWorkoutScheduleData: thunk(
+    async (actions, params, { getState, getStoreState }) => {
+      actions.setIsWorkoutScheduleLoading(true);
+      try {
+        const { page = 1 } = params;
+        const { workoutScheduleData } = getState();
+        const { isSuperAdmin } = getStoreState().AdminStore;
+        const response = await workoutModel.fetchWorkoutSchedule({
+          ...params,
+          isSuperAdmin,
+        });
+        if (response) {
+          if (page === 1) {
+            actions.setWorkoutScheduleData(response.data);
+          } else {
+            actions.setWorkoutScheduleData([
+              ...(workoutScheduleData || []),
+              ...response.data,
+            ]);
+          }
+          actions.setHasMore(
+            (workoutScheduleData ?? [])?.length < response.totalCount,
+          );
         }
-        actions.setHasMore(
-          (workoutScheduleData ?? [])?.length < response.totalCount,
-        );
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.warn('Failed to fetch workout schedule data:', error);
+      } finally {
+        actions.setIsWorkoutScheduleLoading(false);
       }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn('Failed to fetch workout schedule data:', error);
-    } finally {
-      actions.setIsWorkoutScheduleLoading(false);
-    }
-  }),
+    },
+  ),
 
   // New states and actions implementation
   workoutSessionDetails: null,

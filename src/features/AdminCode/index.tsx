@@ -12,10 +12,11 @@ import Typo from '@/components/typography/Typo';
 import { useStoreActions, useStoreState } from '@/store';
 
 const AdminCode: FC<{ className?: string }> = ({ className }) => {
-  const { admin, adminCode } = useStoreState(
-    ({ AdminStore: { admin, adminCode } }) => ({
+  const { admin, adminCode, isSuperAdmin } = useStoreState(
+    ({ AdminStore: { admin, adminCode, isSuperAdmin } }) => ({
       admin,
       adminCode,
+      isSuperAdmin,
     }),
   );
   const { fetchAdminCode } = useStoreActions(
@@ -25,7 +26,7 @@ const AdminCode: FC<{ className?: string }> = ({ className }) => {
   );
 
   useEffect(() => {
-    if (!adminCode && admin) fetchAdminCode(admin?._id);
+    if (!adminCode && admin && !isSuperAdmin) fetchAdminCode(admin?._id);
   }, [admin]);
 
   if (!adminCode) return <></>;

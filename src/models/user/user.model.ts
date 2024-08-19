@@ -10,7 +10,14 @@ import {
 
 const userModel = {
   async fetchUsersList(params: UsersListParams) {
-    const { page = 1, limit = 15, search, sort, planIds } = params;
+    const {
+      page = 1,
+      limit = 15,
+      search,
+      sort,
+      planIds,
+      isSuperAdmin,
+    } = params;
     // Transform planIds array into the correct query string format
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // Serialize parameters, ensuring no "[]" for array
@@ -20,13 +27,14 @@ const userModel = {
     );
 
     const response = await request<UserListResponse>(
-      `/coach/users?${queryString}`,
+      `/coach/${isSuperAdmin ? 'users-by-admin' : 'users'}?${queryString}`,
       {
         method: 'GET',
       },
     );
     return response;
   },
+
   async fetchUserById(id: string) {
     return request<User>(`/users/${id}`);
   },

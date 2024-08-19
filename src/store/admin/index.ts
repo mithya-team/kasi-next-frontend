@@ -24,12 +24,16 @@ export interface TAdminState {
   adminCode: string | null;
   setAdminCode: Action<TAdminState, string | null>;
   fetchAdminCode: Thunk<TAdminState, string>;
+  isSuperAdmin: boolean; // New state for super admin
+  setSuperAdmin: Action<TAdminState, boolean>;
 }
 
 const AdminStore: TAdminState = {
   admin: null,
   setAdmin: action((state, payload) => {
     state.admin = payload;
+    // Check if the admin has the 'ADMIN' role and set isSuperAdmin
+    state.isSuperAdmin = payload?.roles.includes('ADMIN') ?? false;
   }),
   isLoading: false,
   setIsLoading: action((state, payload) => {
@@ -95,6 +99,10 @@ const AdminStore: TAdminState = {
     } catch (error) {
       console.log(error, 'fetching admin code');
     }
+  }),
+  isSuperAdmin: false, // Initialize to false
+  setSuperAdmin: action((state, payload) => {
+    state.isSuperAdmin = payload;
   }),
 };
 

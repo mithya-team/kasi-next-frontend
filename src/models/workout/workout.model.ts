@@ -16,9 +16,9 @@ const workoutModel = {
   },
 
   async fetchWorkoutSchedule(params: Omit<UserWorkoutSessionParams, 'userId'>) {
-    const { page = 1, limit = 15, search, sort, status } = params;
+    const { page = 1, limit = 15, search, sort, status, isSuperAdmin } = params;
     const response = request<WorkoutScheduleResponse>(
-      '/workout-sessions/schedule',
+      `/workout-sessions/${isSuperAdmin ? 'schedule-for-admin' : 'schedule'}`,
       {
         method: 'GET',
         params: {

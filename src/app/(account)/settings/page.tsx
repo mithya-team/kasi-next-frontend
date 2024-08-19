@@ -17,8 +17,12 @@ import adminModel from '@/models/admin/admin.model';
 import { ActiveProduct } from '@/models/admin/admin.types';
 
 const Settings = () => {
-  const { admin, adminCode } = useStoreState(
-    ({ AdminStore: { admin, adminCode } }) => ({ admin, adminCode }),
+  const { admin, adminCode, isSuperAdmin } = useStoreState(
+    ({ AdminStore: { admin, adminCode, isSuperAdmin } }) => ({
+      admin,
+      adminCode,
+      isSuperAdmin,
+    }),
   );
   const { fetchAdminCode } = useStoreActions(
     ({ AdminStore: { fetchAdminCode } }) => ({
@@ -42,17 +46,17 @@ const Settings = () => {
   }, []);
 
   useEffect(() => {
-    if (!adminCode && admin) fetchAdminCode(admin?._id);
+    if (!adminCode && admin && !isSuperAdmin) fetchAdminCode(admin?._id);
   }, [admin]);
 
   const settingConfig = useMemo(
-    () => getSettingItem(admin, adminCode),
+    () => getSettingItem(admin, adminCode, isSuperAdmin),
     [adminCode, admin],
   );
 
   return (
     <div className='flex flex-col gap-9 mx-auto w-[32.5rem] items-center justify-center py-10'>
-      <PlanStatus activeProduct={activeSubscription} />
+      {isSuperAdmin ? null : <PlanStatus activeProduct={activeSubscription} />}
       {settingConfig?.map((config) => {
         return (
           <Link

@@ -15,9 +15,14 @@ interface UsersListTableProps {
     user: User | UnConfirmedUserWithDetails,
     action: ActionType,
   ) => void;
+  isSuperAdmin?: boolean;
 }
 
-const UsersListTable: FC<UsersListTableProps> = ({ user, onAction }) => {
+const UsersListTable: FC<UsersListTableProps> = ({
+  user,
+  onAction,
+  isSuperAdmin = false,
+}) => {
   const { status, className } = getPlanStatusTag(
     user?.athleteSubscription?.[0],
   );
@@ -31,6 +36,11 @@ const UsersListTable: FC<UsersListTableProps> = ({ user, onAction }) => {
       <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
         <Link href={`/user/${user._id}`}>{user?.fullName}</Link>
       </div>
+      {isSuperAdmin ? (
+        <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
+          {user?.coachConnection?.coachDetails?.fullName ?? '-'}
+        </div>
+      ) : null}
       <div className='w-[12%] p-5'>
         {parseDate(user?.createdAt, 'MMMM D, YYYY')}
       </div>

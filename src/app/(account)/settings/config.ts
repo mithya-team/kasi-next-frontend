@@ -7,17 +7,11 @@ import { User } from '@/models/user/user.types';
 export const getSettingItem = (
   admin: User | null,
   code: string | null,
+  isSuperAdmin?: boolean,
 ): SettingItemConfig[] => {
   if (!admin) return [];
 
   const settings: SettingItemConfig[] = [
-    {
-      id: SettingItemType.CODE,
-      label: 'Code',
-      value: code ?? '',
-      icon: 'code',
-      href: SETTING_ROUTE.CODE.path,
-    },
     {
       id: SettingItemType.NAME,
       label: 'Name',
@@ -26,7 +20,14 @@ export const getSettingItem = (
       href: SETTING_ROUTE.NAME.path,
     },
   ];
-
+  if (!isSuperAdmin)
+    settings.push({
+      id: SettingItemType.CODE,
+      label: 'Code',
+      value: code ?? '',
+      icon: 'code',
+      href: SETTING_ROUTE.CODE.path,
+    });
   if (!admin.emailVerified) {
     settings.push({
       label: 'Email Address',

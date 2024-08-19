@@ -17,7 +17,9 @@ export interface RightHeaderProps {
   rightHeaderClass?: string;
 }
 const RightHeader: FC<RightHeaderProps> = ({ rightHeaderClass }) => {
-  const { admin } = useStoreState(({ AdminStore: { admin } }) => ({ admin }));
+  const { admin, isSuperAdmin } = useStoreState(
+    ({ AdminStore: { admin, isSuperAdmin } }) => ({ admin, isSuperAdmin }),
+  );
 
   const [openPopover, setOpenPopover] = useState(false);
 
@@ -48,7 +50,12 @@ const RightHeader: FC<RightHeaderProps> = ({ rightHeaderClass }) => {
         <Popover
           open={openPopover}
           onOpenChange={setOpenPopover}
-          content={<PopoverContent closePopover={closePopover} />}
+          content={
+            <PopoverContent
+              closePopover={closePopover}
+              isSuperAdmin={isSuperAdmin}
+            />
+          }
         >
           <div
             onClick={() => setOpenPopover(!openPopover)}
@@ -85,21 +92,17 @@ export default RightHeader;
 
 interface PopoverContentProps {
   closePopover: () => void;
+  isSuperAdmin?: boolean;
 }
 
-const PopoverContent: FC<PopoverContentProps> = ({ closePopover }) => {
+const PopoverContent: FC<PopoverContentProps> = ({
+  closePopover,
+  isSuperAdmin = false,
+}) => {
   const { logout } = useAuthActions();
   const router = useRouter();
 
-  const contentConfig = [
-    // {
-    //   title: 'Settings',
-    //   icon: 'setting' as IconName,
-    //   onClick: () => {
-    //     router.push(ROUTE.SETTING_ROUTE.path);
-    //     closePopover();
-    //   },
-    // },
+  let contentConfig = [
     {
       title: 'Subscriptions',
       icon: 'payment' as IconName,
@@ -117,6 +120,11 @@ const PopoverContent: FC<PopoverContentProps> = ({ closePopover }) => {
       },
     },
   ];
+
+  // Remove the first item if the user is a super admin
+  if (isSuperAdmin) {
+    contentConfig = contentConfig.slice(1);
+  }
 
   return contentConfig.map((config, idx) => (
     <div key={idx} className=''>
