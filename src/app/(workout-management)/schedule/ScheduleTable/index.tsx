@@ -42,7 +42,7 @@ const ScheduleTable: FC<ScheduleTableProps> = ({
       <div className='w-[15%] p-5'>
         {parseDate(data?.startTime ?? '', 'MMMM D, YYYY')}
       </div>
-      <div className='w-[15%] p-5'> {parseTime(user?.createdAt ?? '')}</div>
+      <div className='w-[15%] p-5'> {parseTime(data?.startTime ?? '')}</div>
     </div>
   );
 };
