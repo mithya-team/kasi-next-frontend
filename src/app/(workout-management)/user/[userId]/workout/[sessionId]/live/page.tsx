@@ -127,7 +127,7 @@ const LiveScreen: FC = () => {
               level='h4'
               classes='font-secondary font-semibold text-lg p-4 w-fit text-white'
             >
-              Please update your phone number
+              Cannot initiate phone call. Runner’s phone number not found.
             </Typo>
           )}
         </div>

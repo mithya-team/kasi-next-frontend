@@ -1,8 +1,6 @@
-import { isAxiosError } from 'axios';
 import { usePathname } from 'next/navigation';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
-import { toast } from '@/lib/toast';
 import { cn } from '@/lib/utils';
 
 import Button from '@/components/Buttons';
@@ -10,12 +8,15 @@ import CheckboxInput from '@/components/CheckboxInput';
 import Popover from '@/components/Popover';
 import SvgIcon from '@/components/SvgIcon';
 
-import { useStoreActions, useStoreState } from '@/store';
+import { useStoreState } from '@/store';
 
 import { ProductPlanId } from '@/models/user/user.types';
 import { WorkoutSessionStatus } from '@/models/workout/workout.types';
 
-const HeaderFilter: FC = () => {
+interface HeaderFilterProps {
+  handleCheckboxChange: (config: IConfig) => Promise<void>;
+}
+const HeaderFilter: FC<HeaderFilterProps> = ({ handleCheckboxChange }) => {
   const [openPopover, setOpenPopover] = useState(false);
   const pathName = usePathname();
 
@@ -26,63 +27,6 @@ const HeaderFilter: FC = () => {
       usersScreenFilter,
     }),
   );
-  const {
-    fetchUsersList,
-    fetchWorkoutScheduleData,
-    updateScheduleFilters,
-    updateUsersScreenFilter,
-  } = useStoreActions(
-    ({
-      UserStore: { fetchUsersList },
-      WorkoutStore: { fetchWorkoutScheduleData },
-      filterStore: { updateUsersScreenFilter, updateScheduleFilters },
-    }) => ({
-      fetchUsersList,
-      fetchWorkoutScheduleData,
-      updateScheduleFilters,
-      updateUsersScreenFilter,
-    }),
-  );
-
-  const handleOnClick = async () => {
-    try {
-      if (isScheduleScreen) {
-        await fetchWorkoutScheduleData({
-          status: scheduleFilters,
-        });
-      } else {
-        await fetchUsersList({ planIds: usersScreenFilter as ProductPlanId[] });
-      }
-    } catch (error) {
-      if (isAxiosError(error))
-        toast.error(error?.response?.data?.message || 'Try Again');
-    }
-  };
-
-  const handleCheckboxChange = (config: IConfig) => {
-    const isSelected = isScheduleScreen
-      ? scheduleFilters.includes(config.id as WorkoutSessionStatus)
-      : usersScreenFilter.includes(config.id as ProductPlanId);
-
-    const newSelectedItems = isSelected
-      ? (isScheduleScreen ? scheduleFilters : usersScreenFilter).filter(
-          (id) => id !== config.id,
-        )
-      : [
-          ...(isScheduleScreen ? scheduleFilters : usersScreenFilter),
-          config.id,
-        ];
-
-    if (isScheduleScreen) {
-      updateScheduleFilters(newSelectedItems as WorkoutSessionStatus[]);
-    } else {
-      updateUsersScreenFilter(newSelectedItems as ProductPlanId[]);
-    }
-  };
-
-  useEffect(() => {
-    handleOnClick();
-  }, [scheduleFilters, usersScreenFilter]);
 
   return (
     <Popover
@@ -95,13 +39,13 @@ const HeaderFilter: FC = () => {
           isScheduleScreen={isScheduleScreen}
         />
       }
-      containerClassName={cn({ ['w-[17rem]']: !isScheduleScreen })}
+      containerClassName={cn('gap-0', { ['w-[17rem]']: !isScheduleScreen })}
     >
       <div
         onClick={() => setOpenPopover(!openPopover)}
-        className='px-[15px] w-[54px] flex justify-center items-center h-[54px] py-[18px] border-[1px] border-gray-600 rounded-xl'
+        className='flex justify-center items-center'
       >
-        <SvgIcon name='sort' />
+        <SvgIcon pathFill='#9CA3AF' name='down-arrow' />
       </div>
     </Popover>
   );
@@ -134,7 +78,7 @@ const PopoverContent: FC<PopoverContentProps> = ({
             className='flex flex-col justify-center items-center'
             onClick={() => handleCheckboxChange(config)}
           >
-            <div className='flex flex-row text-left gap-4 items-center p-2 h-full w-full'>
+            <div className='flex flex-row text-left gap-4 items-center px-3 h-full w-full'>
               <CheckboxInput
                 checked={isChecked}
                 onChange={() => handleCheckboxChange(config)}
@@ -144,7 +88,11 @@ const PopoverContent: FC<PopoverContentProps> = ({
                 {config.label}
               </span>
             </div>
-            <div className='w-full h-[1px] opacity-20 bg-gray-1' />
+            {idx === rowsConfig.length - 1 ? (
+              <></>
+            ) : (
+              <div className='w-full h-[1px] my-3 opacity-20 bg-gray-1' />
+            )}
           </Button>
         );
       })}
@@ -152,7 +100,7 @@ const PopoverContent: FC<PopoverContentProps> = ({
   );
 };
 
-interface IConfig {
+export interface IConfig {
   label: string;
   id: ProductPlanId | WorkoutSessionStatus;
 }

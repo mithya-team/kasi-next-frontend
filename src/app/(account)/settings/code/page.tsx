@@ -1,10 +1,9 @@
 'use client';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { toast } from '@/lib/toast';
-import useAsyncTask from '@/hooks/useAsyncTask';
 
 import PrimaryButton from '@/components/Buttons/PrimaryButton';
 import TertiaryButton from '@/components/Buttons/TertiaryButton';
@@ -14,9 +13,12 @@ import { useStoreActions, useStoreState } from '@/store';
 
 import { ROUTE } from '@/constant/route';
 import AdminCode from '@/features/AdminCode';
+import ConfirmationDialog from '@/features/ConfirmationDialog';
 import adminModel from '@/models/admin/admin.model';
 
 const Code: FC = () => {
+  const [openDialog, setDialogOpen] = useState(false);
+
   const { admin } = useStoreState(({ AdminStore: { admin } }) => ({ admin }));
   const { setAdminCode } = useStoreActions(
     ({ AdminStore: { setAdminCode } }) => ({
@@ -26,16 +28,17 @@ const Code: FC = () => {
 
   const router = useRouter();
 
-  const onRegenerateCoachCode = useAsyncTask(async () => {
+  const onRegenerateCoachCode = async () => {
     if (!admin?._id) return;
     try {
       const res = await adminModel.generateInviteCode(admin?._id);
       if (res?.code) setAdminCode(res.code);
+      setDialogOpen(false);
     } catch (error) {
       if (isAxiosError(error))
         toast.error(error?.response?.data?.message || 'Try Again');
     }
-  });
+  };
 
   return (
     <div className='flex flex-col gap-9 mt-[60px] justify-center items-center mx-auto w-[25rem]'>
@@ -46,18 +49,12 @@ const Code: FC = () => {
         Code
       </Typo>
       <div className='flex flex-col gap-5'>
-        <Typo classes='font-primary text-base text-gray-300 text-center '>
-          Your new code is...
-        </Typo>
         <AdminCode className='mt-0' />
       </div>
 
       <div className='flex flex-row w-full gap-5'>
-        <TertiaryButton
-          onClick={() => onRegenerateCoachCode.run()}
-          isLoading={onRegenerateCoachCode.isLoading}
-        >
-          Regenerator
+        <TertiaryButton onClick={() => setDialogOpen(true)}>
+          Regenerate
         </TertiaryButton>
         <PrimaryButton
           type='submit'
@@ -66,6 +63,26 @@ const Code: FC = () => {
           Save
         </PrimaryButton>
       </div>
+      <ConfirmationDialog
+        open={openDialog}
+        onClose={() => setDialogOpen(false)}
+        onAgree={onRegenerateCoachCode}
+      >
+        <div className='flex flex-col gap-4'>
+          <Typo
+            level='h2'
+            classes='font-secondary font-semibold text-white text-center tracking-[-0.225px]'
+          >
+            Are you sure!
+          </Typo>
+          <Typo
+            level='h2'
+            classes='font-secondary font-semibold text-white text-center tracking-[-0.225px]'
+          >
+            You want to regenerate code
+          </Typo>
+        </div>
+      </ConfirmationDialog>
     </div>
   );
 };

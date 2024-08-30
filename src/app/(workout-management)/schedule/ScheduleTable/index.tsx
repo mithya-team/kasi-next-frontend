@@ -1,32 +1,43 @@
 import Link from 'next/link';
 import { FC } from 'react';
 
+import { toast } from '@/lib/toast';
 import { getHref, parseDate, parseTime } from '@/lib/utils';
 
 import WorkoutStatus from '@/components/WorkoutStatus';
 
-import { WorkoutScheduleData } from '@/models/workout/workout.types';
+import {
+  WorkoutScheduleData,
+  WorkoutSessionStatus,
+} from '@/models/workout/workout.types';
 
 interface ScheduleTableProps {
   data: WorkoutScheduleData;
-  onClick?: () => void;
   isSuperAdmin?: boolean;
 }
 const ScheduleTable: FC<ScheduleTableProps> = ({
   data,
-  onClick,
   isSuperAdmin = false,
 }) => {
-  const { user } = data;
+  const { user, status } = data;
+  const handleLinkClick = () => {
+    if (status === WorkoutSessionStatus.CANCELLED) {
+      toast.info('No info to display'); // Show the toast notification
+    }
+  };
+
   return (
-    <div className='flex border-b justify-center items-center border-gray-800 text-sm leading-[14px] text-white'>
-      <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
-        <Link
-          href={getHref(data?._id, data?.status, data?.userId) ?? '/'}
-          onClick={onClick}
-        >
-          {user?.fullName}
-        </Link>
+    <Link
+      href={
+        status !== WorkoutSessionStatus.CANCELLED
+          ? getHref(data?._id, status, data?.userId) ?? '/'
+          : '#'
+      }
+      onClick={handleLinkClick}
+      className='flex border-b justify-center items-center border-gray-800 text-sm leading-[14px] text-white'
+    >
+      <div className='flex-1 p-5 text-ellipsis text-base font-medium text-gray-400 overflow-hidden'>
+        {user?.fullName}
       </div>
       {isSuperAdmin ? (
         <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
@@ -43,7 +54,7 @@ const ScheduleTable: FC<ScheduleTableProps> = ({
         {parseDate(data?.startTime ?? '', 'MMMM D, YYYY')}
       </div>
       <div className='w-[15%] p-5'> {parseTime(data?.startTime ?? '')}</div>
-    </div>
+    </Link>
   );
 };
 

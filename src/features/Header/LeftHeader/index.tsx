@@ -11,7 +11,6 @@ import TextInput from '@/components/TextInput';
 import { useStoreState } from '@/store';
 
 import WorkoutLeftHeader from '@/features/Header/WorkoutLeftHeader';
-import HeaderFilter from '@/features/HeaderFilter';
 import { WorkoutSessionStatus } from '@/models/workout/workout.types';
 
 export interface LeftHeaderProps {
@@ -92,7 +91,6 @@ const SearchView: FC<LeftHeaderProps> = ({ onSearch }) => {
           className='gap-0'
         />
       </div>
-      <HeaderFilter />
     </>
   );
 };

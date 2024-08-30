@@ -50,6 +50,7 @@ const RightHeader: FC<RightHeaderProps> = ({ rightHeaderClass }) => {
         <Popover
           open={openPopover}
           onOpenChange={setOpenPopover}
+          containerClassName='gap-0'
           content={
             <PopoverContent
               closePopover={closePopover}
@@ -130,14 +131,18 @@ const PopoverContent: FC<PopoverContentProps> = ({
     <div key={idx} className=''>
       <Button
         onClick={config?.onClick}
-        className='flex flex-row justify-start gap-3 py-2 w-full'
+        className='flex flex-row justify-start gap-4 w-full'
       >
         <SvgIcon name={config.icon} className='w-6 h-6' />
         <span className='font-primary font-medium text-gray-50'>
           {config.title}
         </span>
       </Button>
-      <div className='w-full h-[1px] opacity-20 bg-gray-1' />
+      {idx === contentConfig.length - 1 ? (
+        <></>
+      ) : (
+        <div className='w-full h-[1px] my-5 opacity-20 bg-gray-1' />
+      )}
     </div>
   ));
 };

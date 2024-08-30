@@ -53,12 +53,14 @@ export const getHref = (
   switch (status) {
     case WorkoutSessionStatus.PAST:
       return `user/${userId}/workout/${id}/past`;
+    case WorkoutSessionStatus.Recovery:
+      return `user/${userId}/workout/${id}/live`;
     case WorkoutSessionStatus.RUNNING:
       return `user/${userId}/workout/${id}/live`;
     case WorkoutSessionStatus.YET_TO_START:
       return `user/${userId}/workout/${id}/upcoming`;
     default:
-      break;
+      return '#';
   }
 };
 

@@ -40,6 +40,8 @@ export const toast = {
   ) => _toast.success<T>(content, getToastOptions<T>({ containerId })),
   error: <T = unknown>(content: ToastContent, containerId = GLOBAL_TOAST_ID) =>
     _toast.error<T>(content, getToastOptions<T>({ containerId })),
+  info: <T = unknown>(content: ToastContent, containerId = GLOBAL_TOAST_ID) =>
+    _toast.info<T>(content, getToastOptions<T>({ containerId })),
 };
 
 export const ToastContainer = _ToastContainer;

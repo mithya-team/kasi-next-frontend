@@ -6,6 +6,7 @@ export enum WorkoutSessionStatus {
   YET_TO_START = 'Yet to start',
   Recovery = 'Recovery',
   PAST = 'End',
+  CANCELLED = 'Cancelled',
 }
 export interface UserWorkoutSessionParams {
   userId: string;

@@ -1,5 +1,6 @@
 'use client';
 import { isAxiosError } from 'axios';
+import Image from 'next/image';
 import { FC, useEffect, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -17,6 +18,7 @@ import UsersListTable, {
   isUnConfirmedUserWithDetails,
 } from '@/app/(workout-management)/users/UsersListTable';
 import ConfirmationDialog from '@/features/ConfirmationDialog';
+import HeaderFilter, { IConfig } from '@/features/HeaderFilter';
 import withAuth from '@/hoc/withAuth';
 import adminModel from '@/models/admin/admin.model';
 import { UnConfirmedUserWithDetails } from '@/models/admin/admin.types';
@@ -63,6 +65,7 @@ const UsersListingPage: FC = () => {
     fetchUserConnections,
     updateConfirmedUsers,
     updateUsersScreenSort,
+    updateUsersScreenFilter,
   } = useStoreActions(
     ({
       UserStore: { fetchUsersList },
@@ -70,12 +73,13 @@ const UsersListingPage: FC = () => {
         fetchUnConfirmedUsers: fetchUserConnections,
         updateConfirmedUsers,
       },
-      filterStore: { updateUsersScreenSort },
+      filterStore: { updateUsersScreenSort, updateUsersScreenFilter },
     }) => ({
       fetchUsersList,
       fetchUserConnections,
       updateConfirmedUsers,
       updateUsersScreenSort,
+      updateUsersScreenFilter,
     }),
   );
 
@@ -114,6 +118,25 @@ const UsersListingPage: FC = () => {
     }
   };
 
+  const handleCheckboxChange = async (config: IConfig) => {
+    const isSelected = usersScreenFilter.includes(config.id as ProductPlanId);
+
+    const newSelectedItems = isSelected
+      ? usersScreenFilter.filter((id) => id !== config.id)
+      : [...usersScreenFilter, config.id];
+    try {
+      updateUsersScreenFilter(newSelectedItems as ProductPlanId[]);
+      await fetchUsersList({
+        planIds: newSelectedItems as ProductPlanId[],
+        sort: `${usersScreenSort === 'asc' ? '+' : '-'}createdAt`,
+        page: 1,
+      });
+    } catch (error) {
+      if (isAxiosError(error))
+        toast.error(error?.response?.data?.message || 'Try Again');
+    }
+  };
+
   const filteredUnconfirmedUsers = unConfirmedUsers?.filter(
     (unconfirmedUser) =>
       (unconfirmedUser.status === 'requested' ||
@@ -133,64 +156,71 @@ const UsersListingPage: FC = () => {
     [filteredUnconfirmedUsers, usersList],
   );
 
-  const handleSortClick = () => {
-    updateUsersScreenSort(usersScreenSort === 'asc' ? 'desc' : 'asc');
-    setCurrentPage(1); // Reset to the first page when sorting
-  };
-
-  useEffect(() => {
-    fetchUsersList({
-      page: currentPage,
-      sort: `${usersScreenSort === 'asc' ? '+' : '-'}createdAt`,
-      planIds: usersScreenFilter as ProductPlanId[],
-    });
-
-    return () => {
-      setDialogOpen(false);
-      setActionType(undefined);
-    };
-  }, [currentPage, usersScreenSort]);
-
   useEffect(() => {
     if (usersList?.length && admin) {
       const userIds = usersList?.map((user) => user._id);
       fetchUserConnections({ coachId: admin._id, userIds });
     }
-  }, []);
-
-  if (isLoading && !usersList?.length) return <Loader className='h-[100vh]' />;
+    return () => {
+      setDialogOpen(false);
+      setActionType(undefined);
+    };
+  }, [admin]);
 
   return (
     <div
       id='users-scrollable-div'
       className='w-full px-5 font-medium font-primary h-full overflow-y-scroll'
     >
-      <div className='flex bg-gray-800 text-base text-gray-400 mb-5'>
-        <div className='flex-1 py-3 pl-5'>Username</div>
+      <div className='flex sticky top-0 bg-gray-800 text-base text-gray-400 mb-5'>
+        <div className='flex-1 py-3 pl-5'>Runner</div>
         {isSuperAdmin ? <div className='flex-1 py-3 pl-5'>Coach</div> : null}
         <div className='w-[12%] flex flex-row justify-between py-3 pl-5'>
           <Typo>Joined</Typo>
           <Button
-            onClick={handleSortClick}
-            className={`mr-5 transform transition-transform ${
-              usersScreenSort === 'desc' ? '' : 'rotate-180'
-            }`}
+            onClick={() => {
+              fetchUsersList({
+                page: 1,
+                sort: `${usersScreenSort === 'asc' ? '-' : '+'}createdAt`,
+                planIds: usersScreenFilter as ProductPlanId[],
+              });
+              updateUsersScreenSort(usersScreenSort === 'asc' ? 'desc' : 'asc');
+              setCurrentPage(1);
+            }}
+            className='mr-5 transform transition-transform'
           >
-            <SvgIcon pathFill='#9CA3AF' name='down-arrow' />
+            <Image
+              src={
+                usersScreenSort === 'desc'
+                  ? '/images/desc.png'
+                  : '/images/asc.png'
+              }
+              alt='sort-icon'
+              width={16}
+              height={16}
+            />
           </Button>
         </div>
-        <div className='w-[16.91%] py-3 pl-5'>Plan</div>
+        <div className='w-[16.91%] flex flex-row justify-between py-3 px-5'>
+          <Typo>Membership</Typo>
+          <HeaderFilter handleCheckboxChange={handleCheckboxChange} />
+        </div>
         <div className='flex-1 py-3 pl-5'>Email</div>
-        <div className='w-[18%] py-3 pl-5'>Membership Status</div>
+        <div className='w-[18%] py-3 pl-5'>Connection Status</div>
       </div>
-      {!allUsers.length ? (
-        <Empty />
-      ) : (
+      {allUsers.length ? (
         <InfiniteScroll
-          next={() => setCurrentPage((prevPage) => prevPage + 1)}
+          next={() => {
+            fetchUsersList({
+              page: currentPage + 1,
+              sort: `${usersScreenSort === 'asc' ? '+' : '-'}createdAt`,
+              planIds: usersScreenFilter as ProductPlanId[],
+            });
+            setCurrentPage((prevPage) => prevPage + 1);
+          }}
           hasMore={hasMore}
-          loader={undefined}
-          dataLength={usersList?.length ?? 0}
+          loader={<Loader />}
+          dataLength={(usersList ?? []).length}
           scrollableTarget='users-scrollable-div'
           scrollThreshold={0.5}
         >
@@ -203,6 +233,10 @@ const UsersListingPage: FC = () => {
             />
           ))}
         </InfiniteScroll>
+      ) : isLoading ? (
+        <Loader />
+      ) : (
+        <Empty />
       )}
       <ConfirmationDialog
         open={isDialogOpen}
@@ -222,7 +256,7 @@ const UsersListingPage: FC = () => {
           <Typo classes='font-primary text-gray-500 text-base text-center'>
             {actionType === 'accept'
               ? `${selectedUser?.fullName} has requested to join you.`
-              : `       Please confirm if you wish to decline ${selectedUser?.fullName} request to join. This action cannot be undone.`}
+              : `This action is irreversible and ${selectedUser?.fullName} will no longer be able to connect.`}
           </Typo>
         </div>
       </ConfirmationDialog>

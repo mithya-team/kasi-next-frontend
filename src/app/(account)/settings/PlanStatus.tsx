@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 
@@ -33,7 +34,7 @@ const PlanStatus: FC<PlanStatusProps> = ({ activeProduct }) => {
               : 'expired'
           }
         />
-        <div className='flex flex-col w-[12.25rem]'>
+        <div className='flex flex-col'>
           <Typo
             level='h4'
             classes='font-secondary font-semibold text-gray-50 tracking-[-0.01px]'
@@ -42,6 +43,15 @@ const PlanStatus: FC<PlanStatusProps> = ({ activeProduct }) => {
             activeProduct?.subscription?.status === 'delete_after_expiration'
               ? activeProduct?.name
               : ' Free trial expired'}
+          </Typo>
+          <Typo
+            level='h4'
+            classes='font-secondary font-semibold text-gradient-1 tracking-[-0.01px]'
+          >
+            {activeProduct?.subscription?.status === 'active' ||
+            activeProduct?.subscription?.status === 'delete_after_expiration'
+              ? getPlanStatusText(activeProduct)
+              : null}
           </Typo>
           <Typo
             classes={cn(
@@ -70,4 +80,29 @@ const getSubtext = (activeProduct?: ActiveProduct) => {
     return 'active';
   }
   return 'Please renew to continue enjoying our services.';
+};
+
+const getPlanStatusText = (activeProduct: ActiveProduct) => {
+  if (!activeProduct?.subscription) return '';
+
+  const { creditDurationInDays, creditDurationInMonths } = activeProduct;
+  const currentPeriodStart = dayjs(
+    activeProduct?.subscription.currentPeriodStart,
+  );
+
+  let endDate = currentPeriodStart;
+  if (creditDurationInDays) {
+    endDate = currentPeriodStart.add(creditDurationInDays, 'day');
+  } else if (creditDurationInMonths) {
+    endDate = currentPeriodStart.add(creditDurationInMonths, 'month');
+  }
+
+  const today = dayjs();
+  const formattedEndDate = endDate.format('MMM DD');
+
+  if (endDate.isBefore(today)) {
+    return `Ended on ${formattedEndDate}`;
+  } else {
+    return `Ends on ${formattedEndDate}`;
+  }
 };

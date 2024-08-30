@@ -11,14 +11,18 @@ export interface WorkoutStatusProps {
 const WorkoutStatus: FC<WorkoutStatusProps> = ({ status }) => {
   const renderStatusText = (status: WorkoutSessionStatus) => {
     switch (status) {
-      case WorkoutSessionStatus.RUNNING || WorkoutSessionStatus.Recovery:
+      case WorkoutSessionStatus.CANCELLED:
+        return 'Cancelled';
+      case WorkoutSessionStatus.RUNNING:
+        return 'Live';
+      case WorkoutSessionStatus.Recovery:
         return 'Live';
       case WorkoutSessionStatus.YET_TO_START:
         return 'Upcoming';
       case WorkoutSessionStatus.PAST:
         return 'Past';
       default:
-        return 'Upcoming';
+        break;
     }
   };
 
@@ -27,11 +31,14 @@ const WorkoutStatus: FC<WorkoutStatusProps> = ({ status }) => {
       className={cn(
         'flex justify-center items-center w-fit  flex-row gap-1.5 py-0.5 px-2.5 rounded-md text-white text-sm font-primary bg-gray-700 font-semibold',
         {
-          ['bg-violet-700']: status === WorkoutSessionStatus.RUNNING,
+          ['bg-violet-700']:
+            status === WorkoutSessionStatus.RUNNING ||
+            status === WorkoutSessionStatus.Recovery,
         },
       )}
     >
-      {status === WorkoutSessionStatus.RUNNING ? (
+      {status === WorkoutSessionStatus.RUNNING ||
+      status === WorkoutSessionStatus.Recovery ? (
         <div className='w-2 h-2 bg-white rounded-full' />
       ) : null}
       {renderStatusText(status)}

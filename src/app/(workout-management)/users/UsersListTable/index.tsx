@@ -32,9 +32,12 @@ const UsersListTable: FC<UsersListTableProps> = ({
   )
     return <></>;
   return (
-    <div className='flex border-b border-gray-800 text-sm leading-[14px] text-white'>
-      <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
-        <Link href={`/user/${user._id}`}>{user?.fullName}</Link>
+    <Link
+      href={`/user/${user._id}`}
+      className='flex border-b border-gray-800 text-sm leading-[14px] text-white'
+    >
+      <div className='flex-1 p-5 text-base text-ellipsis overflow-hidden text-gray-400 font-medium'>
+        {user?.fullName}
       </div>
       {isSuperAdmin ? (
         <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
@@ -49,7 +52,7 @@ const UsersListTable: FC<UsersListTableProps> = ({
         {user?.email}
       </div>
       {renderUnconfirmedUserStatus(user, onAction)}
-    </div>
+    </Link>
   );
 };
 

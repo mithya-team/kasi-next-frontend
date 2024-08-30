@@ -7,6 +7,7 @@ import { FC } from 'react';
 import { cn } from '@/lib/utils';
 
 import SvgIcon, { ISvgIconProps } from '@/components/SvgIcon';
+import Tooltip from '@/components/Tooltip';
 
 import { ROUTE } from '@/constant/route';
 
@@ -17,10 +18,14 @@ const links = [
   {
     name: 'users' as ISvgIconProps['name'],
     href: ROUTE.USER_LIST_ROUTE.path,
+    id: 'runners-tab',
+    tooltipText: 'Runners',
   },
   {
     name: 'run' as ISvgIconProps['name'],
     href: ROUTE.SCHEDULE_ROUTE.path,
+    id: 'schedule-tab',
+    tooltipText: 'Schedules',
   },
   // {
   //   name: 'subscription' as ISvgIconProps['name'],
@@ -29,6 +34,8 @@ const links = [
   {
     name: 'setting' as ISvgIconProps['name'],
     href: ROUTE.SETTING_ROUTE.path,
+    id: 'setting-tab',
+    tooltipText: 'Settings',
   },
 ];
 const DashboardSidebar: FC<DashboardSidebarProps> = ({ className }) => {
@@ -52,12 +59,19 @@ const DashboardSidebar: FC<DashboardSidebarProps> = ({ className }) => {
       </div>
 
       <ul className='py-5 px-3.5 gap-2.5 flex flex-col justify-center items-center'>
-        {links?.map(({ name, ...link }, idx) => {
+        {links?.map(({ name, ...link }) => {
           const isActive = pathname === link.href;
           return (
-            <Link className='p-2.5' key={idx} href={link?.href}>
-              <SvgIcon name={name} pathFill={isActive ? 'white' : '#6B7280'} />
-            </Link>
+            <div key={link.id} className='p-2.5'>
+              <Tooltip key={link.id} content={link.tooltipText}>
+                <Link data-tooltip-id={link.id} key={link.id} href={link?.href}>
+                  <SvgIcon
+                    name={name}
+                    pathFill={isActive ? 'white' : '#6B7280'}
+                  />
+                </Link>
+              </Tooltip>
+            </div>
           );
         })}
       </ul>

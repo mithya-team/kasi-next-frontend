@@ -21,7 +21,7 @@ export function copyToClipboard(text: string, toastMessage?: string) {
   navigator.clipboard
     .writeText(text)
     .then(() => {
-      toast.success(toastMessage ?? 'Code copied to clipboard successfully!');
+      toast.success(toastMessage ?? 'Code copied!');
     })
     .catch((err) => {
       toast.error('Failed to copy text to clipboard:', err);

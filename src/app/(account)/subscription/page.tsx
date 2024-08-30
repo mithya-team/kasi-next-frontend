@@ -8,7 +8,6 @@ import { toast } from '@/lib/toast';
 
 import Dialog from '@/components/Dialog';
 import SubscriptionCard from '@/components/SubscriptionCard';
-import SvgIcon from '@/components/SvgIcon';
 import Typo from '@/components/typography/Typo';
 
 import Cards from '@/app/(account)/subscription/Cards';
@@ -29,6 +28,7 @@ const stripeKey = APP_CONFIG.STRIPE_PUBLISHABLE_KEY;
 let stripePromise: Promise<Stripe | null>;
 
 if (stripeKey) stripePromise = loadStripe(stripeKey);
+
 const SubscriptionScreen = () => {
   const [openPaymentDialog, setPaymentDialog] = useState(false);
   const [subscriptionProducts, setSubscriptionProducts] =
@@ -122,6 +122,12 @@ const SubscriptionScreen = () => {
   if (isPaymentSuccessful)
     return <Success onContinue={() => setPaymentSuccessful(false)} />;
 
+  const filteredProducts = subscriptionProducts
+    ? Object.values(subscriptionProducts).filter(
+        (product) => product.planId !== activeSubscription?.planId,
+      )
+    : [];
+
   return (
     <div className='mx-auto flex flex-col w-[53.75rem] items-center gap-9 py-10'>
       {activeSubscription ? (
@@ -130,10 +136,16 @@ const SubscriptionScreen = () => {
         activeSubscription.creditDurationInDays <= 0 ? (
           <>
             <SubscriptionInfo />
-            <Cards
-              subscriptionProducts={subscriptionProducts}
-              onClick={handleOnSubscribe}
-            />
+            {subscriptionProducts && (
+              <Cards
+                products={[
+                  subscriptionProducts.PAID_TIER_1_MONTH,
+                  subscriptionProducts.PAID_TIER_6_MONTHS,
+                  subscriptionProducts.PAID_TIER_12_MONTHS,
+                ]}
+                onClick={handleOnSubscribe}
+              />
+            )}
           </>
         ) : (
           <>
@@ -148,6 +160,9 @@ const SubscriptionScreen = () => {
               onClick={openCancelPlanDialog}
               product={activeSubscription}
             />
+            {filteredProducts.length > 0 && (
+              <Cards products={filteredProducts} onClick={handleOnSubscribe} />
+            )}
           </>
         )
       ) : null}
@@ -156,7 +171,7 @@ const SubscriptionScreen = () => {
         onClose={() => setPaymentDialog(false)}
         hasKasiIcon={false}
       >
-        {clientSecret ? (
+        {clientSecret && (
           <Elements
             stripe={stripePromise}
             options={{
@@ -174,7 +189,7 @@ const SubscriptionScreen = () => {
               handleOnSuccess={handleOnPaymentSuccess}
             />
           </Elements>
-        ) : null}
+        )}
       </Dialog>
       <ConfirmationDialog
         open={openCancelSubscriptionDialog}
@@ -186,7 +201,6 @@ const SubscriptionScreen = () => {
             : 'Cancel plan'
         }
       >
-        <SvgIcon name='remove-user' />
         <div className='flex flex-col justify-center items-center gap-5'>
           <Typo
             level='h2'
