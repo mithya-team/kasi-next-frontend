@@ -105,7 +105,7 @@ const getUserOverview = (user: User | null): IConfig[] => {
 
     {
       iconName: 'subscription',
-      label: 'Subscription',
+      label: 'Athlete Subscription',
       value: status ?? '-',
     },
   ];
