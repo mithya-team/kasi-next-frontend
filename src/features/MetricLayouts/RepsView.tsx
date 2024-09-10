@@ -1,7 +1,5 @@
 import Typo from '@/components/typography/Typo';
-import WorkoutStatus from '@/components/WorkoutStatus';
 
-import { WorkoutSessionStatus } from '@/models/workout/workout.types';
 import { MetricRep } from '@/models/workout/workout-metric/workout-metric.types';
 
 interface RepsViewProps {
@@ -10,7 +8,7 @@ interface RepsViewProps {
   isLive?: boolean;
 }
 
-const RepsView: React.FC<RepsViewProps> = ({ title, reps, isLive }) => {
+const RepsView: React.FC<RepsViewProps> = ({ title, reps }) => {
   if (!reps.length) return <></>;
   return (
     <div className=''>
@@ -25,17 +23,18 @@ const RepsView: React.FC<RepsViewProps> = ({ title, reps, isLive }) => {
             <div className='flex flex-row w-full justify-between items-center'>
               <div className='flex flex-row gap-2.5'>
                 <Typo>{rep.name}</Typo>
-                {isLive ? (
+                {/* {isLive ? (
                   <WorkoutStatus status={WorkoutSessionStatus.RUNNING} />
                 ) : (
                   <></>
-                )}
+                )} */}
+                {/* Removing this since it demands extra logic */}
               </div>
               <div className='text-gray-300 text-right'>{rep.value}</div>
             </div>
             <hr className='border-gray-600 w-full my-4' />
           </div>
-          {rep.laps.map((lap, idx) => (
+          {rep.laps?.map((lap, idx) => (
             <div
               key={lap.id}
               className='flex flex-col items-center justify-between text-gray-500 text-xs'
@@ -45,8 +44,10 @@ const RepsView: React.FC<RepsViewProps> = ({ title, reps, isLive }) => {
                 <div>{lap.value}</div>
               </div>
 
-              {idx < rep?.laps.length - 1 && (
+              {rep?.laps?.length && idx < rep?.laps?.length - 1 ? (
                 <hr className='border-gray-600 my-3 opacity-60 w-full' />
+              ) : (
+                <></>
               )}
             </div>
           ))}

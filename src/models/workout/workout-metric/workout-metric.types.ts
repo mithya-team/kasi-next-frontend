@@ -24,7 +24,7 @@ export interface MetricRep {
   id: string;
   name: string;
   value: string;
-  laps: MetricLap[];
+  laps?: MetricLap[];
   recovery?: string;
   status: LiveStatus;
 }

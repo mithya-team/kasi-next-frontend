@@ -100,6 +100,7 @@ export interface RepDetails {
   averagePace: number;
   elapsedDuration: number;
   elapsedDistance: number;
+  recoveryTime?: number;
   laps: LapDetails[];
 }
 
