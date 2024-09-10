@@ -26,33 +26,39 @@ const UsersListTable: FC<UsersListTableProps> = ({
   const { status, className } = getPlanStatusTag(
     user?.athleteSubscription?.[0],
   );
+
   if (
     !user ||
     (isUnConfirmedUserWithDetails(user) && user?.status === 'declined')
   )
     return <></>;
+
   return (
-    <Link
-      href={`/user/${user._id}`}
-      className='flex border-b border-gray-800 text-sm leading-[14px] text-white'
-    >
-      <div className='flex-1 p-5 text-base text-ellipsis overflow-hidden text-gray-400 font-medium'>
+    <div className='flex border-b border-gray-800 text-sm leading-[14px] text-white'>
+      <Link
+        href={`/user/${user._id}`}
+        className='flex-1 p-5 text-base text-ellipsis overflow-hidden text-gray-400 font-medium'
+      >
         {user?.fullName}
-      </div>
+      </Link>
+
       {isSuperAdmin ? (
         <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
           {user?.coachConnection?.coachDetails?.fullName ?? '-'}
         </div>
       ) : null}
+
       <div className='w-[12%] p-5'>
         {parseDate(user?.createdAt, 'MMMM D, YYYY')}
       </div>
       <div className={`w-[16.91%] p-5 ${className}`}>{status}</div>
+
       <div className='flex-1 p-5 text-ellipsis overflow-hidden'>
         {user?.email}
       </div>
+
       {renderUnconfirmedUserStatus(user, onAction)}
-    </Link>
+    </div>
   );
 };
 
@@ -71,20 +77,27 @@ function renderUnconfirmedUserStatus(
   }
   return <div className='w-[18%] p-5 text-gray-500'>Member already exists</div>;
 }
+
 interface CoachActionsProps {
   onClick: (action: ActionType) => void;
 }
+
 const CoachActions: FC<CoachActionsProps> = ({ onClick }) => {
+  const handleClick = (event: React.MouseEvent, action: ActionType) => {
+    event.stopPropagation(); // Stop event propagation
+    onClick(action); // Trigger the provided onClick handler with the action
+  };
+
   return (
     <div className='w-[18%] px-5 py-2.5 flex flex-row gap-3 font-primary text-white font-medium text-sm leading-[14px]'>
       <Button
-        onClick={() => onClick('decline')}
+        onClick={(event) => handleClick(event, 'decline')}
         className='rounded-[10px] px-5 py-2.5 bg-red-1'
       >
         Decline
       </Button>
       <Button
-        onClick={() => onClick('accept')}
+        onClick={(event) => handleClick(event, 'accept')}
         className='rounded-[10px] px-5 py-2.5 bg-green-1'
       >
         Accept

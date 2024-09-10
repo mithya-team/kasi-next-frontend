@@ -165,7 +165,7 @@ const UsersListingPage: FC = () => {
       setDialogOpen(false);
       setActionType(undefined);
     };
-  }, [admin]);
+  }, [admin, usersList]);
 
   return (
     <div
