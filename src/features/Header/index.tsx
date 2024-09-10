@@ -79,7 +79,6 @@ const Header: FC<HeaderProps> = ({
   };
 
   const onSearch = (term: string) => {
-    if (!term) return;
     if (isSchedulePage) {
       fetchWorkoutScheduleData({ search: term, page: 1 });
     } else if (isUserListingPage || isUserDetailsPage)
