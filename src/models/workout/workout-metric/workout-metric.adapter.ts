@@ -46,7 +46,7 @@ export function initializeMetrics(
       case 'TimeForEachMileDistance':
         initialMetrics.push({
           id: crypto.randomUUID(),
-          label: 'Time for each Mile',
+          label: 'Mile Splits',
           value: '00:00',
           key: 'TimeForEachMileDistance',
           type: MetricType.Tabular,
@@ -56,7 +56,7 @@ export function initializeMetrics(
       case 'TimeForEachKMDistance':
         initialMetrics.push({
           id: crypto.randomUUID(),
-          label: 'Time for each Kilometer',
+          label: 'Kilometer Splits',
           value: '00:00',
           key: 'TimeForEachKMDistance',
           type: MetricType.Tabular,
@@ -96,7 +96,7 @@ export function initializeMetrics(
       case 'TimeEachRep':
         initialMetrics.push({
           id: crypto.randomUUID(),
-          label: 'Workout Time Per Rep',
+          label: 'Rep Splits',
           value: '00:00',
           key: metric,
           type: MetricType.Tabular,
@@ -121,6 +121,26 @@ export function initializeMetrics(
           key: metric,
           type: MetricType.SingleValue,
           icon: 'heart-rate',
+        });
+        break;
+      case 'RepTimeElapsed':
+        initialMetrics.push({
+          id: crypto.randomUUID(),
+          label: 'Rep Time',
+          value: '00:00',
+          key: metric,
+          type: MetricType.SingleValue,
+          icon: 'elapsed-time',
+        });
+        break;
+      case 'RepDistanceElapsed':
+        initialMetrics.push({
+          id: crypto.randomUUID(),
+          label: `Rep ${lengthUnit === LengthUnit.KM ? 'KM' : 'Miles'}`,
+          value: '0.0',
+          key: metric,
+          type: MetricType.SingleValue,
+          icon: 'elapsed-distance',
         });
         break;
       default:
@@ -235,7 +255,7 @@ export function updateMetricPrettified(
 
     const timeForEachKMMetric: MetricPresentView = {
       id: crypto.randomUUID(),
-      label: 'Time for each Kilometer',
+      label: 'Kilometer Splits',
       value: '',
       key: 'TimeForEachKMDistance',
       type: MetricType.Tabular,
@@ -295,7 +315,7 @@ export function updateMetricPrettified(
 
     const timeForEachMileMetric: MetricPresentView = {
       id: crypto.randomUUID(),
-      label: 'Time for each Mile',
+      label: 'Mile Splits',
       value: '',
       key: 'TimeForEachMileDistance',
       type: MetricType.Tabular,
@@ -512,7 +532,7 @@ export function updateMetricPrettified(
       const setTotalSeconds = setTotalDuration % 60;
       const formattedSetTotalDuration = `${setTotalMinutes.toString().padStart(2, '0')}:${setTotalSeconds.toString().padStart(2, '0')}`;
 
-      const setsLabel = 'Workout Time Per Rep';
+      const setsLabel = 'Rep Splits';
       const timeEachRepMetric: MetricPresentView = {
         id: crypto.randomUUID(),
         label: setsLabel,
@@ -523,6 +543,103 @@ export function updateMetricPrettified(
       };
       updatedMetricPrettified[timeEachRepIndex] = timeEachRepMetric;
     });
+  }
+
+  const repTimeElapsedIndex = updatedMetricPrettified.findIndex(
+    (item) => item.key === 'RepTimeElapsed',
+  );
+
+  if (repTimeElapsedIndex !== -1) {
+    if (workoutSession.status === 'End') {
+      // Calculate time elapsed and format it as MM:SS
+      const currentTimeElapsed = workoutSession.timeElapsed;
+      const minutes = Math.floor(currentTimeElapsed / 60);
+      const seconds = currentTimeElapsed % 60;
+      const formattedTimeElapsed = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+      // Update the value and label in updatedMetricPrettified for repTimeElapsedIndex
+      updatedMetricPrettified[repTimeElapsedIndex].value = formattedTimeElapsed;
+      updatedMetricPrettified[repTimeElapsedIndex].label = 'Time';
+    } else {
+      const currentSetIndex = workoutSession.currentSetIndex;
+      const currentRepIndex = workoutSession.currentRepIndex;
+
+      if (
+        currentSetIndex !== undefined &&
+        currentRepIndex !== undefined &&
+        currentSetIndex < workoutSession.workoutData.length &&
+        currentRepIndex <
+          workoutSession.workoutData[currentSetIndex].reps.length
+      ) {
+        const currentRep =
+          workoutSession.workoutData[currentSetIndex].reps[currentRepIndex];
+
+        // Calculate total duration of laps
+        let repTotalDuration = 0;
+        for (const lap of currentRep.laps) {
+          repTotalDuration += lap.elapsedDuration;
+        }
+
+        // Convert total duration to minutes and seconds
+        const repTotalMinutes = Math.floor(repTotalDuration / 60);
+        const repTotalSeconds = repTotalDuration % 60;
+        const formattedRepTotalDuration = `${String(repTotalMinutes).padStart(2, '0')}:${String(repTotalSeconds).padStart(2, '0')}`;
+
+        // Update the value in updatedMetricPrettified
+        updatedMetricPrettified[repTimeElapsedIndex].value =
+          formattedRepTotalDuration;
+      } else {
+        // If currentSetIndex or currentRepIndex is undefined or out of range, set default value "00:00"
+        updatedMetricPrettified[repTimeElapsedIndex].value = '00:00';
+      }
+    }
+  }
+
+  // Find the index for "RepDistanceElapsed"
+  const repDistanceElapsedIndex = updatedMetricPrettified.findIndex(
+    (item) => item.key === 'RepDistanceElapsed',
+  );
+
+  if (repDistanceElapsedIndex !== -1) {
+    if (workoutSession.status === 'End') {
+      // Format the total distance
+      const formattedDistance = workoutSession.totalDistance.toFixed(2);
+
+      // Update the value and label in updatedMetricPrettified for repDistanceElapsedIndex
+      updatedMetricPrettified[repDistanceElapsedIndex].value =
+        formattedDistance;
+      updatedMetricPrettified[repDistanceElapsedIndex].label =
+        workoutSession.lengthUnit === 'km' ? 'KM' : 'Miles';
+    } else {
+      // Safely unwrap currentSetIndex, currentRepIndex, and currentRep
+      const currentSetIndex = workoutSession.currentSetIndex;
+      const currentRepIndex = workoutSession.currentRepIndex;
+
+      if (
+        currentSetIndex !== undefined &&
+        currentRepIndex !== undefined &&
+        currentSetIndex < workoutSession.workoutData.length &&
+        currentRepIndex <
+          workoutSession.workoutData[currentSetIndex].reps.length
+      ) {
+        const currentRep =
+          workoutSession.workoutData[currentSetIndex].reps[currentRepIndex];
+
+        // Calculate total distance of laps
+        let repTotalDistance = 0.0;
+        for (const lap of currentRep.laps) {
+          repTotalDistance += lap.elapsedDistance;
+        }
+        const formattedDistance = repTotalDistance.toFixed(2);
+
+        // Update the value in updatedMetricPrettified
+        updatedMetricPrettified[repDistanceElapsedIndex].value =
+          formattedDistance;
+      } else {
+        // If currentSetIndex or currentRepIndex is undefined or out of range, set default value "00:00"
+        updatedMetricPrettified[repDistanceElapsedIndex].value = '0.0';
+      }
+    }
   }
 
   return updatedMetricPrettified;
