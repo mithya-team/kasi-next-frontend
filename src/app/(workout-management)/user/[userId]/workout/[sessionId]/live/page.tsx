@@ -120,7 +120,7 @@ const LiveScreen: FC = () => {
         <div className='flex justify-center w-full items-center bg-gray-800 rounded-xl'>
           {user?.phone ? (
             <Call
-              phoneNumber={`${user?.phone?.countryCodeText}${user?.phone?.number}`}
+              phoneNumber={`${user?.phone?.countryCode}${user?.phone?.number}`}
             />
           ) : (
             <Typo
