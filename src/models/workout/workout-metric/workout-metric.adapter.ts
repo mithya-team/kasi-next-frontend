@@ -210,48 +210,20 @@ export function updateMetricPrettified(
   );
   if (timeForEachKMIndex !== -1) {
     const children: MetricLap[] = [];
-    let currentSegmentLengthSum = 0.0;
-    let currentSegmentDurationSum = 0;
-    let kmCount = 0;
-
-    for (const segment of workoutSession.segmentDurations) {
-      currentSegmentLengthSum += workoutSession.segmentLength;
-      currentSegmentDurationSum += segment.elapsedDuration;
-
-      if (Math.abs(currentSegmentLengthSum - 1) < 0.0001) {
-        const segmentMinutes = Math.floor(currentSegmentDurationSum / 60);
-        const segmentSeconds = currentSegmentDurationSum % 60;
-        kmCount++;
-
-        const formattedSegmentDuration = `${segmentMinutes.toString().padStart(2, '0')}:${segmentSeconds.toString().padStart(2, '0')}`;
-        const label = `KM ${kmCount}`;
-        const atomicMetric: MetricLap = {
-          id: crypto.randomUUID(),
-          name: label,
-          value: formattedSegmentDuration,
-          status: LiveStatus.Completed,
-        };
-        children.push(atomicMetric);
-
-        currentSegmentLengthSum = 0.0;
-        currentSegmentDurationSum = 0;
-      }
-    }
-
-    if (currentSegmentLengthSum > 0) {
-      const segmentMinutes = Math.floor(currentSegmentDurationSum / 60);
-      const segmentSeconds = currentSegmentDurationSum % 60;
-
+    workoutSession.unitLengthStats.forEach((segment, index) => {
+      const segmentDuration = Math.floor(segment.elapsedDuration);
+      const segmentMinutes = Math.floor(segmentDuration / 60);
+      const segmentSeconds = segmentDuration % 60;
       const formattedSegmentDuration = `${segmentMinutes.toString().padStart(2, '0')}:${segmentSeconds.toString().padStart(2, '0')}`;
-      const label = `KM ${kmCount}`;
+      const label = `KM ${index + 1}`;
       const atomicMetric: MetricLap = {
         id: crypto.randomUUID(),
         name: label,
         value: formattedSegmentDuration,
-        status: LiveStatus.Running,
+        status: LiveStatus.Completed,
       };
       children.push(atomicMetric);
-    }
+    });
 
     const timeForEachKMMetric: MetricPresentView = {
       id: crypto.randomUUID(),
@@ -270,48 +242,20 @@ export function updateMetricPrettified(
   );
   if (timeForEachMileIndex !== -1) {
     const children: MetricLap[] = [];
-    let currentSegmentLengthSum = 0.0;
-    let currentSegmentDurationSum = 0;
-    let mileCount = 0;
-
-    for (const segment of workoutSession.segmentDurations) {
-      currentSegmentLengthSum += workoutSession.segmentLength;
-      currentSegmentDurationSum += segment.elapsedDuration;
-
-      if (Math.abs(currentSegmentLengthSum - 1) < 0.0001) {
-        const segmentMinutes = Math.floor(currentSegmentDurationSum / 60);
-        const segmentSeconds = currentSegmentDurationSum % 60;
-        mileCount++;
-
-        const formattedSegmentDuration = `${segmentMinutes.toString().padStart(2, '0')}:${segmentSeconds.toString().padStart(2, '0')}`;
-        const label = `Mile ${mileCount}`;
-        const atomicMetric: MetricLap = {
-          id: crypto.randomUUID(),
-          name: label,
-          value: formattedSegmentDuration,
-          status: LiveStatus.Completed,
-        };
-        children.push(atomicMetric);
-
-        currentSegmentLengthSum = 0.0;
-        currentSegmentDurationSum = 0;
-      }
-    }
-
-    if (currentSegmentLengthSum > 0) {
-      const segmentMinutes = Math.floor(currentSegmentDurationSum / 60);
-      const segmentSeconds = currentSegmentDurationSum % 60;
-
+    workoutSession.unitLengthStats.forEach((segment, index) => {
+      const segmentDuration = Math.floor(segment.elapsedDuration);
+      const segmentMinutes = Math.floor(segmentDuration / 60);
+      const segmentSeconds = segmentDuration % 60;
       const formattedSegmentDuration = `${segmentMinutes.toString().padStart(2, '0')}:${segmentSeconds.toString().padStart(2, '0')}`;
-      const label = `Mile ${mileCount}`;
+      const label = `Mile ${index + 1}`;
       const atomicMetric: MetricLap = {
         id: crypto.randomUUID(),
         name: label,
         value: formattedSegmentDuration,
-        status: LiveStatus.Running,
+        status: LiveStatus.Completed,
       };
       children.push(atomicMetric);
-    }
+    });
 
     const timeForEachMileMetric: MetricPresentView = {
       id: crypto.randomUUID(),

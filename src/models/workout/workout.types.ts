@@ -137,6 +137,7 @@ export interface WorkoutSessionDetails {
   timeElapsed: number;
   segmentLength: number;
   segmentDurations: SegmentDuration[];
+  unitLengthStats: SegmentDuration[];
   totalLapDistance: number;
   userId: string;
   workoutSlug: string;
