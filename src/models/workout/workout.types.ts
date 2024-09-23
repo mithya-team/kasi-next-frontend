@@ -116,6 +116,8 @@ export interface SegmentDuration {
   elapsedDuration: number;
   totalDurationAtStart: number;
   segment: number;
+  startTime: string;
+  endTime?: string;
 }
 
 export type TWorkoutNature = 'lap' | 'interval';
