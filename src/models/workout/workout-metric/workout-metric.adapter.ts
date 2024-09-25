@@ -136,7 +136,7 @@ export function initializeMetrics(
       case 'RepDistanceElapsed':
         initialMetrics.push({
           id: crypto.randomUUID(),
-          label: `Rep (Distance)`,
+          label: `Rep Distance`,
           value: '0.0',
           key: metric,
           type: MetricType.SingleValue,
