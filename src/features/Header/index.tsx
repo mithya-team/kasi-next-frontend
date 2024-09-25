@@ -4,7 +4,7 @@ import { FC, useEffect, useMemo } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { useStoreActions } from '@/store';
+import { useStoreActions, useStoreState } from '@/store';
 
 import MiddleHeader, { ITabs } from '@/features/Header/MiddleHeader';
 
@@ -43,6 +43,13 @@ const Header: FC<HeaderProps> = ({
 
   const userId = pathname.split('/')[2];
 
+  const { usersScreenSort, scheduleScreenSort } = useStoreState(
+    ({ filterStore: { usersScreenSort, scheduleScreenSort } }) => ({
+      usersScreenSort,
+      scheduleScreenSort,
+    }),
+  );
+
   const {
     setShowUserWorkoutContent,
     fetchUsersList,
@@ -80,9 +87,18 @@ const Header: FC<HeaderProps> = ({
 
   const onSearch = (term: string) => {
     if (isSchedulePage) {
-      fetchWorkoutScheduleData({ search: term, page: 1 });
-    } else if (isUserListingPage || isUserDetailsPage)
-      fetchUsersList({ search: term, page: 1 });
+      fetchWorkoutScheduleData({
+        search: term,
+        page: 1,
+        sort: `${scheduleScreenSort === 'asc' ? '+' : '-'}createdAt`,
+      });
+    } else if (isUserListingPage || isUserDetailsPage) {
+      fetchUsersList({
+        search: term,
+        page: 1,
+        sort: `${usersScreenSort === 'asc' ? '-' : '+'}createdAt`,
+      });
+    }
   };
 
   return (
