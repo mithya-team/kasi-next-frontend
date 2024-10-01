@@ -10,6 +10,7 @@ import {
   MetricLayout,
   MetricPresentView,
   MetricRep,
+  MetricSet,
   MetricType,
 } from '@/models/workout/workout-metric/workout-metric.types';
 
@@ -355,11 +356,12 @@ export function updateMetricPrettified(
     (metric) => metric.key === 'TimeEachLap',
   );
   if (timeEachLapIndex !== -1) {
-    const setChildren: MetricRep[] = [];
+    let setChildren: MetricRep[] = [];
+    const sets: MetricSet[] = [];
 
-    workoutSession.workoutData.forEach((set) => {
-      let setTotalDuration = 0;
-
+    workoutSession.workoutData.forEach((set, setIndex) => {
+      // let setTotalDuration = 0;
+      setChildren = [];
       set.reps.forEach((rep, repIndex) => {
         const repChildren: MetricLap[] = [];
         let repTotalDuration = 0;
@@ -405,35 +407,53 @@ export function updateMetricPrettified(
         setChildren.push(repMetric);
 
         // Add to set total duration
-        setTotalDuration += repTotalDuration;
+        // setTotalDuration += repTotalDuration;
       });
 
+      sets.push({
+        id: crypto.randomUUID(),
+        name: `Set ${setIndex + 1}`,
+        reps: setChildren,
+        status: LiveStatus.Completed,
+      });
       // Calculate set total duration in minutes and seconds
-      const setTotalMinutes = Math.floor(setTotalDuration / 60);
-      const setTotalSeconds = setTotalDuration % 60;
-      const formattedSetTotalDuration = `${setTotalMinutes.toString().padStart(2, '0')}:${setTotalSeconds.toString().padStart(2, '0')}`;
+      // const setTotalMinutes = Math.floor(setTotalDuration / 60);
+      // const setTotalSeconds = setTotalDuration % 60;
+      // const formattedSetTotalDuration = `${setTotalMinutes.toString().padStart(2, '0')}:${setTotalSeconds.toString().padStart(2, '0')}`;
+    });
 
-      const setsLabel = 'Rep Times';
-      const timeForEachKMMetric: MetricPresentView = {
+    const setsLabel = 'Rep Times';
+    let timeForEachKMMetric: MetricPresentView = {
+      id: crypto.randomUUID(),
+      label: setsLabel,
+      value: '0',
+      key: 'TimeEachLap',
+      type: MetricType.Tabular,
+      reps: setChildren,
+    };
+    if (workoutSession.workoutData.length > 1) {
+      timeForEachKMMetric = {
         id: crypto.randomUUID(),
         label: setsLabel,
-        value: formattedSetTotalDuration,
+        value: '0',
         key: 'TimeEachLap',
         type: MetricType.Tabular,
-        reps: setChildren,
+        sets: sets,
       };
-      updatedMetricPrettified[timeEachLapIndex] = timeForEachKMMetric;
-    });
+    }
+    updatedMetricPrettified[timeEachLapIndex] = timeForEachKMMetric;
   }
 
   const timeEachRepIndex = updatedMetricPrettified.findIndex(
     (metric) => metric.key === 'TimeEachRep',
   );
   if (timeEachRepIndex !== -1) {
-    const setChildren: MetricRep[] = [];
+    let setChildren: MetricRep[] = [];
+    const sets: MetricSet[] = [];
 
-    workoutSession.workoutData.forEach((set) => {
-      let setTotalDuration = 0;
+    workoutSession.workoutData.forEach((set, setIndex) => {
+      // let setTotalDuration = 0;
+      setChildren = [];
 
       set.reps.forEach((rep, repIndex) => {
         // const repChildren: MetricLap[] = [];
@@ -468,25 +488,43 @@ export function updateMetricPrettified(
         setChildren.push(repMetric);
 
         // Add to set total duration
-        setTotalDuration += repTotalDuration;
+        // setTotalDuration += repTotalDuration;
       });
 
       // Calculate set total duration in minutes and seconds
-      const setTotalMinutes = Math.floor(setTotalDuration / 60);
-      const setTotalSeconds = setTotalDuration % 60;
-      const formattedSetTotalDuration = `${setTotalMinutes.toString().padStart(2, '0')}:${setTotalSeconds.toString().padStart(2, '0')}`;
+      // const setTotalMinutes = Math.floor(setTotalDuration / 60);
+      // const setTotalSeconds = setTotalDuration % 60;
+      // const formattedSetTotalDuration = `${setTotalMinutes.toString().padStart(2, '0')}:${setTotalSeconds.toString().padStart(2, '0')}`;
 
-      const setsLabel = 'Rep Splits';
-      const timeEachRepMetric: MetricPresentView = {
+      sets.push({
+        id: crypto.randomUUID(),
+        name: `Set ${setIndex + 1}`,
+        reps: setChildren,
+        status: LiveStatus.Completed,
+      });
+    });
+
+    const setsLabel = 'Rep Splits';
+    let timeEachRepMetric: MetricPresentView = {
+      id: crypto.randomUUID(),
+      label: setsLabel,
+      value: '0',
+      key: 'TimeEachRep',
+      type: MetricType.Tabular,
+      reps: setChildren,
+    };
+    if (workoutSession.workoutData.length > 1) {
+      timeEachRepMetric = {
         id: crypto.randomUUID(),
         label: setsLabel,
-        value: formattedSetTotalDuration,
+        value: '0',
         key: 'TimeEachRep',
         type: MetricType.Tabular,
-        reps: setChildren,
+        sets: sets,
       };
-      updatedMetricPrettified[timeEachRepIndex] = timeEachRepMetric;
-    });
+    }
+
+    updatedMetricPrettified[timeEachRepIndex] = timeEachRepMetric;
   }
 
   const repTimeElapsedIndex = updatedMetricPrettified.findIndex(
