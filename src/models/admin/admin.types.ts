@@ -30,6 +30,7 @@ export interface SubscriptionProductsDetails {
   amount: number;
   currency: string;
   timeString: string;
+  amountString: string;
   stripePricingId: string;
   planId: ProductPlanId;
 }

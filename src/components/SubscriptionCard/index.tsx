@@ -46,11 +46,11 @@ const SubscriptionCard: FC<SubscriptionCardProps> = ({
         </div>
         <div className='bg-gray-1 h-[1px] opacity-20 mt-3' />
       </div>
-      <div className='flex flex-row items-baseline'>
+      <div className='flex flex-row gap-1 items-baseline'>
         <Typo
           level='h4'
           classes='font-secondary text-white text-xl font-semibold tracking-[-0.1px]'
-        >{`$${product?.amount}`}</Typo>
+        >{`$${product?.amountString}`}</Typo>
         <Typo classes='text-gray-500 font-medium font-primary text-xs leading-5'>
           {getSubscriptionPeriod(product?.planId)}
         </Typo>
@@ -87,11 +87,11 @@ const getSubscriptionPeriod = (name: ProductPlanId) => {
     case 'FREE_TIER':
       return '';
     case 'PAID_TIER_1_MONTH':
-      return '/per month';
+      return '/ month';
     case 'PAID_TIER_6_MONTHS':
-      return '/per half year';
+      return '/ month billable half-yearly';
     case 'PAID_TIER_12_MONTHS':
-      return '/per year';
+      return '/month billable yearly';
     default:
       return '';
   }
