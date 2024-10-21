@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { FC } from 'react';
 
 import { toast } from '@/lib/toast';
-import { getHref, parseDate, parseTime } from '@/lib/utils';
+import { getHref, parseDate, parseTimeWithTimeZone } from '@/lib/utils';
 
 import WorkoutStatus from '@/components/WorkoutStatus';
 
@@ -53,7 +53,10 @@ const ScheduleTable: FC<ScheduleTableProps> = ({
       <div className='w-[15%] p-5'>
         {parseDate(data?.startTime ?? '', 'MMMM D, YYYY')}
       </div>
-      <div className='w-[15%] p-5'> {parseTime(data?.startTime ?? '')}</div>
+      <div className='w-[15%] p-5'>
+        {' '}
+        {parseTimeWithTimeZone(data?.startTime ?? '')}
+      </div>
     </Link>
   );
 };

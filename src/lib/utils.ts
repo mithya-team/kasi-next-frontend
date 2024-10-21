@@ -1,7 +1,11 @@
 import clsx, { ClassValue } from 'clsx';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import utc from 'dayjs/plugin/timezone';
+import DayJSUtc from 'dayjs/plugin/utc';
 dayjs.extend(duration);
+dayjs.extend(DayJSUtc);
+dayjs.extend(utc);
 import { twMerge } from 'tailwind-merge';
 
 import { AthleteSubscription } from '@/models/user/user.types';
@@ -22,6 +26,16 @@ export const parseTime = (date: string): string => {
   return dateObj.isValid() ? dateObj.format('hh:mm A') : '-';
 };
 
+export const parseTimeWithTimeZone = (date: string): string => {
+  const dateObj = dayjs(date); // Create a dayjs object from the date string
+
+  if (!dateObj.isValid()) {
+    return '-'; // Return '-' for invalid dates
+  }
+
+  const browserTimezone = dayjs.tz.guess(); // Guess browser's timezone
+  return dateObj.tz(browserTimezone).format('hh:mm A, Z');
+};
 export const formatDuration = (seconds: number): string => {
   const formattedDuration = dayjs.duration(seconds, 'seconds');
   return formattedDuration.format('mm:ss');
