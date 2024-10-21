@@ -47,12 +47,12 @@ const DashboardSidebar: FC<DashboardSidebarProps> = ({ className }) => {
         className,
       )}
     >
-      <div className='my-[15px] mx-[8px]'>
+      <div className='mt-7 mb-4 mx-2 justify-center items-center flex'>
         <Link href={ROUTE.USER_LIST_ROUTE.path}>
           <Image
-            width={64}
-            height={54}
-            src='/images/kasi_logo.png'
+            width={54}
+            height={64}
+            src='/svg/kasi_logo.svg'
             alt='kasi_logo'
           />
         </Link>
