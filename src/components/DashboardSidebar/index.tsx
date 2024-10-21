@@ -25,7 +25,7 @@ const links = [
     name: 'run' as ISvgIconProps['name'],
     href: ROUTE.SCHEDULE_ROUTE.path,
     id: 'schedule-tab',
-    tooltipText: 'Schedules',
+    tooltipText: 'Workouts',
   },
   // {
   //   name: 'subscription' as ISvgIconProps['name'],
