@@ -26,7 +26,7 @@ const SignupScreen: FC = () => {
     <>
       <div className={cn('flex justify-center w-full items-center')}>
         <Typo
-          classes='tracking-1 text-center font-secondary font-semibold text-white pb-0'
+          classes='tracking-1 text-center font-secondary font-semibold text-white pb-2.5'
           level='h2'
         >
           Sign Up

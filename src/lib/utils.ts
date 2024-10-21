@@ -34,7 +34,7 @@ export const parseTimeWithTimeZone = (date: string): string => {
   }
 
   const browserTimezone = dayjs.tz.guess(); // Guess browser's timezone
-  return dateObj.tz(browserTimezone).format('hh:mm A, Z');
+  return dateObj.tz(browserTimezone).format('hh:mm A(Z)');
 };
 export const formatDuration = (seconds: number): string => {
   const formattedDuration = dayjs.duration(seconds, 'seconds');

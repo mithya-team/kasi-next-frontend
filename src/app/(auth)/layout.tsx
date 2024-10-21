@@ -20,7 +20,7 @@ const AuthLayout: FC<PropsWithChildren> = ({ children }) => {
           )}
         >
           <div
-            className='overflow-y-auto py-10 px-[52px]'
+            className='overflow-y-auto pt-10 pb-9 px-[52px] mb-2.5'
             style={{ maxHeight: 'calc(100vh - 80px)' }} // To ensure padding from top and bottom
           >
             {children}
