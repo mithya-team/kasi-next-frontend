@@ -26,16 +26,18 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
 
   const memoizedCountryOptions = useMemo(
     () =>
-      COUNTRY_LIST.map((country) => (
-        <option
-          key={country.code}
-          className='p-2 border-b hover:bg-gray-600 active:bg-gray-600 border-gray-800'
-          value={country.dial_code}
-          data-countryname={country.name}
-        >
-          {`${country.name} (${country.dial_code})`}
-        </option>
-      )),
+      COUNTRY_LIST.sort((a, b) => a.name.localeCompare(b.name)).map(
+        (country) => (
+          <option
+            key={country.code}
+            className='p-2 border-b hover:bg-gray-600 active:bg-gray-600 border-gray-800'
+            value={country.dial_code}
+            data-countryname={country.name}
+          >
+            {`${country.name} (${country.dial_code})`}
+          </option>
+        ),
+      ),
     [],
   );
 
