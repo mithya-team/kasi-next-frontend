@@ -17,7 +17,7 @@ const Empty: FC<{ className?: string }> = ({ className }) => {
     >
       <SvgIcon name='empty-user-list' />
       <Typo classes='font-secondary font-semibold tracking-[-0.225px] text-white text-3xl text-center'>
-        There is no one runner available for coaching.
+        No runners available for coaching.
       </Typo>
 
       <Typo classes='font-primary text-base text-gray-300 text-center'>
